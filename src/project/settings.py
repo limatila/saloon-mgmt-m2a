@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'saloon'
+    'saloon',
+
+    'core',
+    'cadastros',
+    'servicos'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +61,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'saloon' / 'templates'
+            BASE_DIR / 'templates',
+            BASE_DIR / 'cadastros' / 'templates',
+            BASE_DIR / 'servicos' / 'templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -122,7 +128,9 @@ STATIC_URL = 'static/'
 
 #All dirs that include static files are required to be here.
 STATICFILES_DIRS = [
-    BASE_DIR / "saloon" / "static",
+    BASE_DIR / "core" / "static",
+    BASE_DIR / "cadastros" / "static",
+    BASE_DIR / "servicos" / "static",
 ]
 
 # Path for static files to be saved when 'manage.py collectstatic' for production

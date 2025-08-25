@@ -65,6 +65,7 @@ class Servico(Base):
         PENDENTE = 'P', "Pendente"
         EXECUTANDO =  'E', "Executando"
         FINALIZADO = 'F', "Finalizado"
+        CANCELADO = 'C', "Cancelado"
 
     nome = models.CharField(
         verbose_name="Nome do serviço",

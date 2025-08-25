@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'saloon',
-
     'core',
     'cadastros',
     'servicos'
@@ -130,11 +128,11 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "core" / "static",
     BASE_DIR / "cadastros" / "static",
-    BASE_DIR / "servicos" / "static",
+    BASE_DIR / "servicos" / "static"
 ]
 
 # Path for static files to be saved when 'manage.py collectstatic' for production
 STATIC_ROOT = BASE_DIR / 'static/'
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'static' / 'media'
+MEDIA_ROOT = BASE_DIR / 'media'

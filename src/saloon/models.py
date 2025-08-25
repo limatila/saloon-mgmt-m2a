@@ -1,5 +1,7 @@
 from django.db import models
 
+from saloon.choices import *
+
 # Create your models here.
 # Classes Abstratas
 class Base(models.Model):
@@ -24,6 +26,7 @@ class Pessoa(Base):
     nome = models.CharField(
         null=False,
         blank=False,
+        max_length=255
     )
     cpf = models.CharField(
         verbose_name="CPF",
@@ -57,11 +60,12 @@ class Cliente(Pessoa):
         max_length=21,
         null=False,
         blank=False,
-        unique=True
+        unique=True,
     )
 
 class Trabalhador(Pessoa):
-    pass
+    class Meta:
+        verbose_name_plural = "Trabalhadores"
 
 class Servico(Base):
     nome = models.CharField(
@@ -72,25 +76,21 @@ class Servico(Base):
     )
     preco = models.DecimalField(
         verbose_name="Preço",
-        decimal_places=2
+        max_digits=12,
+        decimal_places=2,
     )
 
 
 class Agendamento(Base):
-    class TipoStatus(models.TextChoices):
-        PENDENTE = 'P', "Pendente"
-        EXECUTANDO =  'E', "Executando"
-        FINALIZADO = 'F', "Finalizado"
-        CANCELADO = 'C', "Cancelado"
-
     data_agendado = models.DateField(
         null=False,
         blank=False
     )
     status = models.CharField(
         verbose_name="Status",
-        choices=TipoStatus.choices, 
-        default=TipoStatus.PENDENTE,
+        choices=C_TIPO_STATUS_AGENDAMENTO,
+        default=AGENDAMENTO_STATUS_PENDENTE,
+        max_length=1,
         null=False,
         blank=False
     )

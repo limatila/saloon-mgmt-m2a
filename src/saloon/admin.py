@@ -7,10 +7,11 @@ class ClienteAdmin(admin.ModelAdmin):
     pass
 @admin.register(Trabalhador)
 class TrabalhadorAdmin(admin.ModelAdmin):
-    list_filter = ""
+    pass
 @admin.register(Servico)
 class ServicoAdmin(admin.ModelAdmin):
     pass
+
 @admin.register(Agendamento)
 class AgendamentoAdmin(admin.ModelAdmin):
-    pass
+    list_filter = "status", "cliente", "servico", "trabalhador"

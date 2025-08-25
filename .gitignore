@@ -1,2 +1,5 @@
 .logs
 .env
+src/database.sqlite3
+.vscode/*
+**/__pycache__/

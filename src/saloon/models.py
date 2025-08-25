@@ -60,13 +60,10 @@ class Cliente(Pessoa):
         unique=True
     )
 
-class Servico(Base):
-    class TipoServico(models.TextChoices):
-        PENDENTE = 'P', "Pendente"
-        EXECUTANDO =  'E', "Executando"
-        FINALIZADO = 'F', "Finalizado"
-        CANCELADO = 'C', "Cancelado"
+class Trabalhador(Pessoa):
+    pass
 
+class Servico(Base):
     nome = models.CharField(
         verbose_name="Nome do serviço",
         max_length=50,
@@ -74,18 +71,31 @@ class Servico(Base):
         blank=False
     )
     preco = models.DecimalField(
-        verbose_name="Preço"
+        verbose_name="Preço",
+        decimal_places=2
     )
 
-class Trabalhador(Pessoa):
-    ...
 
 class Agendamento(Base):
+    class TipoStatus(models.TextChoices):
+        PENDENTE = 'P', "Pendente"
+        EXECUTANDO =  'E', "Executando"
+        FINALIZADO = 'F', "Finalizado"
+        CANCELADO = 'C', "Cancelado"
+
     data_agendado = models.DateField(
         null=False,
         blank=False
     )
+    status = models.CharField(
+        verbose_name="Status",
+        choices=TipoStatus.choices, 
+        default=TipoStatus.PENDENTE,
+        null=False,
+        blank=False
+    )
 
+    #FKs
     cliente = models.ForeignKey(
         'Cliente',
         on_delete=models.PROTECT,

@@ -27,3 +27,6 @@ class Servico(Base):
         max_digits=12,
         decimal_places=2,
     )
+
+    def __str__(self):
+        return f"{self.nome} por R${self.preco}"

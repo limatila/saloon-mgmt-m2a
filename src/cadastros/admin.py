@@ -5,13 +5,14 @@ from cadastros.models import (
     Trabalhador,
     Servico
 )
+from core.admin import PersonAdmin
 
 @admin.register(Cliente)
-class ClienteAdmin(admin.ModelAdmin):
+class ClienteAdmin(PersonAdmin):
     pass
 
 @admin.register(Trabalhador)
-class TrabalhadorAdmin(admin.ModelAdmin):
+class TrabalhadorAdmin(PersonAdmin):
     pass
 
 @admin.register(Servico)

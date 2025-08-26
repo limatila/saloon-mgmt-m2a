@@ -10,6 +10,11 @@ class Cliente(Pessoa):
         blank=False,
         unique=True
     )
+    endereco = models.CharField(
+        verbose_name="Endereço",
+        null=False,
+        blank=False
+    )
 
 class Trabalhador(Pessoa):
     class Meta:

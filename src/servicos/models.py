@@ -5,7 +5,8 @@ from servicos.choices import C_TIPO_STATUS_AGENDAMENTO, AGENDAMENTO_STATUS_PENDE
 
 # Create your models here.
 class Agendamento(Base):
-    data_agendado = models.DateField(
+    data_agendado = models.DateTimeField(
+        verbose_name="Data Agendado",
         null=False,
         blank=False
     )
@@ -39,4 +40,4 @@ class Agendamento(Base):
     )
 
     def __str__(self):
-        return f"{self.client.name} at {self.date_scheduled.date()}"
+        return f"{self.cliente.nome}, {self.servico.nome} at {self.data_agendado.date()}"

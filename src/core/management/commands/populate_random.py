@@ -7,6 +7,7 @@ from validate_docbr import CPF
 from cadastros.models import Cliente, Servico, Trabalhador
 from servicos.models import Agendamento, C_TIPO_STATUS_AGENDAMENTO
 
+
 class Command(BaseCommand):
     help = "Cria dados aleatórios no banco de dados"
 

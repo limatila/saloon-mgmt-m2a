@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Base(models.Model):
     data_criado = models.DateTimeField(
         verbose_name="Data de Criação",
@@ -17,6 +18,7 @@ class Base(models.Model):
 
     class Meta:
         abstract = True
+
 
 class Pessoa(Base):
     nome = models.CharField(

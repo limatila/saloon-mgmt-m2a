@@ -3,3 +3,4 @@
 src/database.sqlite3
 .vscode/*
 **/__pycache__/
+src/media/imagens-pessoas/**

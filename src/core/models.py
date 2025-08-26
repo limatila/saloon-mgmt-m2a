@@ -45,7 +45,7 @@ class Pessoa(Base):
     )
 
     def __str__(self):
-        return f"{self.id} - {self.name}"
+        return f"{self.id} - {self.nome}"
 
     class Meta:
         abstract = True

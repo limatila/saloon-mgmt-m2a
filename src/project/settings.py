@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'servicos',
 
     #submodules
+    'core.bases',
+    'core.pessoas',
+
     'cadastros.clientes',
     'cadastros.tipo_servicos',
     'cadastros.trabalhadores',

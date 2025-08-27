@@ -17,3 +17,15 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class BaseAssociadoEmpresa(BaseModel):
+    empresa = models.ForeignKey(
+        'empresas.Empresa',
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT
+    )
+
+    class Meta:
+        abstract = True

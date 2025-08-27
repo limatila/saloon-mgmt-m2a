@@ -1,10 +1,10 @@
 from django.db import models
 
-from core.bases.models import BaseModel
+from core.bases.models import BaseAssociadoEmpresa
 from servicos.agendamentos.choices import C_TIPO_STATUS_AGENDAMENTO, AGENDAMENTO_STATUS_PENDENTE
 
 
-class Agendamento(BaseModel):
+class Agendamento(BaseAssociadoEmpresa):
     data_agendado = models.DateTimeField(
         verbose_name="Data Agendado",
         null=False,

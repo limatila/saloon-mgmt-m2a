@@ -5,7 +5,7 @@ from cadastros.tipo_servicos.models import TipoServico
 
 @admin.register(TipoServico)
 class TipoServicoAdmin(BaseAssociadoEmpresaAdmin):
-    search_fields = "nome",
+    search_fields = "nome", 
     search_help_text = "Nome..."
 
     def get_fieldsets(self, request, obj = ...):

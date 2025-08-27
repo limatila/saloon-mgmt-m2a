@@ -4,9 +4,14 @@ from core.bases.admin import BaseAssociadoEmpresaAdmin, DateHierarchyAdmin
 from servicos.agendamentos.models import Agendamento
 
 @admin.register(Agendamento)
-class AgendamentoAdmin(DateHierarchyAdmin, BaseAssociadoEmpresaAdmin):
+class AgendamentoAdmin(
+        DateHierarchyAdmin, 
+        BaseAssociadoEmpresaAdmin
+    ):
     list_filter = "status", 
     raw_id_fields = "cliente", "servico", "trabalhador", "empresa"
+    search_fields = "status", #! is getting only by enum values, not get_display
+    search_help_text = "Status..."
 
     def get_fieldsets(self, request, obj = ...):
         base_fieldsets = list(super().get_fieldsets(request, obj))

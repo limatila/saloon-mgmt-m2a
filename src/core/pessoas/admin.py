@@ -3,7 +3,7 @@ from core.bases.admin import BaseAssociadoEmpresaAdmin
 
 class PessoaAdmin(BaseAssociadoEmpresaAdmin):
     search_fields = "nome", "cpf", "telefone", "endereco"
-    search_help_text = "Nome, cpf, telefone ou endereço..."
+    search_help_text = "Nome, CPF, telefone ou endereço..."
 
     def get_fieldsets(self, request, obj = ...):
         base_fieldsets = list(super().get_fieldsets(request, obj))

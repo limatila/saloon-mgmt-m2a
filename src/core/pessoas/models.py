@@ -1,9 +1,9 @@
 from django.db import models
 
-from core.bases.models import BaseModel
+from core.bases.models import BaseAssociadoEmpresa
 
 
-class Pessoa(BaseModel):
+class Pessoa(BaseAssociadoEmpresa):
     nome = models.CharField(
         null=False,
         blank=False,
@@ -27,6 +27,17 @@ class Pessoa(BaseModel):
         null=True,
         blank=True,
         editable=True
+    )
+    telefone = models.CharField(
+        max_length=21,
+        null=False,
+        blank=False,
+        unique=True
+    )
+    endereco = models.CharField(
+        verbose_name="Endereço",
+        null=False,
+        blank=False
     )
 
     def __str__(self):

@@ -4,7 +4,7 @@ from core.admin import BaseAdmin
 from cadastros.tipo_servicos.models import TipoServico
 
 @admin.register(TipoServico)
-class ServicoAdmin(BaseAdmin):
+class TipoServicoAdmin(BaseAdmin):
     search_fields = "nome",
     search_help_text = "Nome..."
 

@@ -1,7 +1,7 @@
 .logs
 .env
 src/database.sqlite3
-.vscode/*
+.vscode/settings.json
 **/__pycache__/
 src/media/imagens-pessoas/**
 src/*/migrations/**

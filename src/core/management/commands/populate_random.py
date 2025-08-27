@@ -3,7 +3,7 @@ from random import choice, random
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError, models
 from faker import Faker
-from validate_docbr import CPF
+from validate_docbr import CPF, CNPJ
 
 from cadastros.clientes.models import Cliente
 from cadastros.tipo_servicos.models import TipoServico
@@ -28,30 +28,44 @@ class Command(BaseCommand):
         total: int = kwargs.get('times', 1)
         fake = Faker()
         cpf = CPF()
+        cnpj = CNPJ()
+
         #cria manualmente objetos de model empresa
         for _ in range(total):
+            nova_empresa = Empresa(
+                cnpj=cnpj.generate(),
+                nome_fantasia=fake.name(),
+                razao_social=fake.company()
+            )
             additions: list[models.Model] = [
+                nova_empresa,
                 Cliente(
                     nome=fake.name(),
                     cpf=cpf.generate(),
                     telefone=fake.phone_number(),
-                    endereco=fake.address()
+                    endereco=fake.address(),
+                    empresa=nova_empresa
                 ),
                 TipoServico(
                     nome=f"{choice(['Corte', 'Limpeza', 'Hidratação'])}" + f" {choice(['Simples', 'Complexo', 'Completo', 'Barba'])}",
-                    preco=random() * 100
+                    preco=random() * 100,
+                    empresa=nova_empresa
                 ),
                 Trabalhador(
                     nome=fake.name(),
-                    cpf=cpf.generate()
+                    cpf=cpf.generate(),
+                    telefone=fake.phone_number(),
+                    endereco=fake.address(),
+                    empresa=nova_empresa
                 ),
             ]
             novo_agendamento = Agendamento(
                 data_agendado=fake.future_datetime(),
                 status=choice(C_TIPO_STATUS_AGENDAMENTO)[0],
-                cliente=additions[0],
-                servico=additions[1],
-                trabalhador=additions[2]
+                empresa=additions[0],
+                cliente=additions[1],
+                servico=additions[2],
+                trabalhador=additions[3],
             )
             additions.append(novo_agendamento)
 

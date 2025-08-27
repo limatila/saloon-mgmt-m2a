@@ -38,9 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    #modules
     'core',
     'cadastros',
-    'servicos'
+    'servicos',
+
+    #submodules
+    'cadastros.clientes',
+    'cadastros.tipo_servicos',
+    'cadastros.trabalhadores',
+    'cadastros.empresas',
+    
+    'servicos.agendamentos'
 ]
 
 MIDDLEWARE = [

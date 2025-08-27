@@ -4,8 +4,11 @@ from django.core.management.base import BaseCommand
 from faker import Faker
 from validate_docbr import CPF
 
-from cadastros.models import Cliente, Servico, Trabalhador
-from servicos.models import Agendamento, C_TIPO_STATUS_AGENDAMENTO
+from cadastros.clientes.models import Cliente
+from cadastros.tipo_servicos.models import TipoServico
+from cadastros.trabalhadores.models import Trabalhador
+from cadastros.empresas.models import Empresa
+from servicos.agendamentos.models import Agendamento, C_TIPO_STATUS_AGENDAMENTO
 
 
 class Command(BaseCommand):
@@ -22,7 +25,7 @@ class Command(BaseCommand):
                 telefone=fake.phone_number(),
                 endereco=fake.address()
             ),
-            Servico(
+            TipoServico(
                 nome=f"{choice(['Corte', 'Limpeza', 'Hidratação'])}" + f" {choice(['Simples', 'Complexo', 'Completo', 'Barba'])}",
                 preco=random() * 100
             ),

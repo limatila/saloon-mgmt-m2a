@@ -1,9 +1,9 @@
 from django.db import models
 
 from core.models import Base
-from servicos.choices import C_TIPO_STATUS_AGENDAMENTO, AGENDAMENTO_STATUS_PENDENTE
+from servicos.agendamentos.choices import C_TIPO_STATUS_AGENDAMENTO, AGENDAMENTO_STATUS_PENDENTE
 
-# Create your models here.
+
 class Agendamento(Base):
     data_agendado = models.DateTimeField(
         verbose_name="Data Agendado",
@@ -21,19 +21,19 @@ class Agendamento(Base):
 
     #FKs
     cliente = models.ForeignKey(
-        'cadastros.Cliente',
+        'clientes.Cliente',
         on_delete=models.PROTECT,
         verbose_name="Cliente",
         null=False
     )
     servico = models.ForeignKey(
-        'cadastros.Servico',
+        'tipo_servicos.TipoServico',
         on_delete=models.PROTECT,
         verbose_name="Serviço contratado",
         null=False
     )
     trabalhador = models.ForeignKey(
-        'cadastros.Trabalhador',
+        'trabalhadores.Trabalhador',
         on_delete=models.PROTECT,
         verbose_name="Trabalhador",
         null=False

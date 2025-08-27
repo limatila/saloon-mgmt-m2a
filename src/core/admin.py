@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+
 class BaseAdmin(admin.ModelAdmin):
     readonly_fields = ['data_criado', 'data_modificado']
     fieldsets = [
@@ -10,6 +11,7 @@ class BaseAdmin(admin.ModelAdmin):
             }
         )
     ]
+
 
 class PersonAdmin(BaseAdmin):
     search_fields = "nome", "cpf", "telefone", "endereco"
@@ -35,6 +37,7 @@ class PersonAdmin(BaseAdmin):
         ]
         
         return base_fieldsets + new_fieldsets
+
 
 class DateHierarchyAdmin(admin.ModelAdmin):
     date_hierarchy = "data_criado"

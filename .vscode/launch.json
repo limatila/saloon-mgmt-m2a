@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Saloon",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/manage.py",
+      "args": ["runserver", "8000"],
+      "django": true,
+      "justMyCode": false,
+      "console": "integratedTerminal",
+    }
+  ]
+}

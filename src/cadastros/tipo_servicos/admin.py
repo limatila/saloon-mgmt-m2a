@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core.admin import BaseAdmin
+from core.bases.admin import BaseAdmin
 from cadastros.tipo_servicos.models import TipoServico
 
 @admin.register(TipoServico)

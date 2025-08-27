@@ -1,6 +1,9 @@
-from cadastros.models import models, Base
+from django.db import models
+from core.bases.models import BaseModel
 
-class TipoServico(Base):
+
+
+class TipoServico(BaseModel):
     nome = models.CharField(
         verbose_name="Nome do serviço",
         max_length=50,

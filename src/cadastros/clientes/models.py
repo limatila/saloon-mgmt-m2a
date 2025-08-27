@@ -1,4 +1,5 @@
-from cadastros.models import models, Pessoa
+from django.db import models
+from core.pessoas.models import Pessoa
 
 
 # Create your models here.

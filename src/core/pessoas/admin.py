@@ -1,10 +1,10 @@
-from core.bases.admin import BaseAdmin
+from core.bases.admin import BaseAssociadoEmpresaAdmin
 
 
-class PessoaAdmin(BaseAdmin):
+class PessoaAdmin(BaseAssociadoEmpresaAdmin):
     search_fields = "nome", "cpf", "telefone", "endereco"
     search_help_text = "Nome, cpf, telefone ou endereço..."
-    
+
     def get_fieldsets(self, request, obj = ...):
         base_fieldsets = list(super().get_fieldsets(request, obj))
         
@@ -23,5 +23,5 @@ class PessoaAdmin(BaseAdmin):
                 }
             )
         ]
-        
+
         return base_fieldsets + new_fieldsets

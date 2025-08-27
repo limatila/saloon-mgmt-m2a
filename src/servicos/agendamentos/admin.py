@@ -6,4 +6,24 @@ from servicos.agendamentos.models import Agendamento
 @admin.register(Agendamento)
 class AgendamentoAdmin(DateHierarchyAdmin, BaseAssociadoEmpresaAdmin):
     list_filter = "status", 
-    raw_id_fields = "cliente", "servico", "trabalhador"
+    raw_id_fields = "cliente", "servico", "trabalhador", "empresa"
+
+    def get_fieldsets(self, request, obj = ...):
+        base_fieldsets = list(super().get_fieldsets(request, obj))
+
+        new_fieldsets = [
+            (
+                "Basic",
+                {
+                    'fields': ('data_agendado', 'cliente', 'servico', 'trabalhador')
+                }
+            ),
+            (
+                "Additional",
+                {
+                    'fields': ('status', )
+                }
+            )
+        ]
+        
+        return base_fieldsets + new_fieldsets

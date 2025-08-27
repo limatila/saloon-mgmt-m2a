@@ -13,7 +13,8 @@ class BaseAdmin(admin.ModelAdmin):
     ]
 
 class BaseAssociadoEmpresaAdmin(BaseAdmin):
-
+    raw_id_fields = "empresa", 
+    
     def get_fieldsets(self, request, obj = ...):
         base_fieldsets = list(super().get_fieldsets(request, obj))
 
@@ -27,7 +28,7 @@ class BaseAssociadoEmpresaAdmin(BaseAdmin):
         ]
         
         return base_fieldsets + new_fieldsets
-    raw_id_fields = "empresa", 
+
 
 class DateHierarchyAdmin(BaseAdmin):
     date_hierarchy = "data_criado"

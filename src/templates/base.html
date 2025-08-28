@@ -18,30 +18,33 @@
     </head>
 
     <body>
+        <header>
+            <div class="wrapper header-content">
+                <a class="header-title" href="">
+                    <img src="{% static "imgs/kiss.png" %}" alt="saloon icon" width="32" height="auto">
+                    <h1>
+                        {{ title }}<span id="mgmt-title"> - Saloon Management</span>
+                    </h1>
+                </a>
+            </div>
+        </header>
+        
         <main>
-            <header>
-                <div class="wrapper header-content">
-                    <a class="header-title" href="">
-                        <img src="{% static "imgs/kiss.png" %}" alt="saloon icon" width="32" height="auto">
-                        <h1>
-                            {{ title }}<span id="mgmt-title"> - Saloon Management</span>
-                        </h1>
-                    </a>
-                    {% comment %} {% include "common/nav-bar.html" %} {% endcomment %}
-                </div>
-            </header>
+            <aside>
+                {% include "partials/nav-bar.html" %}
+            </aside>
     
             <section class="main-content">
-                <div class="wrapper container">
-                    Hello {{ nome }}
+                <div class="wrapper">
+                    a
                     {% block content %}
                     {% endblock content %}
                 </div>
             </section>
-    
-            <footer>
-                {% comment %} {% include "common/footer-nav.html" %} {% endcomment %}
-            </footer>
         </main>
+    
+        <footer>
+            {% comment %} {% include "common/footer-nav.html" %} {% endcomment %}
+        </footer>
     </body>
 </html>

@@ -9,6 +9,13 @@ class EmpresaAdmin(DateHierarchyAdmin):
     search_fields = "cnpj", "nome_fantasia", "razao_social"
     search_help_text = "CNPJ, nome fantasia ou razao social..."
 
+    def get_list_display(self, request):
+        base_list = list(super().get_list_display(request))
+
+        new_list = ["cnpj", "nome_fantasia", "razao_social"]
+
+        return new_list + base_list
+
     def get_fieldsets(self, request, obj = ...):
         base_fieldsets = list(super().get_fieldsets(request, obj))
 

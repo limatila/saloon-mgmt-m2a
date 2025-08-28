@@ -15,6 +15,9 @@ class BaseModel(models.Model):
         blank=False
     )
 
+    def __str__(self):
+        return f"{self.id} - {self.nome}"
+
     class Meta:
         abstract = True
 

@@ -24,3 +24,6 @@ class Empresa(BaseModel):
         blank=False,
         default=None
     )
+
+    def __str__(self):
+        return f"{self.id} - {self.nome_fantasia}"

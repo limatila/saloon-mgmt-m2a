@@ -1,16 +1,47 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-</head>
-<body>
-    {% comment %} TODO: header {% endcomment %}
+    <head>
+        <title>
+            {{ title }} - Saloon Management
+        </title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Management Page for the Saloon (fictional)">
+        <meta name="keywords" content="saloon">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="icon" href="{% static "imgs/icons/kiss.png" %}">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "css/base.css" %}">
+        {% block head %}{% endblock head %}
+    </head>
 
-    {% block content %}
-    {% endblock content %}
-
-    {% comment %} ?TODO?: footer {% endcomment %}
-</body>
+    <body>
+        <main>
+            <header>
+                <div class="wrapper header-content">
+                    <a class="header-title" href="">
+                        <img src="{% static "imgs/kiss.png" %}" alt="saloon icon" width="32" height="auto">
+                        <h1>
+                            {{ title }}<span id="mgmt-title"> - Saloon Management</span>
+                        </h1>
+                    </a>
+                    {% comment %} {% include "common/nav-bar.html" %} {% endcomment %}
+                </div>
+            </header>
+    
+            <section class="main-content">
+                <div class="wrapper container">
+                    Hello {{ nome }}
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+            </section>
+    
+            <footer>
+                {% comment %} {% include "common/footer-nav.html" %} {% endcomment %}
+            </footer>
+        </main>
+    </body>
 </html>

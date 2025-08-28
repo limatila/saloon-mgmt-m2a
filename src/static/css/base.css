@@ -1,10 +1,210 @@
-*{
-    box-sizing: border-box;
-    scroll-behavior: smooth;
+/* Base css to all views */
+
+* {
+  box-sizing: border-box;
+  border-radius: 0.75rem;
 }
 
-html, body{
-    height: 100vh;
-    width: 100vw;
-    margin: 0;
+html {
+  scroll-behavior: smooth;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Fonts */
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif, Verdana;
+}
+
+h1 {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700;    /* font-bold */
+}
+
+h2 {
+  font-size: 1.5rem;   /* text-2xl */
+}
+
+h3 {
+  font-size: 1.25rem;  /* text-xl */
+}
+
+p, span, td {
+  font-size: 0.875rem;      /* text-sm */
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+button {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-weight: 600;         /* font-semibold */
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 125ms;
+}
+
+form {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Divs */
+h1, h2, h3, p, span, li, button {
+  padding: 0.25rem; /* p-1 */
+  width: fit-content;
+  height: fit-content;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+/* Position content at middle */
+.wrapper {
+  margin: auto;
+  width: 75%;     /* w-3/4 */
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+/* MAIN DIV */
+main{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* not 100% — use full viewport */
+
+  /* Header */
+  header {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background-color: #ec4899; /* bg-pink-500 */
+    width: 100%;
+    height: 3.75rem; /* h-15 = 60px = 3.75rem */
+    top: 0;
+  }
+  header div.wrapper {
+    color: white;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
+  .header-title {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-title img,
+  .header-title h1 {
+    display: inline;
+  }
+
+  @media (max-width: 640px) {
+    .header-title h1 {
+      font-size: 0.875rem; /* text-sm */
+    }
+
+    .header-title img {
+      transform: scale(0.75);
+    }
+  }
+
+  #mgmt-title {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    #mgmt-title {
+      display: inline;
+      font-weight: 300; /* font-light */
+      font-size: 1.875rem; /* text-3xl */
+    }
+  }
+
+  /* Nav bar at Header */
+  #nav-bar {
+    display: flex;
+    justify-content: space-evenly;
+    width: fit-content;
+  }
+
+  #nav-bar button {
+    border-width: 2px;
+    border-color: white;
+    background-color: white;
+    color: #be185d; /* text-pink-700 */
+  }
+
+  @media (max-width: 640px) {
+    #nav-bar button {
+      transform: scale(0.9);
+    }
+
+    #nav-bar button + button {
+      margin-left: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    #nav-bar button {
+      transform: scale(1.25);
+    }
+
+    #nav-bar button + button {
+      margin-left: 2.5rem; /* ml-10 */
+    }
+  }
+
+  #nav-bar button:hover {
+    background-color: #9d174d; /* bg-pink-800 */
+    color: white;
+  }
+
+  /* Content - Replaceable per page */
+  section.main-content {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+    & .wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+    }
+  }
+
+  /* Footer */
+  footer {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: #be185d; /* bg-pink-700 */
+    color: white;
+    width: 100%;
+    height: 3rem;
+    z-index: 900;
+  }
+
+  #footer-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
 }

@@ -1,0 +1,160 @@
+/*? daily-dashboard, .appointments-dashboard, .workers-dashboard */
+.dashboard {
+  height: 25%;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem; /* p-2 */
+  border: 2px solid #f9a8d4; /* border-pink-300 */
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); /* shadow-lg */
+}
+
+.dashboard div.dashboard-head {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.dashboard div.dashboard-head a {
+  font-family: sans-serif;
+  font-weight: 600;
+  color: #2563eb; /* text-blue-600 */
+  align-self: center;
+  justify-self: end;
+}
+
+/** Appointments-dashboard (table) */
+div.appointments-dashboard {
+  overflow-x: auto;
+}
+
+div.appointments-dashboard table {
+  width: 100%;
+  table-layout: auto;
+}
+
+div.appointments-dashboard table * tr th,
+div.appointments-dashboard table * tr td {
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  text-align: center;
+}
+
+div.appointments-dashboard table * tr td {
+  border: 1px solid #d1d5db; /* border-gray-300 */
+}
+
+div.appointments-dashboard table tbody {
+  overflow-y: auto;
+}
+
+/** Workers-dashboard (grid) */
+div.workers-dashboard {
+  overflow: auto;
+}
+
+div.workers-dashboard div.grid {
+  max-height: 100%;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.625rem; /* gap-2.5 */
+
+  /* Large screen */
+}
+
+@media (min-width: 1024px) {
+  div.workers-dashboard div.grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem; /* lg:gap-4 */
+  }
+}
+
+div.workers-dashboard div.grid div.worker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid #9ca3af; /* border-gray-400 */
+}
+
+@media (max-width: 1024px) {
+  div.workers-dashboard div.grid div.worker {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+div.workers-dashboard div.grid div.worker div,
+div.workers-dashboard div.grid div.worker img {
+  min-width: 25%;
+  height: 100%;
+  max-width: 100%;
+}
+
+div.workers-dashboard div.grid div.worker div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div.workers-dashboard div.grid div.worker div span {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  flex-grow: 1;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  div.workers-dashboard div.grid div.worker div span {
+    font-size: 12px;
+  }
+}
+
+div.workers-dashboard div.grid div.worker div span img {
+  width: 30%;
+  height: auto;
+}
+
+@media (max-width: 1024px) {
+  div.workers-dashboard div.grid div.worker div.eliminable {
+    display: none;
+  }
+}
+
+/* Force each inner child to have its own fixed proportion */
+div.workers-dashboard div.grid div.worker > * {
+  flex-basis: 25%;
+  flex-shrink: 0;
+}
+
+/* custom screen size */
+@media screen and (max-width: 490px) {
+  div.workers-dashboard div.grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/** daily dashboard (simple flexbox) */
+.daily-dashboard h2 {
+  font-size: inherit;
+}
+
+@media (max-width: 640px) {
+  .daily-dashboard h2 {
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .daily-dashboard h2 {
+    font-size: 1.125rem; /* text-lg */
+  }
+}
+
+/* custom screen height */
+@media screen and (max-height: 490px) {
+  div.workers-dashboard div.grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -73,7 +73,7 @@ TEMPLATES = [
         'DIRS': [
             #base
             BASE_DIR / 'templates',
-            
+
             #submodulos
             BASE_DIR / 'core' / 'bases' / 'templates',
             BASE_DIR / 'core' / 'pessoas' / 'templates',

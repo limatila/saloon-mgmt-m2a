@@ -71,9 +71,19 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            #base
             BASE_DIR / 'templates',
-            BASE_DIR / 'cadastros' / 'templates',
-            BASE_DIR / 'servicos' / 'templates'
+            
+            #submodulos
+            BASE_DIR / 'core' / 'bases' / 'templates',
+            BASE_DIR / 'core' / 'pessoas' / 'templates',
+
+            BASE_DIR / 'cadastros' / 'clientes' / 'templates',
+            BASE_DIR / 'cadastros' / 'empresas' / 'templates',
+            BASE_DIR / 'cadastros' / 'tipo_servicos' / 'templates',
+            BASE_DIR / 'cadastros' / 'trabalhadores' / 'templates',
+
+            BASE_DIR / 'servicos' / 'agendamentos' / 'templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -150,13 +160,22 @@ STATIC_URL = 'static/'
 
 #All dirs that include static files are required to be here.
 STATICFILES_DIRS = [
-    BASE_DIR / "core" / "static",
-    BASE_DIR / "cadastros" / "static",
-    BASE_DIR / "servicos" / "static"
+    BASE_DIR / 'static',
+    
+    #submodulos
+    BASE_DIR / 'core' / 'bases' / 'static',
+    BASE_DIR / 'core' / 'pessoas' / 'static',
+
+    BASE_DIR / 'cadastros' / 'clientes' / 'static',
+    BASE_DIR / 'cadastros' / 'empresas' / 'static',
+    BASE_DIR / 'cadastros' / 'tipo_servicos' / 'static',
+    BASE_DIR / 'cadastros' / 'trabalhadores' / 'static',
+    
+    BASE_DIR / 'servicos' / 'agendamentos' / 'static'
 ]
 
 # Path for static files to be saved when 'manage.py collectstatic' for production
-STATIC_ROOT = BASE_DIR / 'static/'
+STATIC_ROOT = 'static/'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'

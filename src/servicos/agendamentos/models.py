@@ -11,7 +11,7 @@ class Agendamento(BaseAssociadoEmpresa):
         blank=False
     )
     status = models.CharField(
-        verbose_name="Status",
+        verbose_name="Estado",
         choices=C_TIPO_STATUS_AGENDAMENTO,
         default=AGENDAMENTO_STATUS_PENDENTE,
         max_length=1,
@@ -22,20 +22,20 @@ class Agendamento(BaseAssociadoEmpresa):
     #FKs
     cliente = models.ForeignKey(
         'clientes.Cliente',
+        verbose_name="Cliente"
         on_delete=models.PROTECT,
-        verbose_name="Cliente",
         null=False
     )
     servico = models.ForeignKey(
         'tipo_servicos.TipoServico',
-        on_delete=models.PROTECT,
         verbose_name="Serviço contratado",
+        on_delete=models.PROTECT,
         null=False
     )
     trabalhador = models.ForeignKey(
         'trabalhadores.Trabalhador',
-        on_delete=models.PROTECT,
         verbose_name="Trabalhador",
+        on_delete=models.PROTECT,
         null=False
     )
 

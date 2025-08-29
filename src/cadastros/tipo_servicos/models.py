@@ -2,7 +2,6 @@ from django.db import models
 from core.bases.models import BaseAssociadoEmpresa
 
 
-
 class TipoServico(BaseAssociadoEmpresa):
     nome = models.CharField(
         verbose_name="Nome do serviço",

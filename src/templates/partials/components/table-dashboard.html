@@ -16,13 +16,13 @@
             {% for dict in object_dicts %}
                 <tr>
                     {% for key, value in dict.items %}
+                    <td>
                         {% if key == "imagem" %}
-                            <td>
-                                <img height="30px" src="{{ value.url }}" alt="photo">
-                            </td>
+                            <img height="30px" src="{{ value.url }}" alt="photo">
                         {% else %}
-                            <td>{{ value }}</td>
+                            {{ value }}
                         {% endif %}
+                    </td>
                     {% endfor %}
                 </tr>
             {% empty %}

@@ -22,7 +22,7 @@ class Agendamento(BaseAssociadoEmpresa):
     #FKs
     cliente = models.ForeignKey(
         'clientes.Cliente',
-        verbose_name="Cliente"
+        verbose_name="Cliente",
         on_delete=models.PROTECT,
         null=False
     )

@@ -39,14 +39,19 @@ class BaseDynamicListView(ListView):
             try:
                 self.model._meta.get_field(field)
             except Exception:
-                raise ImproperlyConfigured(f"'{field}' is not a valid field on {self.model.__name__}")
+                raise ImproperlyConfigured(f"'{field}' não é um field de {self.model.__name__}")
 
         context['field_names'] = [
             self.model._meta.get_field(field).verbose_name
             for field in field_order
         ]
         context['object_dicts'] = [
-            {field: getattr(obj, field) for field in field_order}
+            {
+                field: getattr(obj, f"get_{field}_display")()
+                if callable(getattr(obj, f"get_{field}_display", None))
+                else getattr(obj, field)
+                for field in field_order
+            }
             for obj in context['object_list']
         ]
 

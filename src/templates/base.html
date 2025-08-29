@@ -31,9 +31,11 @@
         </header>
         
         <main>
-            <aside>
-                {% include "partials/nav-bar.html" %}
-            </aside>
+            {% if sidebar %}
+                <aside>
+                    {% include "partials/nav-bar.html" %}
+                </aside>
+            {% endif %}
     
             <section class="main-content">
                 <div class="wrapper">

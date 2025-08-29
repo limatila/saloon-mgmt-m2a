@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.core.exceptions import ImproperlyConfigured
 from django.views import View
-from django.views.generic import TemplateView 
+from django.views.generic import TemplateView
 from django.views.generic import CreateView, ListView, UpdateView #DeleteView não recomendado, apenas inativar o registro.
+
 
 class BaseView(TemplateView):
     template_name = "base.html"
@@ -11,4 +12,42 @@ class BaseView(TemplateView):
         contexto["title"] = "Base"
         contexto["nome"] = "atila"
         return contexto
-    
+
+
+# bases de componentes
+class DynamicListView(ListView):
+    """
+    Uma view para iterar sobre campos de objetos.
+    var 'model' deve ser definido.
+    método 'get_field_order' deve ser definido.
+    """
+    def get_fields_display(self):
+        """
+        Hook para definir fields_ordenados
+        """
+        raise ImproperlyConfigured(
+            f"{self.__class__.__name__} deve implementar get_field_order(), retornando uma list[str]."
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        field_order = self.get_fields_display()
+
+        # Optional: Validate fields exist
+        for field in field_order:
+            try:
+                self.model._meta.get_field(field)
+            except Exception:
+                raise ImproperlyConfigured(f"'{field}' is not a valid field on {self.model.__name__}")
+
+        context['field_names'] = [
+            self.model._meta.get_field(field).verbose_name
+            for field in field_order
+        ]
+        context['object_dicts'] = [
+            {field: getattr(obj, field) for field in field_order}
+            for obj in context['object_list']
+        ]
+
+        return context

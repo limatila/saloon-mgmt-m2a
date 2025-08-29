@@ -145,9 +145,8 @@ header div.wrapper {
 }
 
 .side-nav-bar a {
-  border-width: 2px;
   width: fit-content;
-  border-color: white;
+  border: 2px solid white;
   background-color: white;
   color: #be185d; /* text-pink-700 */
 }
@@ -168,7 +167,7 @@ header div.wrapper {
   }
 
   .side-nav-bar a + a {
-    margin-top: 2.5rem; /* mt-10 */
+    margin-top: 1.5rem;
   }
 }
 

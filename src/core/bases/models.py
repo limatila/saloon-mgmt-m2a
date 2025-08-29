@@ -14,6 +14,12 @@ class BaseModel(models.Model):
         null=False,
         blank=False
     )
+    ativo = models.BooleanField(
+        verbose_name="Ativo",
+        default=True,
+        null=False,
+        blank=False
+    )
 
     def __str__(self):
         return f"{self.id} - {self.nome}"
@@ -25,6 +31,7 @@ class BaseModel(models.Model):
 class BaseAssociadoEmpresa(BaseModel):
     empresa = models.ForeignKey(
         'empresas.Empresa',
+        verbose_name="Empresa",
         null=False,
         blank=False,
         on_delete=models.PROTECT

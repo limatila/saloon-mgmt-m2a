@@ -5,6 +5,7 @@ from core.bases.models import BaseAssociadoEmpresa
 
 class Pessoa(BaseAssociadoEmpresa):
     nome = models.CharField(
+        verbose_name="Nome",
         null=False,
         blank=False,
         max_length=255
@@ -16,12 +17,8 @@ class Pessoa(BaseAssociadoEmpresa):
         max_length=11,
         unique=True
     )
-    ativo = models.BooleanField(
-        default=True,
-        null=False,
-        blank=False
-    )
-    image = models.ImageField(
+    imagem = models.ImageField(
+        verbose_name="Imagem",
         default="placeholder.jpg",
         upload_to="imagens-pessoas/",
         null=True,
@@ -29,6 +26,7 @@ class Pessoa(BaseAssociadoEmpresa):
         editable=True
     )
     telefone = models.CharField(
+        verbose_name="Telefone",
         max_length=21,
         null=False,
         blank=False,

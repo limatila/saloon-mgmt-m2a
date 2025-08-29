@@ -77,6 +77,7 @@ TEMPLATES = [
             #submodulos
             BASE_DIR / 'core' / 'bases' / 'templates',
             BASE_DIR / 'core' / 'pessoas' / 'templates',
+            BASE_DIR / 'core' / 'auth' / 'templates',
 
             BASE_DIR / 'cadastros' / 'clientes' / 'templates',
             BASE_DIR / 'cadastros' / 'empresas' / 'templates',
@@ -165,6 +166,7 @@ STATICFILES_DIRS = [
     #submodulos
     BASE_DIR / 'core' / 'bases' / 'static',
     BASE_DIR / 'core' / 'pessoas' / 'static',
+    BASE_DIR / 'core' / 'auth' / 'static',
 
     BASE_DIR / 'cadastros' / 'clientes' / 'static',
     BASE_DIR / 'cadastros' / 'empresas' / 'static',
@@ -179,3 +181,7 @@ STATIC_ROOT = 'static/'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+LOGIN_URL = "/core/auth/login/"
+LOGIN_REDIRECT_URL = '/home/'

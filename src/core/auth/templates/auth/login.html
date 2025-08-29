@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboards.css' %}">
+{% endblock head %}
+
+{% block content %}
+<!-- Worker Registration Render -->
+    <div class="form-dashboard dashboard">
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <section class="form-section">
+                <h2>{{ form_name }} Info</h2>
+                {% for field in form %}
+                    {% include "partials/forms/dynamic-field.html" %}
+                {% endfor %}
+            </section>
+
+            {% include "partials/forms/submit.html" %}
+        </form>
+    </div>
+{% endblock content %}

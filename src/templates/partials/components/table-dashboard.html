@@ -1,0 +1,41 @@
+{% block head %}
+    {% include "partials/heads/dashboard_head.html" %}
+{% endblock head %}
+
+<div class="table-dashboard dashboard">
+    <table>
+        {% comment %} display small list dashboard of all appointments w/ data {% endcomment %}
+        <thead>
+            <tr>
+                {% for field in field_names %}
+                    <th>{{ field }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for dict in object_dicts %}
+                <tr>
+                    {% for key, value in dict.items %}
+                        {% if key == "imagem" %}
+                            <td>
+                                <img height="30px" src="{{ value.url }}" alt="photo">
+                            </td>
+                        {% else %}
+                            <td>{{ value }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="1000" class="py-4 text-gray-500">No clients found.<br> Please add it at
+                        <button class="">
+                            {% comment %} <a href="{% url "cadastros:clients:registrar" %}">
+                                here
+                            </a> {% endcomment %}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

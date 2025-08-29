@@ -11,7 +11,7 @@ class TipoServicoAdmin(BaseAssociadoEmpresaAdmin):
     def get_list_display(self, request):
         base_list = list(super().get_list_display(request))
 
-        new_list = ["nome", "preco"]
+        new_list = ["nome", ]
 
         return new_list + base_list
 

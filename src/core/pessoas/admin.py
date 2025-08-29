@@ -19,7 +19,7 @@ class PessoaAdmin(BaseAssociadoEmpresaAdmin):
             (
                 "Basic",
                 {
-                    'fields': ('nome', 'cpf', 'image')
+                    'fields': ('nome', 'cpf', 'imagem')
                 }
             ),
             (

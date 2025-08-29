@@ -25,13 +25,6 @@ class BaseAssociadoEmpresaAdmin(BaseAdmin):
 
         return new_list + base_list
 
-    def get_list_display_links(self, request, list_display):
-        base_list = list(super().get_list_display(request))
-
-        new_list = ["empresa", ]
-
-        return new_list + base_list
-
     def get_fieldsets(self, request, obj = ...):
         base_fieldsets = list(super().get_fieldsets(request, obj))
 

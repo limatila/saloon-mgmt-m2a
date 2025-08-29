@@ -23,7 +23,7 @@ class AgendamentoAdmin(
     def get_list_display_links(self, request, list_display):
         base_list = list(super().get_list_display(request))
 
-        new_list = ["cliente", "servico", "trabalhador" ]
+        new_list = ["data_agendado", ]
 
         return new_list + base_list
 

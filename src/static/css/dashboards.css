@@ -1,4 +1,4 @@
-/*? daily-dashboard, .appointments-dashboard, .workers-dashboard */
+/*? daily-dashboard, .table-dashboard, .grid-dashboard */
 .dashboard {
   height: 80vh;
   width: 100%;
@@ -23,36 +23,36 @@
   justify-self: end;
 }
 
-/** Appointments-dashboard (table) */
-div.appointments-dashboard {
+/** table dashboards */
+div.table-dashboard {
   overflow-x: auto;
 }
 
-div.appointments-dashboard table {
+div.table-dashboard table {
   width: 100%;
   table-layout: auto;
 }
 
-div.appointments-dashboard table * tr th,
-div.appointments-dashboard table * tr td {
+div.table-dashboard table * tr th,
+div.table-dashboard table * tr td {
   padding: 0.5rem 1rem; /* px-4 py-2 */
   text-align: center;
 }
 
-div.appointments-dashboard table * tr td {
+div.table-dashboard table * tr td {
   border: 1px solid #d1d5db; /* border-gray-300 */
 }
 
-div.appointments-dashboard table tbody {
+div.table-dashboard table tbody {
   overflow-y: auto;
 }
 
-/** Workers-dashboard (grid) */
-div.workers-dashboard {
+/** grid-dashboards */
+div.grid-dashboard {
   overflow: auto;
 }
 
-div.workers-dashboard div.grid {
+div.grid-dashboard div.grid {
   max-height: 100%;
   overflow: auto;
   display: grid;
@@ -63,38 +63,38 @@ div.workers-dashboard div.grid {
 }
 
 @media (min-width: 1024px) {
-  div.workers-dashboard div.grid {
+  div.grid-dashboard div.grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem; /* lg:gap-4 */
   }
 }
 
-div.workers-dashboard div.grid div.worker {
+div.grid-dashboard div.grid div.worker {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border: 1px solid #9ca3af; /* border-gray-400 */
 }
 
 @media (max-width: 1024px) {
-  div.workers-dashboard div.grid div.worker {
+  div.grid-dashboard div.grid div.worker {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-div.workers-dashboard div.grid div.worker div,
-div.workers-dashboard div.grid div.worker img {
+div.grid-dashboard div.grid div.worker div,
+div.grid-dashboard div.grid div.worker img {
   min-width: 25%;
   height: 100%;
   max-width: 100%;
 }
 
-div.workers-dashboard div.grid div.worker div {
+div.grid-dashboard div.grid div.worker div {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-div.workers-dashboard div.grid div.worker div span {
+div.grid-dashboard div.grid div.worker div span {
   height: 100%;
   width: 100%;
   display: flex;
@@ -106,31 +106,31 @@ div.workers-dashboard div.grid div.worker div span {
 }
 
 @media (max-width: 640px) {
-  div.workers-dashboard div.grid div.worker div span {
+  div.grid-dashboard div.grid div.worker div span {
     font-size: 12px;
   }
 }
 
-div.workers-dashboard div.grid div.worker div span img {
+div.grid-dashboard div.grid div.worker div span img {
   width: 30%;
   height: auto;
 }
 
 @media (max-width: 1024px) {
-  div.workers-dashboard div.grid div.worker div.eliminable {
+  div.grid-dashboard div.grid div.worker div.eliminable {
     display: none;
   }
 }
 
 /* Force each inner child to have its own fixed proportion */
-div.workers-dashboard div.grid div.worker > * {
+div.grid-dashboard div.grid div.worker > * {
   flex-basis: 25%;
   flex-shrink: 0;
 }
 
 /* custom screen size */
 @media screen and (max-width: 490px) {
-  div.workers-dashboard div.grid {
+  div.grid-dashboard div.grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -154,7 +154,7 @@ div.workers-dashboard div.grid div.worker > * {
 
 /* custom screen height */
 @media screen and (max-height: 490px) {
-  div.workers-dashboard div.grid {
+  div.grid-dashboard div.grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

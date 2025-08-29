@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "css/base.css" %}">
+    <link rel="stylesheet" href="{% static "css/dashboards.css" %}">
+    <link rel="stylesheet" href="{% static "css/home.css" %}">
+{% endblock head %}
+
+{% block content %}
+    <div class="home-dashboard dashboard">
+        <div>
+            <h3>Clientes</h3>
+            <div class="grid">
+                <a href="">listar</a>
+                <a href="">cadastro</a>
+                <a href="">modificar</a>
+                <a href="">historico</a>
+            </div>
+        </div>
+        <div>
+            <h3>Empresas</h3>
+            <div class="grid">
+                <a href="">listar</a>
+                <a href="">cadastro</a>
+                <a href="">modificar</a>
+                <a href="">historico</a>
+            </div>
+        </div>
+        <div>
+            <h3>Serviços</h3>
+            <div class="grid">
+                <a href="">listar</a>
+                <a href="">cadastro</a>
+                <a href="">modificar</a>
+                <a href="">historico</a>
+            </div>
+        </div>
+        <div>
+            <h3>Trabalhadores</h3>
+            <div class="grid">
+                <a href="">listar</a>
+                <a href="">cadastro</a>
+                <a href="">modificar</a>
+                <a href="">historico</a>
+            </div>
+        </div>
+        <div>
+            <h3>Agendamentos</h3>
+            <div class="grid">
+                <a href="">listar</a>
+                <a href="">cadastro</a>
+                <a href="">modificar</a>
+                <a href="">historico</a>
+            </div>
+        </div>
+        <div>
+            <h3>Admin</h3>
+            <div class="grid">
+                <a href="">listar</a>
+                <a href="">cadastro</a>
+                <a href="">modificar</a>
+                <a href="">historico</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

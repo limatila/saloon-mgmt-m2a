@@ -15,7 +15,7 @@ class BaseView(TemplateView):
 
 
 # bases de componentes
-class DynamicListView(ListView):
+class BaseDynamicListView(ListView):
     """
     Uma view para iterar sobre campos de objetos.
     var 'model' deve ser definido.

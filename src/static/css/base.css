@@ -61,7 +61,7 @@ form {
 }
 
 /* Divs */
-h1, h2, h3, p, span, li, button {
+h1, h2, h3, p, span, button {
   padding: 0.25rem; /* p-1 */
   width: fit-content;
   height: fit-content;
@@ -92,7 +92,7 @@ header {
   width: 100%;
   height: 3.75rem; /* h-15 = 60px = 3.75rem */
 }
-header div.wrapper {
+header div.header-content {
   color: white;
 }
 
@@ -101,7 +101,7 @@ header div.wrapper {
   justify-content: space-between;
   align-items: center;
   height: 100%;
-  width: fit-content;
+  width: 94%;
 }
 
 .header-title {
@@ -115,6 +115,7 @@ header div.wrapper {
 .header-title h1 {
   display: inline;
   margin: 0;
+  
 }
 
 @media (max-width: 640px) {

@@ -27,12 +27,15 @@ class LoginView(FormView):
         user = authenticate(self.request, username=usuario, password=senha)
 
         if user:
+            if self.request.user.is_authenticated:
+                logout(self.request)
+
             login(self.request, user)
-            redirection_url = self.request.GET.get(self.redirect_field_name) or self.request.POST.get(self.redirect_field_name)
+            url_redirecionamento = self.request.GET.get(self.redirect_field_name) or self.request.POST.get(self.redirect_field_name)
 
             # Validate redirection
-            if redirection_url and url_has_allowed_host_and_scheme(redirection_url, allowed_hosts=(self.request.get_host())):
-                return redirect(redirection_url)
+            if url_redirecionamento and url_has_allowed_host_and_scheme(url_redirecionamento, allowed_hosts=(self.request.get_host())):
+                return redirect(url_redirecionamento)
 
             return super().form_valid(form)
         else:
@@ -69,7 +72,7 @@ class SignUpView(LoginView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Registrar sua conta"
-        contexto["form_name"] = "Sign Up"
+        contexto["form_name"] = "Registro"
         return contexto
 
 
@@ -84,6 +87,9 @@ class LogoutView(FormView, TemplateView):
         senha = form.cleaned_data['password']
         user = self.request.user
 
+        if not user.is_authenticated:
+            return redirect(reverse_lazy('core:auth:login'))
+
         if not user.check_password(senha):
             form.add_error(None, ValidationError("Senha incorreta para deslogar usuário da sessão. Fale com administrador."))
             return self.form_invalid(form)
@@ -92,17 +98,17 @@ class LogoutView(FormView, TemplateView):
         return redirect(self.get_next_page())
 
     def get_next_page(self):
-        redirection_url = self.request.META.get('HTTP_REFERER')
+        url_redirecionamento = self.request.META.get('HTTP_REFERER')
 
-        valid_url_condition: bool = redirection_url and url_has_allowed_host_and_scheme(redirection_url, allowed_hosts={self.request.get_host()})
-        valid_redirection_condition = (not "logout" in redirection_url)
-        if valid_url_condition and valid_redirection_condition:
-            return redirection_url
+        condicao_url_valida: bool = url_redirecionamento and url_has_allowed_host_and_scheme(url_redirecionamento, allowed_hosts={self.request.get_host()})
+        condicao_redirecionamento_valido = (not "logout" in url_redirecionamento)
+        if condicao_url_valida and condicao_redirecionamento_valido:
+            return url_redirecionamento
 
         return self.success_url
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        contexto["title"] = "Logout"
+        contexto["title"] = "Sair da conta"
         contexto["form_name"] = "Logout"
         return contexto

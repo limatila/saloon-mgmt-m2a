@@ -21,12 +21,23 @@
     <body>
         <header>
             <div class="wrapper header-content">
+                <div>
+                    {% if user.is_authenticated %}
+                        <p>Usuário Logado: {{ user.username }}</p>
+                    {% else %}
+                        <p>Não está logado</p>
+                    {% endif %}
+
+                </div>
+
                 <a class="header-title" href="{% url "home" %}">
                     <img src="{% static "imgs/kiss.png" %}" alt="saloon icon" width="32" height="auto">
                     <h1>
                         {{ title }}<span id="mgmt-title"> - Saloon Management</span>
                     </h1>
                 </a>
+
+                <a href="{% url "core:auth:logout" %}">Logout</a>
             </div>
         </header>
         
@@ -46,7 +57,7 @@
         </main>
     
         <footer>
-            <a href="{% url "core:auth:logout" %}">Logout</a>
+            
         </footer>
     </body>
 </html>

@@ -1,0 +1,10 @@
+<div class="form-field">
+    <div class="field-input">
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    {% for err in field.errors %}
+        <p class="error-message">{{ err }}</p>
+    {% endfor %}
+    {% comment %} ! if there are too many error-messages, the layout is going to break below the footer {% endcomment %}
+</div>

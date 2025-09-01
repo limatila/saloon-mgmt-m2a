@@ -9,60 +9,19 @@
 
 {% block content %}
     <div class="home-dashboard dashboard">
-        <div>
-            <h3>Clientes</h3>
-            <div class="grid">
-                <a href="">listar</a>
-                <a href="">cadastro</a>
-                <a href="">modificar</a>
-                <a href="">historico</a>
+        {% for module in modules %}
+        <div class="module">
+            <h3>{{ module.name }}</h3>
+            <div class="inner-grid">
+                {% for key, value in module.url_names.items %}
+                {% url value as resolved_url %}
+                    <a href="{{ resolved_url }}">{{ key }}</a>
+                    <a href="{{ resolved_url }}">{{ key }}</a>
+                    <a href="{{ resolved_url }}">{{ key }}</a>
+                {% endfor %}
             </div>
         </div>
-        <div>
-            <h3>Empresas</h3>
-            <div class="grid">
-                <a href="">listar</a>
-                <a href="">cadastro</a>
-                <a href="">modificar</a>
-                <a href="">historico</a>
-            </div>
-        </div>
-        <div>
-            <h3>Serviços</h3>
-            <div class="grid">
-                <a href="">listar</a>
-                <a href="">cadastro</a>
-                <a href="">modificar</a>
-                <a href="">historico</a>
-            </div>
-        </div>
-        <div>
-            <h3>Trabalhadores</h3>
-            <div class="grid">
-                <a href="">listar</a>
-                <a href="">cadastro</a>
-                <a href="">modificar</a>
-                <a href="">historico</a>
-            </div>
-        </div>
-        <div>
-            <h3>Agendamentos</h3>
-            <div class="grid">
-                <a href="">listar</a>
-                <a href="">cadastro</a>
-                <a href="">modificar</a>
-                <a href="">historico</a>
-            </div>
-        </div>
-        <div>
-            <h3>Admin</h3>
-            <div class="grid">
-                <a href="">listar</a>
-                <a href="">cadastro</a>
-                <a href="">modificar</a>
-                <a href="">historico</a>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock content %}
 

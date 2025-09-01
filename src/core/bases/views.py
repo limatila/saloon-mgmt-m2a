@@ -1,8 +1,10 @@
 from django.core.exceptions import ImproperlyConfigured
 # from django.views import View
 from django.views.generic import TemplateView
-from django.views.generic import ListView#, CreateView, UpdateView #DeleteView não recomendado, apenas inativar o registro.
+from django.views.generic import ListView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from core.bases.utils.context_generators import generate_dynamic_urls
 
 
 class BasePageView(LoginRequiredMixin, TemplateView):
@@ -17,11 +19,20 @@ class BasePageView(LoginRequiredMixin, TemplateView):
 
 class HomePageView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
+    all_cadastros_modules: list[str] = ["clientes", "empresas", "servicos", "trabalhadores"]
+    all_servicos_modules: list[str] = ["agendamentos", ]
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Home"
-        contexto["sidebar"] = False
+
+        #load modules grid
+        contexto['modules'] = (
+            generate_dynamic_urls('cadastros', self.all_cadastros_modules) +
+            generate_dynamic_urls('servicos', self.all_servicos_modules) +
+            []
+        )
+
         return contexto
 
 

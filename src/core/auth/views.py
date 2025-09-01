@@ -1,5 +1,3 @@
-from urllib.parse import urlencode
-
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.forms import Form, ValidationError

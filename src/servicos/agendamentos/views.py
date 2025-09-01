@@ -13,4 +13,3 @@ class AgendamentoListView(BaseDynamicListView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Lista de Agendamentos"
         return context
-    

@@ -18,14 +18,15 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
-from core.bases.views import HomePageView
+from core.bases.views import HomePageView, RedirectRootToHomeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('core.urls', namespace='core')),
     path('cadastros/', include('cadastros.urls', namespace='cadastros')),
     path('servicos/', include('servicos.urls', namespace='contratos')),
-    path('home/', HomePageView.as_view(), name='home')
+    path('home/', HomePageView.as_view(), name='home'),
+    path('', RedirectRootToHomeView.as_view(), name='root')
 ]
 
 from django.conf.urls.static import static

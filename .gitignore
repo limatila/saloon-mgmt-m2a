@@ -5,3 +5,4 @@ src/database.sqlite3
 **/__pycache__/
 src/media/imagens-pessoas/**
 src/**/migrations/**
+static/**/**/**

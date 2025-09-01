@@ -1,5 +1,9 @@
 <div class="wrapper">
     <nav class="side-nav-bar">
+        <a href="{% url "home" %}">Home</a>
+
+        <hr>
+
         <a href="{% url "cadastros:empresas:list" %}">Empresas</a>
         <a href="{% url "cadastros:clientes:list" %}">Clientes</a>
         <a href="{% url "cadastros:tipo_servicos:list" %}">Serviços</a>

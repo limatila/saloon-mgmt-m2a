@@ -151,6 +151,13 @@ header div.wrapper {
   color: #be185d; /* text-pink-700 */
 }
 
+.side-nav-bar hr {
+  width: 100%;
+  background-color: white;
+  height: 0.5rem;
+  margin: 2rem 0px;
+}
+
 @media (max-width: 640px) {
   .side-nav-bar a {
     transform: scale(0.9);

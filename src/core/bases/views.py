@@ -17,9 +17,6 @@ class BasePageView(LoginRequiredMixin, TemplateView):
         return contexto
 
 
-class RedirectRootToHomeView(RedirectView):
-    pattern_name = 'home'
-
 class HomePageView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
     all_cadastros_modules: list[str] = ["clientes", "empresas", "servicos", "trabalhadores"]

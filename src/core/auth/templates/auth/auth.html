@@ -17,8 +17,16 @@
                 {% for field in form %}
                     {% include "partials/forms/dynamic-field.html" %}
                 {% endfor %}
+                    {% if form.non_field_errors %}
+                        <ul class="non_field_errors">
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
             </section>
 
+            
             {% include "partials/forms/submit.html" %}
         </form>
     </div>

@@ -1,6 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
 # from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.views.generic import ListView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -16,6 +16,9 @@ class BasePageView(LoginRequiredMixin, TemplateView):
         contexto["sidebar"] = True
         return contexto
 
+
+class RedirectRootToHomeView(RedirectView):
+    pattern_name = 'home'
 
 class HomePageView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"

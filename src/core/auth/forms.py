@@ -8,3 +8,8 @@ class UserForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-field', 'placeholder': "***.."})
     )
+
+class LogoutForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-field', 'placeholder': "***.."})
+    )

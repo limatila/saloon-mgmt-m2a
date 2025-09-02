@@ -20,34 +20,34 @@
     </head>
 
     <body>
-        <header>
-            <div class="wrapper header-content">
-                <div>
-                    {% if user.is_authenticated %}
-                        <p>Usuário Logado: {{ user.username }}</p>
-                    {% else %}
-                        <p>Não está logado</p>
-                    {% endif %}
-
-                </div>
-
-                <a class="header-title" href="{% url "home" %}">
-                    <img src="{% static "imgs/kiss.png" %}" alt="saloon icon" width="32" height="auto">
-                    <h1>
-                        {{ title }}<span id="mgmt-title"> - Saloon Management</span>
-                    </h1>
-                </a>
-
-                <a href="{% url "core:auth:logout" %}">Logout</a>
-            </div>
-        </header>
+        {% if sidebar %}
+            <aside>
+                {% include "partials/nav-bar.html" %}
+            </aside>
+        {% endif %}
         
         <main>
-            {% if sidebar %}
-                <aside>
-                    {% include "partials/nav-bar.html" %}
-                </aside>
-            {% endif %}
+            <header>
+                <div class="wrapper header-content">
+                    <div class="header-intro">
+                        <h2 class="header-title">{{title}}</h2>
+                        <p class="header-description">{{description}}</p>
+                        {% comment %} <img src="{% static "imgs/kiss.png" %}" alt="ícone da empresa" width="32" height="auto">
+                        <h1>
+                            {{ title }}<span id="mgmt-title"> - Saloon Management</span>
+                        </h1> {% endcomment %}
+                    </div>
+                    
+                    <div class="header-actions">
+                        {% if user.is_authenticated %}
+                            <a class="action profile" href="">Usuário Logado: {{ user.username }}</a>
+                            <a class="action logout" href="{% url "core:auth:logout" %}"><i class="fa-solid fa-power-off"></i></a>
+                        {% else %}
+                            <a class="action profile" href="">Não está logado</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </header>
     
             <section class="main-content">
                 <div class="wrapper">
@@ -55,10 +55,10 @@
                     {% endblock content %}
                 </div>
             </section>
+            <footer>
+                {% comment %}  {% endcomment %}
+            </footer>
         </main>
     
-        <footer>
-            
-        </footer>
     </body>
 </html>

@@ -1,13 +1,24 @@
 <div class="wrapper">
     <nav class="side-nav-bar">
-        <a href="{% url "home" %}">Home</a>
+        <a class="home-nav" href="{% url "home" %}"><i class="fa-solid fa-house"></i> Home</a>
 
         <hr>
 
-        <a href="{% url "cadastros:empresas:list" %}">Empresas</a>
-        <a href="{% url "cadastros:clientes:list" %}">Clientes</a>
-        <a href="{% url "cadastros:tipo_servicos:list" %}">Serviços</a>
-        <a href="{% url "cadastros:trabalhadores:list" %}">Trabalhadores</a>
-        <a href="{% url "servicos:agendamentos:list" %}">Agendamentos</a>
+        <section class="nav-section">
+            <a class="module-name" href="{% url "cadastros:list" %}"><h5> Cadastros</h5></a>
+            <div class="submodules-nav">
+                <a href="{% url "cadastros:empresas:list" %}"><i class="fa-solid fa-building"></i> Empresas</a>
+                <a href="{% url "cadastros:clientes:list" %}"><i class="fa-solid fa-circle-user"></i> Clientes</a>
+                <a href="{% url "cadastros:trabalhadores:list" %}"><i class="fa-solid fa-briefcase"></i> Trabalhadores</a>
+            </div>
+        </section class="nav-section">
+        
+        <section class="nav-section">
+            <a class="module-name" href="{% url "servicos:list" %}"><h5> Serviços</h5></a>
+            <div class="submodules-nav">
+                <a href="{% url "servicos:agendamentos:list" %}"><i class="fa-solid fa-calendar"></i> Agendamentos</a>
+                <a href="{% url "cadastros:tipo_servicos:list" %}"><i class="fa-solid fa-scissors"></i> Tipos Ofertados</a>
+            </div>
+        </section>
     </nav>
 </div>

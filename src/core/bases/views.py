@@ -1,15 +1,13 @@
 from django.core.exceptions import ImproperlyConfigured
-# from django.views import View
-from django.views.generic import TemplateView, RedirectView
+from django.views import View
+from django.views.generic import TemplateView
 from django.views.generic import ListView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from core.bases.utils.context_generators import generate_dynamic_urls
 
 
-class BasePageView(LoginRequiredMixin, TemplateView):
-    template_name = "base.html"
-
+class BasePageView(LoginRequiredMixin, View):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Base"
@@ -17,7 +15,7 @@ class BasePageView(LoginRequiredMixin, TemplateView):
         return contexto
 
 
-class HomePageView(LoginRequiredMixin, TemplateView):
+class HomePageView(BasePageView, TemplateView):
     template_name = "home.html"
     all_cadastros_modules: list[str] = ["clientes", "empresas", "servicos", "trabalhadores"]
     all_servicos_modules: list[str] = ["agendamentos", ]
@@ -37,7 +35,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
 
 # bases de componentes
-class BaseDynamicListView(LoginRequiredMixin, ListView):
+class BaseDynamicListView(BasePageView, ListView):
     """
     Uma view para iterar sobre campos de objetos.
     var 'model' deve ser definido.
@@ -76,6 +74,5 @@ class BaseDynamicListView(LoginRequiredMixin, ListView):
             }
             for obj in contexto['object_list']
         ]
-        contexto["sidebar"] = True
 
         return contexto

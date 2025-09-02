@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
     <head>
         <title>
             {{ title }} - Saloon Management
@@ -13,7 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/20ee9826cd.js" crossorigin="anonymous"></script>
-        <link rel="icon" href="{% static "imgs/icons/kiss.png" %}">
+        <link rel="icon" href="{% static "imgs/kiss.png" %}">
         <link rel="stylesheet" href="{% static "css/base.css" %}">
         {% block head %}
         {% endblock head %}
@@ -25,17 +25,13 @@
                 {% include "partials/nav-bar.html" %}
             </aside>
         {% endif %}
-        
+
         <main>
             <header>
                 <div class="wrapper header-content">
                     <div class="header-intro">
-                        <h2 class="header-title">{{title}}</h2>
-                        <p class="header-description">{{description}}</p>
-                        {% comment %} <img src="{% static "imgs/kiss.png" %}" alt="ícone da empresa" width="32" height="auto">
-                        <h1>
-                            {{ title }}<span id="mgmt-title"> - Saloon Management</span>
-                        </h1> {% endcomment %}
+                        <h2 class="header-title">{{ title }}</h2>
+                        <p class="header-description">{{ description }}</p>
                     </div>
                     
                     <div class="header-actions">

@@ -43,6 +43,7 @@ class LoginView(FormView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Logar na Conta"
+        contexto["description"] = "Entre na sua conta autorizada."
         contexto["form_name"] = "Login"
         contexto["sidebar"] = False
         return contexto
@@ -70,6 +71,7 @@ class SignUpView(LoginView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Registrar sua conta"
+        contexto["description"] = "Crie uma nova conta para o nosso SaaS. A confirmação acontece em segundos!"
         contexto["form_name"] = "Registro"
         return contexto
 
@@ -108,5 +110,6 @@ class LogoutView(FormView, TemplateView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Sair da conta"
+        contexto["description"] = "Saia com sua senha. Depois poderá logar com outra conta."
         contexto["form_name"] = "Logout"
         return contexto

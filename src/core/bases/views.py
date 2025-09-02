@@ -23,6 +23,7 @@ class HomePageView(BasePageView, TemplateView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Home"
+        contexto["description"] = "Bem vindo! Aqui está o resumo de hoje."
 
         #load modules grid
         contexto['modules'] = (
@@ -41,6 +42,7 @@ class BaseDynamicListView(BasePageView, ListView):
     var 'model' deve ser definido.
     método 'get_field_order' deve ser definido.
     """
+
     def get_fields_display(self):
         """
         Hook para definir fields_ordenados
@@ -74,5 +76,6 @@ class BaseDynamicListView(BasePageView, ListView):
             }
             for obj in contexto['object_list']
         ]
+        contexto['description'] = f"Veja a listagem de tudo, verifique e modifique os dados que precisar."
 
         return contexto

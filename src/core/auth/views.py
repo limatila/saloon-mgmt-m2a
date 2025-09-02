@@ -61,7 +61,7 @@ class SignUpView(LoginView):
             User = get_user_model()
             user = User.objects.create_user(username=usuario, password=senha, email='none@mail.com')
             user.first_name = usuario.split()[0]
-            user.last_name = "".join(usuario.split()[1:])
+            user.last_name = " ".join(usuario.split()[1:])
             user.save()
         except Exception as err:
             raise err

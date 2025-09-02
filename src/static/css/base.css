@@ -56,10 +56,10 @@ a {
 a.disabled{
   pointer-events: none;
   cursor: default;
-  & :hover{
-    color: initial;
-    background-color: initial;
-  }
+}
+a.disabled:hover{
+  color: initial;
+  background-color: initial;
 }
 
 /* Font Awesome Icon spacing */
@@ -69,7 +69,7 @@ a.disabled{
 
 /* keep items centered */
 .wrapper {
-  margin: auto;
+  margin: auto auto;
   width: 93%;
   height: 98%;
   padding: 0;
@@ -82,7 +82,7 @@ aside {
   display: flex;
   width: var(--sidebar-width);
   height: 100vh;
-  background-color: rgb(204, 204, 204);
+  background-color: #433655;
   border-right: 1px solid black;
   border-radius: 0;
 }
@@ -122,13 +122,6 @@ aside .wrapper {
   height: 2.4rem;
   padding: 0.5rem;
   border: 2px solid white;
-  background-color: white;
-  color: #be185d;
-}
-
-.side-nav-bar a.home-nav:hover {
-  background-color: #9d174d;
-  color: white;
 }
 
 /* Module name links */
@@ -141,14 +134,10 @@ aside .wrapper {
   width: fit-content;
   height: 2.4rem;
   padding: 0.5rem;
-  border: 2px solid white;
-  background-color: white;
-  color: #be185d;
+  color: white;
 }
-
 .side-nav-bar section.nav-section a.module-name:hover {
-  background-color: #be185d48;
-  color: #be185d;
+  background-color: #876baa;
 }
 
 /* Submodule links */
@@ -168,10 +157,19 @@ aside .wrapper {
   padding: 0.6rem;
 }
 
-.side-nav-bar .submodules-nav a:hover {
-  background-color: #9d174d;
+/* Main links colors */
+.side-nav-bar a.home-nav,
+.side-nav-bar .submodules-nav a{
+  background-color: white;
+  color: #876baa;
+}
+
+.side-nav-bar a.home-nav:hover,
+.side-nav-bar  .submodules-nav a:hover{
+  background-color: #876baa;
   color: white;
 }
+
 
 .side-nav-bar hr {
   width: 100%;

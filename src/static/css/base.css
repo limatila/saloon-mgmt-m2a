@@ -1,7 +1,10 @@
 /* Base CSS for all views */
 :root {
   --base-bg-color: rgb(152, 103, 237);
+
   --sidebar-width: 18vw;
+  --headers-height: 5rem;
+  --footer-height: 15rem; 
 }
 
 /* Reset and global styles */
@@ -192,7 +195,7 @@ main {
 /* Header */
 header {
   background-color: var(--base-bg-color);
-  height: 5rem;
+  height: var(--headers-height);
   display: flex;
   align-items: center;
   width: 100%;
@@ -274,8 +277,8 @@ section.main-content .wrapper {
 /* Footer (hover movable) */
 footer {
   position: fixed;
-  bottom: -12rem;
-  height: 15rem;
+  bottom: calc((var(--footer-height) * -1) + 3rem);
+  height: var(--footer-height);
   width: calc(100% - var(--sidebar-width));
 
   background-color: var(--base-bg-color);
@@ -283,15 +286,17 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0.8rem;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   flex-shrink: 0;
-  transition: transform 400ms ease-in-out;
+  transition: transform 400ms ease-out;
 }
 
 footer:hover{
-  transform: translateY(-12rem);
+  transform: translateY(
+    calc((var(--footer-height) * -1) + 3rem)
+  );
 }
 
 /* Responsive */

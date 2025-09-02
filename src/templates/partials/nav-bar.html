@@ -1,8 +1,19 @@
+{% load static %}
+
 <div class="wrapper">
     <nav class="side-nav-bar">
-        <a class="home-nav" href="{% url "home" %}"><i class="fa-solid fa-house"></i> Home</a>
+        <div class="nav-header">
+            <div class="nav-header-title">
+                <div class="nav-header-icon">
+                    <img src="{% static "imgs/kiss.png" %}" alt="Ícone da Empresa">
+                </div>
+                <h1>Nome Empresa</h1>
+            </div>
 
-        <hr>
+            <hr>
+        </div>
+
+        <a class="home-nav" href="{% url "home" %}"><i class="fa-solid fa-house"></i> Home</a>
 
         <section class="nav-section">
             <a class="module-name" href="{% url "cadastros:list" %}"><h5> Cadastros</h5></a>
@@ -11,8 +22,8 @@
                 <a href="{% url "cadastros:clientes:list" %}"><i class="fa-solid fa-circle-user"></i> Clientes</a>
                 <a href="{% url "cadastros:trabalhadores:list" %}"><i class="fa-solid fa-briefcase"></i> Trabalhadores</a>
             </div>
-        </section class="nav-section">
-        
+        </section>
+
         <section class="nav-section">
             <a class="module-name" href="{% url "servicos:list" %}"><h5> Serviços</h5></a>
             <div class="submodules-nav">

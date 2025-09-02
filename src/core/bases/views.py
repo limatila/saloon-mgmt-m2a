@@ -23,7 +23,7 @@ class HomePageView(BasePageView, TemplateView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Home"
-        contexto["description"] = "Bem vindo! Aqui está o resumo de hoje."
+        contexto["description"] = f"Bem vindo, {self.request.user.first_name or "usuário"}! Aqui está o resumo de hoje."
 
         #load modules grid
         contexto['modules'] = (

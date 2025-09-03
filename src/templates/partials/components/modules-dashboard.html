@@ -5,7 +5,9 @@
                 <div class="inner-grid">
                     {% for key, value in module.url_names.items %}
                     {% url value as resolved_url %}
-                        <a href="{{ resolved_url }}">{{ key }}</a>
+                        <a href="{{ resolved_url }}">
+                            <span>{{ key }}</span>
+                        </a>
                     {% endfor %}
                 </div>
             </div>

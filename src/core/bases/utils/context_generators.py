@@ -14,7 +14,7 @@ def generate_dynamic_urls(prefix: str, modules_list: list[str]) -> list[dict[str
             ),
             'url_names': {
                 'Listar': f'{prefix}:{module_name}:list',
-                # 'Cadastro': f'{prefix}:{module_name}:create',
+                'Cadastro': f'{prefix}:{module_name}:create',
                 # 'Modificar': f'{prefix}:{module_name}:update',
                 # 'Histórico': f'{prefix}:{module_name}:history'
                 #TODO: finish other view types

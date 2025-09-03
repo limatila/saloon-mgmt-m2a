@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "css/dashboards.css" %}">
+{% endblock head %}
+
+{% block content %}
+    {% include "partials/components/modules-dashboard.html" %}
+{% endblock content %}

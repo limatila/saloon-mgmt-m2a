@@ -1,12 +1,12 @@
 from django.urls import path, include
 
-from core.bases.views import HomePageView
+from cadastros.views import CadastrosSubmodulesView
 
 
 app_name = "cadastros"
 
 urlpatterns = [
-    path("", HomePageView.as_view(), name="list"), #! TROCAR APÓS IMPLEMENTAÇÃO
+    path("", CadastrosSubmodulesView.as_view(), name="list"), 
     path("clientes/", include('cadastros.clientes.urls', namespace='clientes')),
     path("empresas/", include('cadastros.empresas.urls', namespace='empresas')),
     path("tipo_servicos/", include('cadastros.tipo_servicos.urls', namespace='tipo_servicos')),

@@ -1,11 +1,11 @@
 from django.urls import path, include
 
-from core.bases.views import HomePageView
+from servicos.views import ServicosSubmodulesView
 
 
 app_name = "servicos"
 
 urlpatterns = [
-    path("", HomePageView.as_view(), name="list"), #! TROCAR APÓS IMPLEMENTAÇÃO
+    path("", ServicosSubmodulesView.as_view(), name="list"), 
     path("agendamentos/", include('servicos.agendamentos.urls', namespace="agendamentos"))
 ]

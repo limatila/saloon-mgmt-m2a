@@ -74,6 +74,11 @@ TEMPLATES = [
             #base
             BASE_DIR / 'templates',
 
+            #Módulos
+            BASE_DIR / 'cadastros' / 'templates',
+            BASE_DIR / 'servicos' / 'templates',
+
+
             #submodulos
             BASE_DIR / 'core' / 'bases' / 'templates',
             BASE_DIR / 'core' / 'pessoas' / 'templates',

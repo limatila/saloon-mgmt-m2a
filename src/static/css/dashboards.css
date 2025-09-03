@@ -5,7 +5,7 @@
   max-width: 100%;
   padding: 0.5rem; /* p-2 */
   border-radius: 1rem; /* rounded-2xl */
-  box-shadow: 0 10px 15px 0px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); /* shadow-lg */
+  box-shadow: 0px 0px 40px -33px rgba(0,0,0,0.7);
 }
 
 .dashboard div.dashboard-head {
@@ -67,7 +67,6 @@ div.grid-dashboard div.grid div.worker {
   border: 1px solid #9ca3af; /* border-gray-400 */
 }
 
-
 div.grid-dashboard div.grid div.worker div,
 div.grid-dashboard div.grid div.worker img {
   min-width: 25%;
@@ -119,7 +118,7 @@ div.grid-dashboard div.grid div.worker > * {
   padding: 1.4rem;
   width: 100%;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 14px;
 }
@@ -141,6 +140,10 @@ div.grid-dashboard div.grid div.worker > * {
 .modules-dashboard div.module {
   border: 2px solid var(--bg-color-light);
 }
+.modules-dashboard div.module h3 {
+  font-size: 2rem;
+  color: var(--bg-color-dark);
+}
 .modules-dashboard div.module div.inner-grid{
   display: grid;
   padding: 0.6rem;
@@ -150,14 +153,19 @@ div.grid-dashboard div.grid div.worker > * {
   grid-row-gap: 4px;
 }
 .modules-dashboard div.module div.inner-grid a{
-  height: 100%;
+  height: 90%;
   width: 80%;
   margin: auto;
-  text-align: center;
   display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
   font-weight: bold;
   transition: scale 200ms ease-out;
+}
+.modules-dashboard div.module div.inner-grid a > span{
+  /* place-self: center center; */
+  font-size: 1.3rem;
 }
 
 .modules-dashboard div.module div.inner-grid a:hover{

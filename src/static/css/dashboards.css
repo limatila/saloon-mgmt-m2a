@@ -4,7 +4,6 @@
   width: 100%;
   max-width: 100%;
   padding: 0.5rem; /* p-2 */
-  border: 2px solid #f9a8d4; /* border-pink-300 */
   border-radius: 1rem; /* rounded-2xl */
   box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); /* shadow-lg */
 }
@@ -184,7 +183,7 @@ div.grid-dashboard div.grid div.worker > * {
     align-items: center;
 }
 .modules-dashboard div.module {
-    border: 2px solid #f9a8d49a;
+    border: 2px solid var(--bg-color-light);
 }
 .modules-dashboard div.module div.inner-grid{
     display: grid;
@@ -211,7 +210,7 @@ div.grid-dashboard div.grid div.worker > * {
 
 /* specific inner grid childs colors */
 .modules-dashboard div.module div.inner-grid a:nth-child(1){
-    background-color: rgb(222, 79, 188);
+    background-color: var(--bg-color-mid);
 }
 .modules-dashboard div.module div.inner-grid a:nth-child(2){
     background-color: rgb(110, 199, 58);

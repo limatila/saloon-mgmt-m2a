@@ -1,6 +1,9 @@
 /* Base CSS for all views */
 :root {
-  --base-bg-color: rgb(152, 103, 237);
+  --base-bg-color: #9867ed;
+  --bg-color-dark: #433655;
+  --bg-color-mid: #876baa;
+  --bg-color-light: #876baa5c;
 
   --sidebar-width: 18vw;
   --headers-height: 5rem;
@@ -92,9 +95,10 @@ aside {
   display: flex;
   width: var(--sidebar-width);
   height: 100vh;
-  background-color: #433655;
-  border-right: 1px solid black;
+  background-color: var(--bg-color-dark);
+  border-right: 2px solid rgba(0, 0, 0, 0.4);
   border-radius: 0;
+  flex-shrink: 0;
 }
 
 aside .wrapper {
@@ -164,7 +168,7 @@ aside .wrapper {
   padding: 0.5rem;
   border: 2px solid white;
   background-color: white;
-  color: #876baa;
+  color: var(--bg-color-mid);
 }
 
 
@@ -181,7 +185,7 @@ aside .wrapper {
   color: white;
 }
 .side-nav-bar section.nav-section a.module-name:hover {
-  background-color: #876baa;
+  background-color: var(--bg-color-mid);
 }
 
 /* Submodule links */
@@ -204,12 +208,12 @@ aside .wrapper {
 .side-nav-bar a.home-nav,
 .side-nav-bar .submodules-nav a{
   background-color: white;
-  color: #876baa;
+  color: var(--bg-color-mid);
 }
 
 .side-nav-bar a.home-nav:hover,
 .side-nav-bar  .submodules-nav a:hover{
-  background-color: #876baa;
+  background-color: var(--bg-color-mid);
   color: white;
 }
 

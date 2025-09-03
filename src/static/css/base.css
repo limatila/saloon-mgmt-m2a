@@ -4,7 +4,7 @@
 
   --sidebar-width: 18vw;
   --headers-height: 5rem;
-  --footer-height: 15rem; 
+  --footer-height: 15rem;
   --footer-difference: calc((var(--footer-height) * -1) + 3rem);
 }
 
@@ -223,6 +223,7 @@ aside .wrapper {
 
 /** ---------------- Main Layout ---------------- */
 main {
+  position: relative;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -328,7 +329,7 @@ footer {
   position: fixed;
   bottom: var(--footer-difference);
   height: var(--footer-height);
-  width: calc(100% - var(--sidebar-width));
+  width: 100%;
 
   background-color: var(--base-bg-color);
   color: white;

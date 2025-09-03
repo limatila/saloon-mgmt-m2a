@@ -78,7 +78,7 @@ a.disabled:hover{
 .wrapper {
   margin: auto auto;
   width: 93%;
-  height: 98%;
+  height: 92%;
   padding: 0;
   display: flex;
 }
@@ -130,7 +130,7 @@ aside .wrapper {
   justify-content: center;
   color: white;
   gap: 0.2rem;
-  & h1{
+  & h2{
     font-size: 1rem;
   }
 }
@@ -268,7 +268,7 @@ header .header-intro {
   border-radius: 0.75rem;
 }
 
-header .header-intro h2.header-title,
+header .header-intro h1.header-title,
 header .header-intro p.header-description {
   margin: 0;
   padding: 0;

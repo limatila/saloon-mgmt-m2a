@@ -1,7 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.views import View
 from django.views.generic import TemplateView
-from django.views.generic import ListView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
+from django.views.generic import ListView, FormView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from core.bases.utils.context_generators import generate_dynamic_urls
@@ -12,6 +12,21 @@ class BasePageView(LoginRequiredMixin, View):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Base"
         contexto["sidebar"] = True
+        return contexto
+
+
+class BaseDynamicFormView(BasePageView, FormView):
+    template_name = "base-form.html"
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        nome_formulario_extraido = self.form_class.__name__.replace("Form", ' ').title()
+        nome_formulario_extraido = "Serviços" if "TipoServico" in nome_formulario_extraido else nome_formulario_extraido
+
+        contexto['form_name'] = nome_formulario_extraido
+        contexto['title'] = f"Formulário de {contexto['form_name']}"
+        contexto['description'] = f"Mude seu registro de {contexto['form_name']}"
+
         return contexto
 
 

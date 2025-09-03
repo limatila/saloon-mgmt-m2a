@@ -8,6 +8,7 @@
         {% comment %} display small list dashboard of all appointments w/ data {% endcomment %}
         <thead>
             <tr>
+                <th class="header-item-actions">Ações</th>
                 {% for field in field_names %}
                     <th>{{ field }}</th>
                 {% endfor %}
@@ -16,10 +17,16 @@
         <tbody>
             {% for dict in object_dicts %}
                 <tr>
+                    <td class="item-actions">
+                        <a href="" title="ver em detalhe"><i class="fa-solid fa-circle-info" ></i>Detalhar</a>
+                        <a href="" title="deletar"><i class="fa-solid fa-circle-minus" ></i>Deletar</a>
+                        <a href="" title="editar"><i class="fa-solid fa-pencil" ></i>Editar</a>
+                        <a href="" title="histórico"><i class="fa-solid fa-clock-rotate-left" ></i>Histórico</a>
+                    </td>
                     {% for key, value in dict.items %}
                     <td>
                         {% if key == "imagem" %}
-                            <img height="30px" src="{{ value.url }}" alt="photo">
+                            <img src="{{ value.url }}" alt="{{ dict.nome }}'s photo" title="{{ dict.nome }}">
                         {% else %}
                             {{ value }}
                         {% endif %}

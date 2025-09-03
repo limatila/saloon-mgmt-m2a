@@ -3,7 +3,7 @@
   height: 100%;
   width: 100%;
   max-width: 100%;
-  padding: 0.5rem; /* p-2 */
+  padding: 0.3rem; /* p-2 */
   border-radius: 1rem; /* rounded-2xl */
   box-shadow: 0px 0px 40px -33px rgba(0,0,0,0.7);
 }
@@ -24,26 +24,109 @@
 
 /** table dashboards */
 div.table-dashboard {
+  width: 100%;
   overflow-x: auto;
 }
 
+/* Table */
 div.table-dashboard table {
   width: 100%;
-  table-layout: auto;
+  table-layout: fixed;
 }
 
-div.table-dashboard table * tr th,
-div.table-dashboard table * tr td {
-  padding: 0.5rem 1rem; /* px-4 py-2 */
-  text-align: center;
+/* Thead (fixed) */
+div.table-dashboard thead {
+  display: table;
+  width: 100%;
+  & tr, tr th{
+    height: 100%;
+    width: 100%;
+  }
 }
 
-div.table-dashboard table * tr td {
-  border: 1px solid #d1d5db; /* border-gray-300 */
-}
-
-div.table-dashboard table tbody {
+/* Tbody (scrollable) */
+div.table-dashboard tbody {
+  display: block;
   overflow-y: auto;
+  width: 100%;
+}
+
+/* Table rows and cells */
+div.table-dashboard tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+div.table-dashboard th {
+  font-size: 1.4rem;
+  background-color: var(--bg-color-mid);
+  color: white;
+  line-height: 3.6rem;
+}
+
+div.table-dashboard td {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  border: 1px solid #d1d5db; /* gray-300 */
+  background-color: white;
+  height: 2rem;
+}
+div.table-dashboard td:has(> img) {
+  & img{
+    object-fit: contain;
+    height: 6rem;
+  }
+}
+
+/* table quick actions */
+div.table-dashboard .header-item-actions{
+  font-size: 1rem;
+}
+div.table-dashboard .item-actions{
+  height: fit-content;
+  display: grid;
+  color: black;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+  & > *{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-shrink: 1;
+  }
+  & > *:hover{
+    color: white;
+  }
+}
+
+td.item-actions a:nth-child(1){
+  color: var(--bg-color-mid);
+}
+td.item-actions a:nth-child(2){
+  color: rgb(209, 83, 52);
+}
+td.item-actions a:nth-child(3){
+  color: rgb(243, 183, 30);
+}
+td.item-actions a:nth-child(4){
+  color: rgb(74, 129, 163);
+}
+td.item-actions a:nth-child(1):hover{
+  background-color: var(--bg-color-light);
+}
+td.item-actions a:nth-child(2):hover{
+  background-color: rgb(255, 0, 0);
+}
+td.item-actions a:nth-child(3):hover{
+  background-color: rgb(243, 183, 30);
+}
+td.item-actions a:nth-child(4):hover{
+  background-color: rgb(74, 129, 163);
 }
 
 /** grid-dashboards */
@@ -97,15 +180,11 @@ div.grid-dashboard div.grid div.worker div span img {
   height: auto;
 }
 
-
 /* Force each inner child to have its own fixed proportion */
 div.grid-dashboard div.grid div.worker > * {
   flex-basis: 25%;
   flex-shrink: 0;
 }
-
-/* custom screen size */
-
 
 /** daily dashboard (simple flexbox) */
 .daily-dashboard h2 {

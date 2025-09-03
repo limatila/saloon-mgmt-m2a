@@ -51,9 +51,12 @@
                     {% endblock content %}
                 </div>
             </section>
-            <footer>
-                {% comment %}  {% endcomment %}
-            </footer>
+
+            {% if user.is_authenticated %}
+                <footer>
+                    {% comment %}  {% endcomment %}
+                </footer>
+            {% endif %}
         </main>
     
     </body>

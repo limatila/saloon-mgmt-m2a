@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboards.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'auth/auth.css' %}"> {% endcomment %}
+{% endblock head %}
+
+{% block content %}
+<!-- Worker Registration Render -->
+    <div class="form-dashboard dashboard">
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <section class="form-section">
+                <h2>Informações de {{ form_name }}</h2>
+                {% if user.is_authenticated %}
+                    {% if form_name == "Login" or form_name == "Registro" %}
+                        <ul>
+                            <li>Você já está logado em uma conta!</li>
+                        </ul>
+                    {% endif %}
+                {% endif %}
+                {% if form_name == "Logout" and not user.is_authenticated %}
+                    <ul>
+                        <li>Você já está deslogado!</li>
+                    </ul>
+                {% endif %}
+                
+                {% for field in form %}
+                    {% include "partials/forms/dynamic-field.html" %}
+                {% endfor %}
+                {% if form.non_field_errors %}
+                    <ul class="non_field_errors">
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </section>
+            
+            {% if form_name == "Login" %}
+                <a href="{% url "core:auth:signup" %}">Não sou registrado</a>
+            {% endif %}
+
+            {% include "partials/forms/submit.html" %}
+        </form>
+    </div>
+{% endblock content %}

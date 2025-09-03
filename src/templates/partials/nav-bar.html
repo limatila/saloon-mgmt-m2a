@@ -9,41 +9,58 @@
                 </div>
                 <h2>Nome Empresa</h2>
             </div>
-
+            
             <hr>
         </div>
 
         <a class="home-nav" href="{% url "home" %}"><i class="fa-solid fa-house"></i> Home</a>
 
         <section class="nav-section">
-            <a class="module-name" href="{% url "cadastros:list" %}"><h5> Cadastros</h5></a>
+            <a class="module-name" href="{% url 'cadastros:list' %}"><h5>Cadastros</h5></a>
             <div class="submodules-nav">
-                <a href="{% url "cadastros:empresas:list" %}"><i class="fa-solid fa-building"></i>
-                    <span> Empresas</span>
-                    <a href="{% url "cadastros:empresas:create" %}"><i class="fa-solid fa-plus"></i> Add</a>
-                </a>
-                <a href="{% url "cadastros:clientes:list" %}"><i class="fa-solid fa-circle-user"></i>
-                    <span> Clientes</span>
-                    <a href="{% url "cadastros:clientes:create" %}"><i class="fa-solid fa-plus"></i> Add</a>
-                </a>
-                <a href="{% url "cadastros:trabalhadores:list" %}"><i class="fa-solid fa-briefcase"></i>
-                    <span> Trabalhadores</span>
-                    <a href="{% url "cadastros:trabalhadores:create" %}"><i class="fa-solid fa-plus"></i> Add</a>
-                </a>
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'cadastros:clientes:list' %}">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span>Clientes</span>
+                    </a>
+                    <a class="nav-add" href="{% url 'cadastros:clientes:create' %}" title="Adicionar novo">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'cadastros:trabalhadores:list' %}">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span>Trabalhadores</span>
+                    </a>
+                    <a class="nav-add" href="{% url 'cadastros:trabalhadores:create' %}" title="Adicionar novo">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
             </div>
         </section>
+
 
         <section class="nav-section">
             <a class="module-name" href="{% url "servicos:list" %}"><h5> Serviços</h5></a>
             <div class="submodules-nav">
-                <a href="{% url "servicos:agendamentos:list" %}"><i class="fa-solid fa-calendar"></i>
-                    <span> Agendamentos</span>
-                    <a href="servicos:agendamentos:create"><i class="fa-solid fa-plus"></i> Add</a>
-                </a>
-                <a href="{% url "cadastros:tipo_servicos:list" %}"><i class="fa-solid fa-scissors"></i>
-                    <span> Tipos Ofertados</span>
-                    <a href="cadastros:tipo_servicos:create"><i class="fa-solid fa-plus"></i> Add</a>
-                </a>
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'servicos:agendamentos:list' %}">
+                        <i class="fa-solid fa-calendar"></i>
+                        <span>Agendamentos</span>
+                    </a>
+                    <a class="nav-add" href="{% url 'servicos:agendamentos:create' %}" title="Adicionar novo">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'cadastros:tipo_servicos:list' %}">
+                        <i class="fa-solid fa-scissors"></i>
+                        <span>Tipos Ofertados</span>
+                    </a>
+                    <a class="nav-add" href="{% url 'cadastros:tipo_servicos:create' %}" title="Adicionar novo">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
             </div>
         </section>
     </nav>

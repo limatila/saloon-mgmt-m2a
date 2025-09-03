@@ -91,6 +91,7 @@ img {
 
 
 /** ---------------- Sidebar ---------------- */
+/** ---------------- Sidebar ---------------- */
 aside {
   display: flex;
   width: var(--sidebar-width);
@@ -103,6 +104,7 @@ aside {
 
 aside .wrapper {
   width: 94%;
+  height: 98%;
 }
 
 .side-nav-bar {
@@ -113,7 +115,8 @@ aside .wrapper {
   overflow-y: auto;
   width: 100%;
 }
-.side-nav-bar .nav-header{
+
+.side-nav-bar .nav-header {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -130,14 +133,15 @@ aside .wrapper {
   justify-content: center;
   color: white;
   gap: 0.2rem;
-  & h2{
-    font-size: 1rem;
-  }
+}
+
+.side-nav-bar .nav-header .nav-header-title h2 {
+  font-size: 1rem;
 }
 
 .side-nav-bar .nav-header .nav-header-icon {
-  width: 1.5rem;/* don't use % */
-  height: 1.5rem; 
+  width: 1.5rem;
+  height: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -152,7 +156,6 @@ aside .wrapper {
   display: flex;
   align-items: center;
   padding: 0.6rem;
-  margin-bottom: 0.4rem;
   text-decoration: none;
   transition: background-color 0.2s, color 0.2s;
 }
@@ -171,7 +174,6 @@ aside .wrapper {
   color: var(--bg-color-mid);
 }
 
-
 /* Module name links */
 .side-nav-bar section.nav-section {
   width: 100%;
@@ -184,35 +186,81 @@ aside .wrapper {
   padding: 0.5rem;
   color: white;
 }
+
 .side-nav-bar section.nav-section a.module-name:hover {
   background-color: var(--bg-color-mid);
 }
 
-/* Submodule links */
+/* Submodule container */
 .side-nav-bar .submodules-nav {
   display: flex;
   width: 100%;
   flex-direction: column;
   flex-wrap: nowrap;
+  gap: 0.4rem;
 }
 
-.side-nav-bar .submodules-nav a {
-  width: 100%;
-  border: 2px solid white;
+/* Each submodule row (with two links inside) */
+.side-nav-bar .submodules-nav .nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: white;
+  border: 2px solid white;
   height: 3rem;
-  padding: 0.6rem;
+  padding: 0 0.6rem;
+  color: var(--bg-color-mid);
 }
 
-/* Main links colors */
+.side-nav-bar .submodules-nav .nav-item:hover {
+  background-color: var(--bg-color-mid);
+  color: white;
+}
+
+/* Link to list */
+.side-nav-bar .submodules-nav .nav-link {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.4rem;
+  flex-grow: 1;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.side-nav-bar .submodules-nav .nav-item:hover .nav-link {
+  color: white;
+}
+
+/* Link to add */
+.side-nav-bar .submodules-nav .nav-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 0.4rem;
+  font-size: 0.9rem;
+  color: inherit;
+  transition: color 0.2s;
+  & .fa, .fa-solid{
+    content: "Novo";
+  }
+}
+
+
+
+/* Home & default submodule colors */
 .side-nav-bar a.home-nav,
-.side-nav-bar .submodules-nav a{
+.side-nav-bar .submodules-nav .nav-item {
   background-color: white;
   color: var(--bg-color-mid);
 }
 
+/* Hover states */
 .side-nav-bar a.home-nav:hover,
-.side-nav-bar  .submodules-nav a:hover{
+.side-nav-bar .submodules-nav .nav-item:hover {
   background-color: var(--bg-color-mid);
   color: white;
 }
@@ -224,6 +272,7 @@ aside .wrapper {
   margin: 0.6rem 0 1rem;
   flex-shrink: 0;
 }
+
 
 /** ---------------- Main Layout ---------------- */
 main {

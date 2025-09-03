@@ -11,7 +11,7 @@ class BasePessoasForm(forms.ModelForm):
             'CPF': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "XXX.XXX.XXX-xx"}),
             'telefone': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "XXX.XXX.XXX-xx"}),
             'endereco': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "nome de nome"}),
-            'imagem': forms.ImageField(attrs={'class': 'form-field', 'placeholder': "nome de nome", 'required': 'False'}, required=False),
+            'imagem': forms.FileInput(attrs={'class': 'form-field', 'placeholder': "nome de nome", 'required': 'False'}),
         }
 
     def clean_phone_number(self):

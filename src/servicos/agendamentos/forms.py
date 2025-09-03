@@ -2,7 +2,7 @@ from django import forms
 from servicos.agendamentos.models import Agendamento
 
 
-class AgendamentoForms(forms.ModelForm):
+class AgendamentoForm(forms.ModelForm):
     class Meta:
         model = Agendamento
         fields = ['data_agendado', 'status', 'cliente', 'servico', 'trabalhador']
@@ -11,5 +11,5 @@ class AgendamentoForms(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-field'}),
             'cliente': forms.Select(attrs={'class': 'form-field'}),
             'servico': forms.Select(attrs={'class': 'form-field'}),
-            'trabalhador': forms.Select(attrs={'class': 'form-field'}),
+            'trabalhador': forms.Select(attrs={'class': 'form-field'})
         }

@@ -17,19 +17,31 @@ class BasePageView(LoginRequiredMixin, View):
 
 class HomePageView(BasePageView, TemplateView):
     template_name = "home.html"
-    all_cadastros_modules: list[str] = ["clientes", "empresas", "servicos", "trabalhadores"]
-    all_servicos_modules: list[str] = ["agendamentos", ]
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Home"
         contexto["description"] = f"Bem vindo, {self.request.user.first_name or "usuário"}! Aqui está o resumo de hoje."
+        return contexto
+
+
+class BaseDynamicSubmodulesView(BasePageView, TemplateView):
+    """
+    Uma view para mostragem de todos os submódulos,
+    e links django para eles
+    """
+    all_cadastros_modules: list[str] = []# = ["clientes", "empresas", "servicos", "trabalhadores"]
+    all_servicos_modules: list[str] = []# = ["agendamentos", ]
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto["title"] = "Módulos"
+        contexto["description"] = f"Escolha o módulo que você quer usar hoje."
 
         #load modules grid
         contexto['modules'] = (
             generate_dynamic_urls('cadastros', self.all_cadastros_modules) +
-            generate_dynamic_urls('servicos', self.all_servicos_modules) +
-            []
+            generate_dynamic_urls('servicos', self.all_servicos_modules)
         )
 
         return contexto

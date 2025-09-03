@@ -1,4 +1,7 @@
 def generate_dynamic_urls(prefix: str, modules_list: list[str]) -> list[dict[str, str | dict[str, str]]]:    
+    if modules_list is None or len(modules_list) == 0:
+        return [] #if not defined, return back nothing
+    
     modules_list = list(map(lambda module_name: "tipo_servicos" if module_name == "servicos" else module_name, modules_list))
     
     return [

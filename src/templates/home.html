@@ -8,18 +8,6 @@
 {% endblock head %}
 
 {% block content %}
-    <div class="home-dashboard dashboard">
-        {% for module in modules %}
-        <div class="module">
-            <h3>{{ module.name }}</h3>
-            <div class="inner-grid">
-                {% for key, value in module.url_names.items %}
-                {% url value as resolved_url %}
-                    <a href="{{ resolved_url }}">{{ key }}</a>
-                {% endfor %}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+    {% comment %} {% include "partials/components/modules-dashboard.html" %} {% endcomment %}
 {% endblock content %}
 

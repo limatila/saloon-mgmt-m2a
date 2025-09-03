@@ -18,17 +18,32 @@
         <section class="nav-section">
             <a class="module-name" href="{% url "cadastros:list" %}"><h5> Cadastros</h5></a>
             <div class="submodules-nav">
-                <a href="{% url "cadastros:empresas:list" %}"><i class="fa-solid fa-building"></i> Empresas</a>
-                <a href="{% url "cadastros:clientes:list" %}"><i class="fa-solid fa-circle-user"></i> Clientes</a>
-                <a href="{% url "cadastros:trabalhadores:list" %}"><i class="fa-solid fa-briefcase"></i> Trabalhadores</a>
+                <a href="{% url "cadastros:empresas:list" %}"><i class="fa-solid fa-building"></i>
+                    <span> Empresas</span>
+                    <a href="{% url "cadastros:empresas:create" %}"><i class="fa-solid fa-plus"></i> Add</a>
+                </a>
+                <a href="{% url "cadastros:clientes:list" %}"><i class="fa-solid fa-circle-user"></i>
+                    <span> Clientes</span>
+                    <a href="{% url "cadastros:clientes:create" %}"><i class="fa-solid fa-plus"></i> Add</a>
+                </a>
+                <a href="{% url "cadastros:trabalhadores:list" %}"><i class="fa-solid fa-briefcase"></i>
+                    <span> Trabalhadores</span>
+                    <a href="{% url "cadastros:trabalhadores:create" %}"><i class="fa-solid fa-plus"></i> Add</a>
+                </a>
             </div>
         </section>
 
         <section class="nav-section">
             <a class="module-name" href="{% url "servicos:list" %}"><h5> Serviços</h5></a>
             <div class="submodules-nav">
-                <a href="{% url "servicos:agendamentos:list" %}"><i class="fa-solid fa-calendar"></i> Agendamentos</a>
-                <a href="{% url "cadastros:tipo_servicos:list" %}"><i class="fa-solid fa-scissors"></i> Tipos Ofertados</a>
+                <a href="{% url "servicos:agendamentos:list" %}"><i class="fa-solid fa-calendar"></i>
+                    <span> Agendamentos</span>
+                    <a href="servicos:agendamentos:create"><i class="fa-solid fa-plus"></i> Add</a>
+                </a>
+                <a href="{% url "cadastros:tipo_servicos:list" %}"><i class="fa-solid fa-scissors"></i>
+                    <span> Tipos Ofertados</span>
+                    <a href="cadastros:tipo_servicos:create"><i class="fa-solid fa-plus"></i> Add</a>
+                </a>
             </div>
         </section>
     </nav>

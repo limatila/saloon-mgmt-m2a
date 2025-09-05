@@ -15,7 +15,7 @@ GLOBAL_AUTH_TEMPLATE = "auth/auth.html"
 class LoginView(FormView):
     template_name = GLOBAL_AUTH_TEMPLATE
     form_class = UserForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('cadastros:empresas:select')
     redirect_field_name = "next"
 
     def form_valid(self, form: Form):
@@ -27,12 +27,17 @@ class LoginView(FormView):
         if user:
             if self.request.user.is_authenticated:
                 logout(self.request)
-
             login(self.request, user)
-            url_redirecionamento = self.request.GET.get(self.redirect_field_name) or self.request.POST.get(self.redirect_field_name)
+
+            #redirect to sucess_url
+            metodo_GET = self.request.GET
+            metodo_POST = self.request.POST
+            url_redirecionamento = (
+                metodo_GET.get(self.redirect_field_name) or metodo_POST.get(self.redirect_field_name)
+            )
 
             # Validate redirection
-            if url_redirecionamento and url_has_allowed_host_and_scheme(url_redirecionamento, allowed_hosts=(self.request.get_host())):
+            if url_redirecionamento:
                 return redirect(url_redirecionamento)
 
             return super().form_valid(form)
@@ -100,9 +105,7 @@ class LogoutView(FormView, TemplateView):
     def get_next_page(self):
         url_redirecionamento = self.request.META.get('HTTP_REFERER')
 
-        condicao_url_valida: bool = url_redirecionamento and url_has_allowed_host_and_scheme(url_redirecionamento, allowed_hosts={self.request.get_host()})
-        condicao_redirecionamento_valido = (not "logout" in url_redirecionamento)
-        if condicao_url_valida and condicao_redirecionamento_valido:
+        if not "logout" in url_redirecionamento:
             return url_redirecionamento
 
         return self.success_url

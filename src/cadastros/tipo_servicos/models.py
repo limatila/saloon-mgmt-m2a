@@ -7,8 +7,7 @@ class TipoServico(BaseAssociadoEmpresa):
         verbose_name="Nome do serviço",
         max_length=50,
         null=False,
-        blank=False,
-        unique=True
+        blank=False
     )
     preco = models.DecimalField(
         verbose_name="Preço",

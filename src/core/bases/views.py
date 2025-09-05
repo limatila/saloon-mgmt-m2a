@@ -83,7 +83,7 @@ class DynamicFormView(BaseLoginRequiredView, FormView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         nome_formulario_extraido = self.form_class.__name__.replace("Form", ' ').title()
-        nome_formulario_extraido = "Serviços" if "tiponãservico" in nome_formulario_extraido.lower() else nome_formulario_extraido
+        nome_formulario_extraido = "Serviços" if "tiposervico" in nome_formulario_extraido.lower() else nome_formulario_extraido
 
         contexto['form_name'] = nome_formulario_extraido
         contexto['title'] = f"Formulário de {contexto['form_name']}"

@@ -91,7 +91,6 @@ img {
 
 
 /** ---------------- Sidebar ---------------- */
-/** ---------------- Sidebar ---------------- */
 aside {
   display: flex;
   width: var(--sidebar-width);
@@ -178,6 +177,9 @@ aside .wrapper {
 .side-nav-bar section.nav-section {
   width: 100%;
   margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .side-nav-bar section.nav-section a.module-name {

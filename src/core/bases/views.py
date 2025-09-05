@@ -2,7 +2,10 @@ from django.core.exceptions import ImproperlyConfigured
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic import ListView, FormView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
+from django.db.models import ForeignKey, Model
+from django.forms import ModelForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseServerError
 
 from core.bases.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 
@@ -77,7 +80,7 @@ class DynamicListView(BaseLoginRequiredView, ListView):
         return contexto
 
 
-class DynamicFormView(BaseLoginRequiredView, FormView):
+class BaseDynamicFormView(BaseLoginRequiredView, FormView):
     template_name = "partials/components/form-dashboard.html"
 
     def get_context_data(self, **kwargs):
@@ -90,6 +93,30 @@ class DynamicFormView(BaseLoginRequiredView, FormView):
         contexto['description'] = f"Mude seu registro de {contexto['form_name']}"
 
         return contexto
+
+
+class EscopoEmpresaFieldsFormView(EscopoEmpresaFormMixin, BaseDynamicFormView):
+    fields_ignorados = ['empresa', 'data_criado', 'data_modificado']
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        # injeta a empresa que o ContextoEmpresaMixin já colocou em request
+        kwargs["empresa"] = self.request.empresa
+        return kwargs
+
+    def form_valid(self, form: ModelForm):
+        for field in form._meta.model._meta.get_fields():
+            if field in self.fields_ignorados: continue
+
+            # se o valor do field não pertence a empresa logada na sessão
+            if isinstance(field, ForeignKey):
+                field_obj: Model = form.cleaned_data.get(field.name, None)
+                if ((field_obj and hasattr(field_obj, "empresa")) and
+                    (field_obj.empresa.id != self.request.empresa.id)):
+                    raise HttpResponseServerError(f"Erro em {self.__class__.__name__}, field {field.verbose_name} não obteve valor válido para empresa em sessão.")
+
+        return super().form_valid(form)
+
 
 
 class DynamicSubmodulesView(BaseLoginRequiredView, EscopoEmpresaQuerysetMixin, TemplateView):

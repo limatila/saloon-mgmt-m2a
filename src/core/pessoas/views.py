@@ -1,6 +1,6 @@
 from django.views.generic import CreateView
 
-from core.bases.views import DynamicListView, DynamicFormView
+from core.bases.views import DynamicListView, BaseDynamicFormView
 
 
 class PessoasListView(DynamicListView):
@@ -8,5 +8,5 @@ class PessoasListView(DynamicListView):
         return ['nome', 'cpf', 'imagem', 'telefone', 'endereco']
 
 
-class PessoasCreateView(DynamicFormView, CreateView):
+class PessoasCreateView(BaseDynamicFormView, CreateView):
     pass

@@ -8,21 +8,15 @@
         {% comment %} display small list dashboard of all appointments w/ data {% endcomment %}
         <thead>
             <tr>
-                <th class="header-item-actions">Ações</th>
                 {% for field in field_names %}
-                    <th>{{ field }}</th>
+                <th>{{ field }}</th>
                 {% endfor %}
+                <th class="header-item-actions">Ações</th>
             </tr>
         </thead>
         <tbody>
             {% for dict in object_dicts %}
                 <tr>
-                    <td class="item-actions">
-                        <a href="" title="ver em detalhe"><i class="fa-solid fa-circle-info" ></i>Detalhar</a>
-                        <a href="" title="deletar"><i class="fa-solid fa-circle-minus" ></i>Deletar</a>
-                        <a href="" title="editar"><i class="fa-solid fa-pencil" ></i>Editar</a>
-                        <a href="" title="histórico"><i class="fa-solid fa-clock-rotate-left" ></i>Histórico</a>
-                    </td>
                     {% for key, value in dict.items %}
                     <td>
                         {% if key == "imagem" %}
@@ -34,14 +28,20 @@
                         {% endif %}
                     </td>
                     {% endfor %}
+                    <td class="item-actions">
+                        <a href="" title="ver em detalhe"><i class="fa-solid fa-circle-info" ></i>Detalhar</a>
+                        <a href="" title="deletar"><i class="fa-solid fa-circle-minus" ></i>Deletar</a>
+                        <a href="" title="editar"><i class="fa-solid fa-pencil" ></i>Editar</a>
+                        <a href="" title="histórico"><i class="fa-solid fa-clock-rotate-left" ></i>Histórico</a>
+                    </td>
                 </tr>
             {% empty %}
-                <tr>
-                    <td colspan="{{ field_names|length }}" class="py-4 text-gray-500">No clients found.<br> Please add it at
-                        <button class="">
-                            {% comment %} <a href="{% url "cadastros:clients:registrar" %}">
-                                here
-                            </a> {% endcomment %}
+                <tr style="height:100%">
+                    <td colspan="{{ field_names|length }}" style="height:100%; font-size:1.5rem;">Nenhum {{ app_name }} encontrado.<br> Porfavor adicione
+                        <button>
+                            <a href="{{ url_submodule_create }}">
+                                aqui
+                            </a>
                         </button>
                     </td>
                 </tr>

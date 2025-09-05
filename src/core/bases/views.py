@@ -1,8 +1,8 @@
 from django.core.exceptions import ImproperlyConfigured
+from django.urls import NoReverseMatch, reverse
 from django.views.generic import TemplateView
 from django.views.generic import ListView, FormView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 
@@ -32,6 +32,35 @@ class BaseDynamicListView(ListView):
             f"{self.__class__.__name__} deve implementar get_field_order(), retornando uma list[str]."
         )
 
+    def get_create_form_app_name_and_url(self) -> tuple[str]:
+        """
+        Retorna a URL de criação padrão para este model.
+        Padrão de nomeação: '<app_label>:<model_name_lower>:create'
+        """
+        #conseguindo nomes
+        module_name = self.model.module_label #clientes, tipo_servicos
+        app_name = self.model._meta.model_name
+
+        plural_names_end_in_es = ["trabalhador"] #add here in singular!
+
+        if app_name:
+            #tratamento
+            app_name_plural = app_name + "s" if app_name not in plural_names_end_in_es else app_name + "es"
+        
+            if app_name_plural == "tiposervicos":
+                app_name_plural = "tipo_servicos"
+            
+            #extração
+            try:
+                url = reverse(f"{module_name}:{app_name_plural}:create")
+            except NoReverseMatch:
+                url = "" #avoid bugs
+
+            app_name_plural = app_name_plural.replace('_', ' de ').replace('servicos', 'serviços').title()
+
+            return (app_name_plural, url)
+        
+
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
 
@@ -57,6 +86,12 @@ class BaseDynamicListView(ListView):
             }
             for obj in contexto['object_list']
         ]
+
+        # em caso de empty
+        if self.get_queryset().count() == 0:
+            contexto['app_name'], contexto['url_submodule_create'] = self.get_create_form_app_name_and_url()
+            
+
         contexto['description'] = f"Veja a listagem de tudo, verifique e modifique os dados que precisar."
         contexto['search'] = self.request.GET.get("search", "")
         contexto["sidebar"] = True
@@ -80,7 +115,7 @@ class BaseDynamicFormView(FormView):
         return contexto
 
 
-#* especializadas: home/ [nome_modulo]/
+#* Especializadas: home/ [nome_modulo]/
 class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BasePageView):
     template_name = "home.html"
 
@@ -94,7 +129,7 @@ class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BasePageView)
 class DynamicSubmodulesView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BasePageView):
     """
     Uma view para mostragem de todos os submódulos,
-    e links django para eles
+    e links da url config para eles
     """
     all_cadastros_modules: list[str] = []# = ["clientes", "empresas", "servicos", "trabalhadores"]
     all_servicos_modules: list[str] = []# = ["agendamentos", ]
@@ -120,7 +155,7 @@ class DynamicSubmodulesView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Base
                     # 'Histórico': f'{prefix}:{module_name}:history'
                     #TODO: finish other view types
                 }
-            }  
+            }
             for module_name in modules_list
         ]
 

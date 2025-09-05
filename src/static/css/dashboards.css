@@ -1,5 +1,7 @@
 /*? daily-dashboard, .table-dashboard, .grid-dashboard */
 .dashboard {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
   max-width: 100%;
@@ -30,6 +32,7 @@ div.table-dashboard {
 
 /* Table */
 div.table-dashboard table {
+  height: 100%;
   width: 100%;
   table-layout: fixed;
 }
@@ -46,7 +49,7 @@ div.table-dashboard thead {
 
 /* Tbody (scrollable) */
 div.table-dashboard tbody {
-  display: block;
+  height: 100%;
   overflow-y: auto;
   width: 100%;
 }
@@ -117,7 +120,7 @@ td.item-actions a:nth-child(4){
   color: rgb(74, 129, 163);
 }
 td.item-actions a:nth-child(1):hover{
-  background-color: var(--bg-color-light);
+  background-color: var(--bg-color-mid);
 }
 td.item-actions a:nth-child(2):hover{
   background-color: rgb(255, 0, 0);

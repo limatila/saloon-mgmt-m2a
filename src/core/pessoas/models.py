@@ -1,9 +1,9 @@
 from django.db import models
 
-from cadastros.empresas.models import BaseAssociadoEmpresa
+from cadastros.models import BaseCadastrosModel
 
 
-class Pessoa(BaseAssociadoEmpresa):
+class Pessoa(BaseCadastrosModel):
     nome = models.CharField(
         verbose_name="Nome",
         null=False,

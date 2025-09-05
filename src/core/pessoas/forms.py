@@ -8,10 +8,10 @@ class BasePessoasForm(forms.ModelForm):
         fields = ['nome', 'cpf', 'imagem', 'telefone', 'endereco']
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "nome de nome"}),
-            'CPF': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "XXX.XXX.XXX-xx"}),
-            'telefone': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "XXX.XXX.XXX-xx"}),
+            'cpf': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "XXX.XXX.XXX-xx"}),
+            'telefone': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "+55 (XX) xxxx.xxxx"}),
             'endereco': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "nome de nome"}),
-            'imagem': forms.FileInput(attrs={'class': 'form-field', 'placeholder': "nome de nome", 'required': 'False'}),
+            'imagem': forms.FileInput(attrs={'class': 'form-field', 'required': 'False'}),
         }
 
     def clean_phone_number(self):

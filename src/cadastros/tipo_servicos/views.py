@@ -1,13 +1,13 @@
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
-
-from core.bases.views import BaseDynamicListView, BaseDynamicFormView
+from core.bases.views import DynamicListView, DynamicFormView
+from core.bases.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.tipo_servicos.models import TipoServico
 from cadastros.tipo_servicos.forms import TipoServicoForm
 
 
-class TipoServicoListView(BaseDynamicListView):
+class TipoServicoListView(EscopoEmpresaQuerysetMixin, DynamicListView):
     model = TipoServico
 
     def get_fields_display(self):
@@ -19,7 +19,7 @@ class TipoServicoListView(BaseDynamicListView):
         return contexto
 
 
-class TipoServicoCreateView(BaseDynamicFormView, CreateView):
+class TipoServicoCreateView(EscopoEmpresaFormMixin, DynamicFormView, CreateView):
     model = TipoServico
     form_class = TipoServicoForm
     success_url = reverse_lazy('cadastros:tipo_servicos:list')

@@ -1,12 +1,13 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from core.bases.views import BaseDynamicListView, BaseDynamicFormView
+from core.bases.views import DynamicListView, DynamicFormView
+from core.bases.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from servicos.agendamentos.models import Agendamento
 from servicos.agendamentos.forms import AgendamentoForm
 
 
-class AgendamentoListView(BaseDynamicListView):
+class AgendamentoListView(EscopoEmpresaQuerysetMixin, DynamicListView):
     model = Agendamento
 
     def get_fields_display(self):
@@ -18,7 +19,7 @@ class AgendamentoListView(BaseDynamicListView):
         return context
 
 
-class AgendamentoCreateView(BaseDynamicFormView, CreateView):
+class AgendamentoCreateView(EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin, DynamicFormView, CreateView):
     model = Agendamento
     form_class = AgendamentoForm
     success_url = reverse_lazy('servicos:agendamentos:list')

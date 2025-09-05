@@ -3,11 +3,12 @@ from django.db.models import Count, Q
 from django.urls import reverse_lazy
 
 from core.pessoas.views import PessoasListView, PessoasCreateView
+from core.bases.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.trabalhadores.models import Trabalhador
 from cadastros.trabalhadores.forms import TrabalhadoresForm
 
 
-class TrabalhadoresListView(PessoasListView):
+class TrabalhadoresListView(EscopoEmpresaQuerysetMixin, PessoasListView):
     model = Trabalhador
 
     def get_queryset(self, **kwargs):
@@ -24,7 +25,7 @@ class TrabalhadoresListView(PessoasListView):
         return contexto
 
 
-class TrabalhadorCreateView(PessoasCreateView, CreateView):
+class TrabalhadorCreateView(EscopoEmpresaFormMixin, PessoasCreateView):
     model = Trabalhador
     form_class = TrabalhadoresForm
     success_url = reverse_lazy('cadastros:trabalhadores:list')

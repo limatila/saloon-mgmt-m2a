@@ -1,10 +1,12 @@
 from django.urls import reverse_lazy
 
 from core.pessoas.views import PessoasListView, PessoasCreateView
+from core.bases.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.clientes.models import Cliente
 from cadastros.clientes.forms import ClientesForm
 
-class ClientesListView(PessoasListView):
+
+class ClientesListView(EscopoEmpresaQuerysetMixin, PessoasListView):
     model = Cliente
 
     def get_context_data(self, *args, **kwargs):
@@ -13,11 +15,8 @@ class ClientesListView(PessoasListView):
         return contexto
 
 
-class ClienteCreateView(PessoasCreateView):
+class ClienteCreateView(EscopoEmpresaFormMixin, PessoasCreateView):
     model = Cliente
     form_class = ClientesForm
     success_url = reverse_lazy('cadastros:clientes:list')
-
-    def form_valid(self, form):
-        return super().form_valid(form)
     

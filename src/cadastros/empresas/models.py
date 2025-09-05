@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+
 from core.bases.models import BaseModel
 
 class Empresa(BaseModel):
@@ -23,6 +25,15 @@ class Empresa(BaseModel):
         null=False,
         blank=False,
         default=None
+    )
+
+    #FKs
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        verbose_name="Usuário",
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT
     )
 
     def __str__(self):

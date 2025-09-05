@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
-from core.bases.views import BaseDynamicSubmodulesView
+from core.bases.views import DynamicSubmodulesView
 
 
-class ServicosSubmodulesView(BaseDynamicSubmodulesView):
+class ServicosSubmodulesView(DynamicSubmodulesView):
     template_name = "servicos/servicos_list.html"
 
     all_cadastros_modules = ["servicos", ] #! mudar depois que reestruturar

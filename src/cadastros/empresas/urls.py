@@ -1,10 +1,10 @@
 from django.urls import path, include
 
-from cadastros.empresas.views import EmpresaListView
+from cadastros.empresas.views import SelecaoEmpresasListView
 
 
 app_name = "empresas"
 
 urlpatterns = [
-    path('', EmpresaListView.as_view(), name="list")
+    path('select/', SelecaoEmpresasListView.as_view(), name="select")
 ]

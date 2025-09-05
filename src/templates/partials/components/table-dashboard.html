@@ -37,7 +37,7 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="1000" class="py-4 text-gray-500">No clients found.<br> Please add it at
+                    <td colspan="{{ field_names|length }}" class="py-4 text-gray-500">No clients found.<br> Please add it at
                         <button class="">
                             {% comment %} <a href="{% url "cadastros:clients:registrar" %}">
                                 here

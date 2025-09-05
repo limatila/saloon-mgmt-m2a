@@ -1,18 +1,15 @@
 from django.contrib import admin
 
-from core.bases.admin import DateHierarchyAdmin
 from cadastros.empresas.admin import BaseAssociadoEmpresaAdmin
 from servicos.agendamentos.models import Agendamento
 
 @admin.register(Agendamento)
-class AgendamentoAdmin(
-        DateHierarchyAdmin, 
-        BaseAssociadoEmpresaAdmin
-    ):
+class AgendamentoAdmin(BaseAssociadoEmpresaAdmin):
     list_filter = "status", 
     raw_id_fields = "cliente", "servico", "trabalhador", "empresa"
     search_fields = "status", #! is getting only by enum values, not get_display
     search_help_text = "Status..."
+    date_hierarchy = "data_agendado"
 
     def get_list_display(self, request):
         base_list = list(super().get_list_display(request))

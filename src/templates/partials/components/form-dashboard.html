@@ -29,7 +29,7 @@
                 {% endif %}
                 
                 {% for field in form %}
-                    {% include "partials/forms/dynamic-field.html" %}
+                    {% include "partials/components/form-partials/dynamic-field.html" %}
                 {% endfor %}
                 {% if form.non_field_errors %}
                     <ul class="non_field_errors">
@@ -44,7 +44,7 @@
                 <a href="{% url "core:auth:signup" %}">Não sou registrado</a>
             {% endif %}
 
-            {% include "partials/forms/submit.html" %}
+            {% include "partials/components/form-partials/submit.html" %}
         </form>
     </div>
 {% endblock content %}

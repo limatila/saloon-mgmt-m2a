@@ -27,6 +27,8 @@
                     <td>
                         {% if key == "imagem" %}
                             <img src="{{ value.url }}" alt="{{ dict.nome }}'s photo" title="{{ dict.nome }}">
+                        {% elif key == "preco" %}
+                            R$ {{ value }}
                         {% else %}
                             {{ value }}
                         {% endif %}

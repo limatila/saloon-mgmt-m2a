@@ -1,6 +1,6 @@
 from django.db import models
 
-from core.bases.models import BaseAssociadoEmpresa
+from cadastros.empresas.models import BaseAssociadoEmpresa
 from servicos.agendamentos.choices import C_TIPO_STATUS_AGENDAMENTO, AGENDAMENTO_STATUS_PENDENTE
 
 

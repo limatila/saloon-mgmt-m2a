@@ -1,16 +1,14 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic import ListView, FormView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
-from django.db.models import ForeignKey, Model
-from django.forms import ModelForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseServerError
-
-from core.bases.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 
 
-class BasePageView(View):
+from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
+
+
+#* Base views -- que podem devem ser herdadas por views especializadas
+class BasePageView(TemplateView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Base"
@@ -19,23 +17,8 @@ class BasePageView(View):
         return contexto
 
 
-class BaseLoginRequiredView(LoginRequiredMixin, BasePageView):
-    pass
-
-
-# home/
-class HomePageView(BaseLoginRequiredView, EscopoEmpresaQuerysetMixin, TemplateView):
-    template_name = "home.html"
-
-    def get_context_data(self, **kwargs):
-        contexto = super().get_context_data(**kwargs)
-        contexto["title"] = "Home"
-        contexto["description"] = f"Bem vindo, {self.request.user.first_name or "usuário"}! Aqui está o resumo de {self.request.empresa.nome_fantasia}."
-        return contexto
-
-
 # bases de componentes
-class DynamicListView(BaseLoginRequiredView, ListView):
+class BaseDynamicListView(ListView):
     """
     Uma view para iterar sobre campos de objetos.
     var 'model' deve ser definido.
@@ -76,11 +59,12 @@ class DynamicListView(BaseLoginRequiredView, ListView):
         ]
         contexto['description'] = f"Veja a listagem de tudo, verifique e modifique os dados que precisar."
         contexto['search'] = self.request.GET.get("search", "")
+        contexto["sidebar"] = True
 
         return contexto
 
 
-class BaseDynamicFormView(BaseLoginRequiredView, FormView):
+class BaseDynamicFormView(FormView):
     template_name = "partials/components/form-dashboard.html"
 
     def get_context_data(self, **kwargs):
@@ -91,35 +75,23 @@ class BaseDynamicFormView(BaseLoginRequiredView, FormView):
         contexto['form_name'] = nome_formulario_extraido
         contexto['title'] = f"Formulário de {contexto['form_name']}"
         contexto['description'] = f"Mude seu registro de {contexto['form_name']}"
+        contexto["sidebar"] = True
 
         return contexto
 
 
-class EscopoEmpresaFieldsFormView(EscopoEmpresaFormMixin, BaseDynamicFormView):
-    fields_ignorados = ['empresa', 'data_criado', 'data_modificado']
+#* especializadas: home/ [nome_modulo]/
+class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BasePageView):
+    template_name = "home.html"
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        # injeta a empresa que o ContextoEmpresaMixin já colocou em request
-        kwargs["empresa"] = self.request.empresa
-        return kwargs
-
-    def form_valid(self, form: ModelForm):
-        for field in form._meta.model._meta.get_fields():
-            if field in self.fields_ignorados: continue
-
-            # se o valor do field não pertence a empresa logada na sessão
-            if isinstance(field, ForeignKey):
-                field_obj: Model = form.cleaned_data.get(field.name, None)
-                if ((field_obj and hasattr(field_obj, "empresa")) and
-                    (field_obj.empresa.id != self.request.empresa.id)):
-                    raise HttpResponseServerError(f"Erro em {self.__class__.__name__}, field {field.verbose_name} não obteve valor válido para empresa em sessão.")
-
-        return super().form_valid(form)
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto["title"] = "Home"
+        contexto["description"] = f"Bem vindo, {self.request.user.first_name or "usuário"}! Aqui está o resumo de {self.request.empresa.nome_fantasia}."
+        return contexto
 
 
-
-class DynamicSubmodulesView(BaseLoginRequiredView, EscopoEmpresaQuerysetMixin, TemplateView):
+class DynamicSubmodulesView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BasePageView):
     """
     Uma view para mostragem de todos os submódulos,
     e links django para eles

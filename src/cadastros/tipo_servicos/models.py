@@ -1,5 +1,5 @@
 from django.db import models
-from core.bases.models import BaseAssociadoEmpresa
+from cadastros.empresas.models import BaseAssociadoEmpresa
 
 
 class TipoServico(BaseAssociadoEmpresa):

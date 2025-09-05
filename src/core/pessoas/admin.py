@@ -1,4 +1,4 @@
-from core.bases.admin import BaseAssociadoEmpresaAdmin
+from cadastros.empresas.admin import BaseAssociadoEmpresaAdmin
 
 
 class PessoaAdmin(BaseAssociadoEmpresaAdmin):

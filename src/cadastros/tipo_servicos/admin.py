@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core.bases.admin import BaseAssociadoEmpresaAdmin
+from cadastros.empresas.admin import BaseAssociadoEmpresaAdmin
 from cadastros.tipo_servicos.models import TipoServico
 
 @admin.register(TipoServico)

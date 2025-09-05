@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from core.bases.admin import BaseAssociadoEmpresaAdmin, DateHierarchyAdmin
+from core.bases.admin import DateHierarchyAdmin
+from cadastros.empresas.admin import BaseAssociadoEmpresaAdmin
 from servicos.agendamentos.models import Agendamento
 
 @admin.register(Agendamento)

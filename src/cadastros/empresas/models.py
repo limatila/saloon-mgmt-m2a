@@ -3,6 +3,7 @@ from django.conf import settings
 
 from core.bases.models import BaseModel
 
+
 class Empresa(BaseModel):
     cnpj = models.CharField(
         verbose_name="CNPJ",
@@ -38,3 +39,15 @@ class Empresa(BaseModel):
 
     def __str__(self):
         return f"{self.id} - {self.nome_fantasia}"
+
+class BaseAssociadoEmpresa(BaseModel):
+    empresa = models.ForeignKey(
+        'empresas.Empresa',
+        verbose_name="Empresa",
+        null=False,
+        blank=False,
+        on_delete=models.PROTECT
+    )
+
+    class Meta:
+        abstract = True

@@ -1,13 +1,14 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from core.bases.views import DynamicListView, BaseDynamicFormView, EscopoEmpresaFieldsFormView
-from core.bases.mixins import EscopoEmpresaQuerysetMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from cadastros.empresas.views import BaseDynamicListView, BaseDynamicFormView, EscopoEmpresaFieldsFormView
+from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 from servicos.agendamentos.models import Agendamento
 from servicos.agendamentos.forms import AgendamentoForm
 
 
-class AgendamentoListView(EscopoEmpresaQuerysetMixin, DynamicListView):
+class AgendamentoListView(EscopoEmpresaQuerysetMixin, BaseDynamicListView):
     model = Agendamento
 
     def get_fields_display(self):

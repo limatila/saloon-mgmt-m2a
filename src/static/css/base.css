@@ -381,20 +381,23 @@ section.main-content .wrapper {
 
 /* Footer (hover movable) */
 footer {
-  position: fixed;
+  position: absolute;
+  left: 0;
   bottom: var(--footer-difference);
-  height: var(--footer-height);
   width: 100%;
+  height: var(--footer-height);
 
   background-color: var(--base-bg-color);
   color: white;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.8rem;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
   flex-shrink: 0;
+
   transition: transform 400ms ease-out;
 }
 

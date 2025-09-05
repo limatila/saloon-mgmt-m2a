@@ -6,7 +6,7 @@ from faker import Faker
 from validate_docbr import CPF, CNPJ
 
 from cadastros.clientes.models import Cliente
-from cadastros.tipo_servicos.models import TipoServico
+from servicos.tipo_servicos.models import TipoServico
 from cadastros.trabalhadores.models import Trabalhador
 from cadastros.empresas.models import Empresa
 from servicos.agendamentos.models import Agendamento, C_TIPO_STATUS_AGENDAMENTO

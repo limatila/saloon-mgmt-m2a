@@ -3,7 +3,7 @@ from django import forms
 from servicos.agendamentos.models import Agendamento
 from cadastros.clientes.models import Cliente
 from cadastros.trabalhadores.models import Trabalhador
-from cadastros.tipo_servicos.models import TipoServico
+from servicos.tipo_servicos.models import TipoServico
 
 
 class AgendamentoForm(forms.ModelForm):

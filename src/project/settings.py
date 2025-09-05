@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fyqh3m%#kwk2drh614o!rgxs_g4o7vz-rgznry@w(lt8lbnusm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
@@ -48,10 +48,10 @@ INSTALLED_APPS = [
     'core.pessoas',
 
     'cadastros.clientes',
-    'cadastros.tipo_servicos',
     'cadastros.trabalhadores',
     'cadastros.empresas',
     
+    'servicos.tipo_servicos',
     'servicos.agendamentos'
 ]
 
@@ -87,10 +87,10 @@ TEMPLATES = [
 
             BASE_DIR / 'cadastros' / 'clientes' / 'templates',
             BASE_DIR / 'cadastros' / 'empresas' / 'templates',
-            BASE_DIR / 'cadastros' / 'tipo_servicos' / 'templates',
             BASE_DIR / 'cadastros' / 'trabalhadores' / 'templates',
 
-            BASE_DIR / 'servicos' / 'agendamentos' / 'templates'
+            BASE_DIR / 'servicos' / 'agendamentos' / 'templates',
+            BASE_DIR / 'cadastros' / 'tipo_servicos' / 'templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -118,7 +118,10 @@ DATABASES = {
 
 # WhiteNoise specific configuration
 STORAGES = {
-    # ...
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "LOCATION": BASE_DIR / "media"
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
@@ -184,10 +187,10 @@ STATICFILES_DIRS = [
 
     BASE_DIR / 'cadastros' / 'clientes' / 'static',
     BASE_DIR / 'cadastros' / 'empresas' / 'static',
-    BASE_DIR / 'cadastros' / 'tipo_servicos' / 'static',
     BASE_DIR / 'cadastros' / 'trabalhadores' / 'static',
     
-    BASE_DIR / 'servicos' / 'agendamentos' / 'static'
+    BASE_DIR / 'servicos' / 'agendamentos' / 'static',
+    BASE_DIR / 'servicos' / 'tipo_servicos' / 'static'
 ]
 
 # Path for static files to be saved when 'manage.py collectstatic' for production

@@ -7,5 +7,6 @@ app_name = "servicos"
 
 urlpatterns = [
     path("", ServicosSubmodulesView.as_view(), name="list"), 
-    path("agendamentos/", include('servicos.agendamentos.urls', namespace="agendamentos"))
+    path("agendamentos/", include('servicos.agendamentos.urls', namespace="agendamentos")),
+    path("servicos/", include('servicos.tipo_servicos.urls', namespace="tipo_servicos"))
 ]

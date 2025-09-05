@@ -1,1 +1,2 @@
 from servicos.agendamentos.admin import AgendamentoAdmin
+from servicos.tipo_servicos.admin import TipoServicoAdmin

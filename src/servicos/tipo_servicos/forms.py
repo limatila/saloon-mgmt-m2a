@@ -1,6 +1,6 @@
 from django import forms
 
-from cadastros.tipo_servicos.models import TipoServico
+from servicos.tipo_servicos.models import TipoServico
 
 
 class TipoServicoForm(forms.ModelForm):

@@ -4,8 +4,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.bases.views import BaseDynamicListView, BaseDynamicFormView
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
-from cadastros.tipo_servicos.models import TipoServico
-from cadastros.tipo_servicos.forms import TipoServicoForm
+from servicos.tipo_servicos.models import TipoServico
+from servicos.tipo_servicos.forms import TipoServicoForm
 
 
 class TipoServicoListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDynamicListView):

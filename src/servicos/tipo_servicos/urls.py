@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import path
 
-from cadastros.tipo_servicos.views import TipoServicoListView, TipoServicoCreateView
+from servicos.tipo_servicos.views import TipoServicoListView, TipoServicoCreateView
 
 
 app_name = "tipo_servicos"

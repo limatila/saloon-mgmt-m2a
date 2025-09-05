@@ -6,7 +6,7 @@ from servicos.agendamentos.choices import C_TIPO_STATUS_AGENDAMENTO, AGENDAMENTO
 
 class Agendamento(BaseAssociadoEmpresa):
     data_agendado = models.DateTimeField(
-        verbose_name="Data Agendado",
+        verbose_name="Data Agendada",
         null=False,
         blank=False
     )
@@ -28,7 +28,7 @@ class Agendamento(BaseAssociadoEmpresa):
     )
     servico = models.ForeignKey(
         'tipo_servicos.TipoServico',
-        verbose_name="Serviço contratado",
+        verbose_name="Serviço",
         on_delete=models.PROTECT,
         null=False
     )

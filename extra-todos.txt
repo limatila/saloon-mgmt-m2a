@@ -1,3 +1,4 @@
 autenticação temporária (se o user não usa o app diariamente, deslogar nos próximos 3 dias)
+DetailView de todos
 chat bot com cliente (script básico)
 perfil da empresa

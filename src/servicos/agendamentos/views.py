@@ -14,6 +14,12 @@ class AgendamentoListView(EscopoEmpresaQuerysetMixin, BaseDynamicListView):
     def get_fields_display(self):
         return ['data_agendado', 'status', 'cliente', 'servico', 'trabalhador']
     
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.select_related('cliente', 'servico', 'trabalhador')
+        return queryset
+    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Lista de Agendamentos"

@@ -213,62 +213,8 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         ]
 
 
-# TODO: implement -------------
-# class ClientesQuickInfoMixin(ViewComQuickInfoMixin):
-#     def get_item_querys(self):
-#         return [
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             }
-#         ]
-
-
-# class TrabalhadoresQuickInfoMixin(ViewComQuickInfoMixin):
-#     def get_item_querys(self):
-#         return [
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             }
-#         ]
-
-
-# class TipoServicosQuickInfoMixin(ViewComQuickInfoMixin):
-#     def get_item_querys(self):
-#         return [
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             },
-#             {
-#                 'header'
-#             }
-#         ]
-
-
-# class AgendamentosQuickInfoMixin(ViewComQuickInfoMixin):
+# TODO: implement in submodules -------------
+# class ModuleQuickInfoMixin(ViewComQuickInfoMixin):
 #     def get_item_querys(self):
 #         return [
 #             {

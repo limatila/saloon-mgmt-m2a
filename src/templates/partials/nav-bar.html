@@ -5,7 +5,7 @@
         <div class="nav-header">
             <div class="nav-header-title">
                 <div class="nav-header-icon">
-                    <img src="{% static "imgs/kiss.png" %}" alt="Ícone da Empresa">
+                    <img src="{{ request.empresa.imagem.url }}" alt="Ícone da Empresa">
                 </div>
                 <h2>{{ request.empresa.nome_fantasia }}</h2>
             </div>

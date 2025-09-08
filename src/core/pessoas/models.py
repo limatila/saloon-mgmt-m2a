@@ -18,8 +18,8 @@ class Pessoa(BaseCadastrosModel):
         unique=True
     )
     imagem = models.ImageField(
-        verbose_name="Imagem",
-        default="placeholder.jpg",
+        verbose_name="Foto da Pessoa",
+        default="placeholder-pessoa.jpg",
         upload_to="imagens-pessoas/",
         null=True,
         blank=True,

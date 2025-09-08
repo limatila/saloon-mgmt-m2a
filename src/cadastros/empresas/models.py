@@ -27,6 +27,14 @@ class Empresa(BaseModel):
         blank=False,
         default=None
     )
+    imagem = models.ImageField(
+        verbose_name="Imagem da empresa",
+        default="placeholder-empresa.jpg",
+        upload_to="imagens-empresas/",
+        null=True,
+        blank=True,
+        editable=True
+    )
 
     #FKs
     user = models.ForeignKey(

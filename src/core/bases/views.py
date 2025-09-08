@@ -104,6 +104,7 @@ class BaseDynamicFormView(FormView):
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
+
         nome_formulario_extraido = self.form_class.__name__.replace("Form", ' ').title()
         nome_formulario_extraido = "Serviços" if "tiposervico" in nome_formulario_extraido.lower() else nome_formulario_extraido
 

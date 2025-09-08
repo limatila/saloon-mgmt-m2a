@@ -121,8 +121,8 @@ aside .wrapper {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  flex-grow: 1;
-  max-height: var(--headers-height);
+  margin: 1rem 0;
+  flex-shrink: 0;
 }
 
 .side-nav-bar .nav-header .nav-header-title {
@@ -135,12 +135,11 @@ aside .wrapper {
 }
 
 .side-nav-bar .nav-header .nav-header-title h2 {
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .side-nav-bar .nav-header .nav-header-icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -376,7 +376,6 @@ section.main-content .wrapper {
   width: 96%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 /* Footer (hover movable) */

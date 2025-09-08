@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseServerError
 
@@ -23,9 +24,13 @@ class EscopoEmpresaQuerysetMixin(ContextoEmpresaMixin):
     """
     Filtra toda a queryset para mostrar a empresa registrada da request
     """
+    @property
+    def escopo_filter(self):
+        return Q(empresa=self.request.empresa)
+
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(empresa=self.request.empresa)
+        queryset = queryset.filter(self.escopo_filter)
         return queryset
 
 

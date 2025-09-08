@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.views.generic import ListView, FormView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from core.bases.mixins import HomeQuickInfoMixin
+from core.bases.mixins import HomeQuickInfoMixin, HomeQuickActionMixin
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 
 
@@ -118,7 +118,7 @@ class BaseDynamicFormView(FormView):
 
 
 #* Especializadas: home/ [nome_modulo]/
-class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, HomeQuickInfoMixin, BasePageView):
+class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, HomeQuickInfoMixin, HomeQuickActionMixin, BasePageView):
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):

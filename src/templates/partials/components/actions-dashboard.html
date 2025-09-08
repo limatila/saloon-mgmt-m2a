@@ -2,7 +2,7 @@
     <h3><i class="fa-solid fa-plus"></i>Ações Rápidas</h3>
     <div class="grid">
         {% for action in quick_actions %}
-            <a href="{{ action.url }}" class="grid-item">
+            <a href="{{ action.link_module }}" class="grid-item">
                 <i class="action-icon fa-solid fa-{{ action.fa_icon }}"></i>
 
                 <div class="grid-item-content">

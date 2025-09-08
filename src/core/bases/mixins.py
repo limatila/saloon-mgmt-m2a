@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q, Sum
 from django.urls import reverse_lazy
 
-from core.types import QuickInfoItem
+from core.types import QuickActionItem, QuickInfoItem
 from cadastros.clientes.models import Cliente
 from cadastros.trabalhadores.models import Trabalhador
 from servicos.agendamentos.models import Agendamento
@@ -42,7 +42,8 @@ class ViewComQuickInfoMixin:
                 'header': '...',
                 'value': '[valor/query]',
                 'conclusion': '[valor/query]',
-                'fa_icon': '[classe FontAwesome, sem 'fa-']'
+                'fa_icon': '[classe FontAwesome, sem 'fa-']',
+                'link_module: 'reverse_lazy('caminho:pelo:namespace')'
             }
         """
         return [
@@ -50,11 +51,12 @@ class ViewComQuickInfoMixin:
                 'header': None,
                 'value': None,
                 'conclusion': None,
-                'fa_icon': None
+                'fa_icon': None,
+                'link_module': None
             }
         ]
 
-    def get_quick_infos(self, max_items: int = None) -> list:
+    def get_quick_infos(self, max_items: int = 4) -> list:
         return [
             QuickInfoItem(
                 header=info.get('header'),
@@ -71,6 +73,45 @@ class ViewComQuickInfoMixin:
         context['quick_infos'] = self.get_quick_infos()
         return context
 
+
+class ViewComQuickActionMixin:
+    def get_item_actions(self) -> list[dict[str, str]]:
+        """
+        Hook para definição de querys dos itens de quick actions
+
+        * Formato necessário:
+        
+            {
+                'header': '...',
+                'description': '...',
+                'fa_icon': 'classe FontAwesome, sem 'fa-''
+                'link_module: 'reverse_lazy('caminho:pelo:namespace')'
+            }
+        """
+        return [
+            {
+                'header': None,
+                'description': None,
+                'fa_icon': None,
+                'link_module': None
+            }
+        ]
+
+    def get_quick_actions(self, max_items: int | None = 4) -> list:
+        return [
+            QuickActionItem(
+                header=info.get('header'),
+                description=info.get('description'),
+                fa_icon=info.get('fa_icon'),
+                link_module=info.get('link_module')
+            )
+            for info in self.get_item_actions()[:max_items]
+        ]   
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['quick_actions'] = self.get_quick_actions()
+        return context
 
 #* Mixins especializados
 class HomeQuickInfoMixin(ViewComQuickInfoMixin):
@@ -210,6 +251,36 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                 'fa_icon': 'briefcase',
                 'link_module': reverse_lazy('cadastros:trabalhadores:list')
             }
+        ]
+
+
+class HomeQuickActionMixin(ViewComQuickActionMixin):
+    def get_item_actions(self):
+        return [
+            {
+                'header': 'Novo Agendamento',
+                'description': 'Adicione um registro',
+                'fa_icon': 'calendar',
+                'link_module': reverse_lazy('servicos:agendamentos:create')
+            },
+            {
+                'header': 'Finalizar Atendimento',
+                'description': 'Adicione um registro',
+                'fa_icon': 'check',
+                'link_module': '' #reverse_lazy('servicos:agendamentos:finalizar')
+            },
+            {
+                'header': 'Novo Cliente',
+                'description': 'Adicione uma pessoa recorrente',
+                'fa_icon': 'circle-user',
+                'link_module': reverse_lazy('cadastros:clientes:create')
+            },
+            {
+                'header': 'Novo Serviço',
+                'description': 'Adicione um novo procedimento',
+                'fa_icon': 'scissors',
+                'link_module': reverse_lazy('servicos:tipo_servicos:create')
+            },
         ]
 
 

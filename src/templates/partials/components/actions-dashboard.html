@@ -3,11 +3,13 @@
     <div class="grid">
         {% for action in quick_actions %}
             <a href="{{ action.link_module }}" class="grid-item">
-                <i class="action-icon fa-solid fa-{{ action.fa_icon }}"></i>
-
                 <div class="grid-item-content">
-                    <h5>{{ action.header }}</h5>
-                    <p>{{ action.description }}</p>
+                    <i class="action-icon fa-solid fa-{{ action.fa_icon }}"></i>
+    
+                    <div>
+                        <h5>{{ action.header }}</h5>
+                        <p>{{ action.description }}</p>
+                    </div>
                 </div>
             </a>
         {% endfor %}

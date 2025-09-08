@@ -376,6 +376,7 @@ section.main-content .wrapper {
   width: 96%;
   display: flex;
   flex-direction: column;
+  gap: 3rem;
 }
 
 /* Footer (hover movable) */

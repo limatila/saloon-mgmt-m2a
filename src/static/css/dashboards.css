@@ -223,15 +223,55 @@ a.dash-item:hover{
 
 /* Actions (grid, 4 itens) */
 .action-dashboard {
-  height: 10rem;
-  width: 10rem;
+  position: relative;
+  height: 20rem;
+  width: 20rem;
 }
 
 .action-dashboard .grid{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 0.7rem;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+}
+
+.action-dashboard .grid-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.action-dashboard .grid-item-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  text-align: center;
+  width: 100%;
+  height: 83%;
+  
+  & p {
+    margin: 0;
+  }
+}
+
+.action-dashboard .grid-item:nth-child(1){
+  background: #ceb80f
+}
+.action-dashboard .grid-item:nth-child(2){
+  background: #1bad0b
+}
+.action-dashboard .grid-item:nth-child(3){
+  background: var(--bg-color-mid)
+}
+.action-dashboard .grid-item:nth-child(4){
+  background: #000000
 }
 
 /* Modules */

@@ -2,6 +2,8 @@ from random import choice, random
 
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError, models
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from faker import Faker
 from validate_docbr import CPF, CNPJ
 
@@ -35,7 +37,8 @@ class Command(BaseCommand):
             nova_empresa = Empresa(
                 cnpj=cnpj.generate(),
                 nome_fantasia=fake.name(),
-                razao_social=fake.company()
+                razao_social=fake.company(),
+                user=User.objects.first()
             )
             additions: list[models.Model] = [
                 nova_empresa,

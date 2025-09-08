@@ -112,7 +112,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database.sqlite3',
+        'NAME': BASE_DIR.parent / 'database.sqlite3',
     }
 }
 
@@ -197,7 +197,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = 'static/'
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR.parent / 'media'
 
 
 LOGIN_URL = "/core/auth/login/"

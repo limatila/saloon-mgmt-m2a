@@ -7,7 +7,7 @@
   max-width: 100%;
   padding: 0.3rem; /* p-2 */
   border-radius: 1rem; /* rounded-2xl */
-  box-shadow: 0px 0px 40px -33px rgba(0,0,0,0.7);
+  box-shadow: 0px 0px 30px -18px rgba(0,0,0,0.8);
 }
 
 .dashboard div.dashboard-head {
@@ -189,10 +189,95 @@ div.grid-dashboard div.grid div.worker > * {
   flex-shrink: 0;
 }
 
-/** daily dashboard (simple flexbox) */
-.daily-dashboard h2 {
-  font-size: inherit;
+/* Quick Info (simple grid in row) */
+.quick-dashboard{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-height: 25vh;
+
+  transition: transform 250ms ease-in-out;
 }
+
+.quick-dashboard a.dash-item {
+  height: 100%;
+  width: 100%;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: solid 1px #CCC;
+  background-color: white;
+  transition: inherit;
+}
+
+.quick-dashboard .dash-item-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 70%;
+  width: 80%;
+  flex-direction: column;
+  & * {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.quick-dashboard .dash-item-content p:nth-child(1) {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+}
+
+.quick-dashboard .dash-header {
+  margin-bottom: 0.4rem;
+  opacity: 80%;
+}
+
+.quick-dashboard .dash-value {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.quick-dashboard .dash-icon {
+  flex: 1;
+} 
+.quick-dashboard .dash-icon::before {
+  margin: 0;
+  padding: 0.5rem;
+  border-radius: inherit;
+}
+
+.quick-dashboard .dash-conclusion {
+  color: var(--bg-color-light);
+}
+
+a.dash-item:hover{
+  transform: scale(108%);
+}
+
+/* FontAwesome icons custom colors */
+.quick-dashboard .dash-item {
+  & .fa-user::before{
+    color: blue;
+    background-color: #c9d9fb;
+  }
+  & .fa-dollar-sign::before{
+    color: green;
+    background-color: #ceffc7;
+  }
+  & .fa-clock::before{
+    color: purple;
+    background-color: #ffc3ff;
+  }
+  & .fa-briefcase::before{
+    color: rgb(92, 92, 11);
+    background-color: #f9ffb3;
+  }
+}
+
 
 /* Modules */
 .modules-dashboard{
@@ -220,7 +305,7 @@ div.grid-dashboard div.grid div.worker > * {
   align-items: center;
 }
 .modules-dashboard div.module {
-  border: 2px solid var(--bg-color-light);
+  border: 2px solid var(--bg-color-fade);
 }
 .modules-dashboard div.module h3 {
   font-size: 2rem;

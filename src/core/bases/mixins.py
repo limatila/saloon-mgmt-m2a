@@ -1,3 +1,18 @@
+from datetime import datetime, timedelta
+
+from django.db.models import Q, Sum
+from django.urls import reverse_lazy
+
+from core.types import QuickInfoItem
+from cadastros.clientes.models import Cliente
+from cadastros.trabalhadores.models import Trabalhador
+from servicos.agendamentos.models import Agendamento
+from servicos.agendamentos.choices import (
+    AGENDAMENTO_STATUS_PENDENTE,
+    AGENDAMENTO_STATUS_EXECUTANDO, 
+    AGENDAMENTO_STATUS_FINALIZADO
+)
+
 
 class FormComArquivoMixin:
     """
@@ -15,4 +30,257 @@ class FormComArquivoMixin:
         })
         return kwargs
 
-#? base security
+
+class ViewComQuickInfoMixin:
+    def get_item_querys(self) -> list[dict[str, str]]:
+        """
+        Hook para definição de querys dos itens de quick info
+
+        * Formato necessário:
+        
+            {
+                'header': '...',
+                'value': '[valor/query]',
+                'conclusion': '[valor/query]',
+                'fa_icon': '[classe FontAwesome, sem 'fa-']'
+            }
+        """
+        return [
+            {
+                'header': None,
+                'value': None,
+                'conclusion': None,
+                'fa_icon': None
+            }
+        ]
+
+    def get_quick_infos(self, max_items: int = None) -> list:
+        return [
+            QuickInfoItem(
+                header=info.get('header'),
+                value=info.get('value'),
+                conclusion=info.get('conclusion'),
+                fa_icon=info.get('fa_icon'),
+                link_module=info.get('link_module')
+            )
+            for info in self.get_item_querys()[:max_items]
+        ]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['quick_infos'] = self.get_quick_infos()
+        return context
+
+
+#* Mixins especializados
+class HomeQuickInfoMixin(ViewComQuickInfoMixin):
+    DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES: int = 2
+
+    def get_novos_clientes_ultimos_dias(self, tolerancia_dias: int = 7) -> str:
+        """
+        Especialização para menu Home/
+
+        Args:
+            tolerancia_dias (int, optional): quantos dias atrás. Default: 7.
+        """
+        agora = datetime.now()
+        start = agora - timedelta(days=tolerancia_dias)
+        end = agora
+        return f"+{
+            Cliente.objects.filter(
+                Q(
+                    data_criado__gte=start,
+                    data_criado__lte=end
+                ) & self.escopo_filter
+            ).count()
+        } nos últimos {tolerancia_dias} dias"
+
+    def get_faturamento_da_semana(self) -> str:
+        hoje = datetime.now()
+        start = (hoje - timedelta(days=hoje.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
+        end = hoje
+        total = Agendamento.objects.aggregate(
+            sum=Sum(
+                'servico__preco',
+                filter=Q(
+                    data_agendado__gte=start,
+                    data_agendado__lte=end,
+                    status=AGENDAMENTO_STATUS_FINALIZADO,
+                ) & self.escopo_filter
+            )
+        ).get('sum') or 0
+
+        # Format for Brazilian currency #TODO: refactor repeated code
+        total_str = f"{total:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+
+        return f"R$ {total_str}"
+
+    def get_faturamento_do_mes(self) -> str:
+        hoje = datetime.now()
+        start = hoje.replace(day=1)
+        end = hoje
+        total = Agendamento.objects.aggregate(
+                sum=Sum('servico__preco', filter=(
+                        Q(
+                            data_agendado__gte=start,
+                            data_agendado__lte=end,
+                            status=AGENDAMENTO_STATUS_FINALIZADO
+                        ) & self.escopo_filter
+                    )
+                )
+            ).get('sum') or 0
+        
+        # Format for Brazilian currency #TODO: refactor repeated code
+        total_str = f"{total:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+        
+        return f"R$ {total_str} no mês"
+    
+    def get_atendimentos_proximas_horas(self, tolerancia_horas: int = DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES) -> str:
+        """
+        Args:
+            horas (int, optional): quantas horas a partir de agora. Default: 1.
+        """
+        agora = datetime.now()
+        start = agora
+        end = agora + timedelta(hours=tolerancia_horas)
+        return f"{
+            Agendamento.objects.filter(
+                Q(
+                    data_agendado__gte=start,
+                    data_agendado__lte=end,
+                    status__in=[AGENDAMENTO_STATUS_PENDENTE, AGENDAMENTO_STATUS_EXECUTANDO]
+                ) & self.escopo_filter
+            ).count()
+        }"
+
+    def get_trabalhadores_ocupados_agora(self, tolerancia_minutos: int = 20) -> str:
+        """
+        Args:
+            tolerancia_minutos (int, optional): quantos minutos antes e depois de agora. Default: 20 (min.).
+        """
+        agora = datetime.now()
+        start = agora - timedelta(minutes=tolerancia_minutos)
+        end = agora + timedelta(minutes=tolerancia_minutos)
+        return f"{
+            Trabalhador.objects.filter(
+                Q(
+                    agendamentos__status=AGENDAMENTO_STATUS_EXECUTANDO,
+                    agendamentos__data_agendado__gte=start,
+                    agendamentos__data_agendado__lte=end
+                ) & self.escopo_filter
+            ).distinct().count()
+        }"
+
+    def get_porcentagem_trabalhadores_ocupados(self) -> str:
+        total_ocupados = int(self.get_trabalhadores_ocupados_agora())
+        total_trabalhadores = Trabalhador.objects.filter(
+            self.escopo_filter
+        ).count()
+
+        porcentagem = (total_ocupados / total_trabalhadores) * 100
+        return f"{int(porcentagem)}%"
+
+    def get_item_querys(self):
+        return [
+            {
+                'header': 'Clientes novos',
+                'value': self.get_novos_clientes_ultimos_dias(),
+                'conclusion': f'de um total de {Cliente.objects.filter(self.escopo_filter).count()} atuais',
+                'fa_icon': 'user',
+                'link_module': reverse_lazy('cadastros:clientes:list')
+            },
+            {
+                'header': 'Faturamento da semana',
+                'value': self.get_faturamento_da_semana(),
+                'conclusion': self.get_faturamento_do_mes(),
+                'fa_icon': 'dollar-sign',
+                'link_module': reverse_lazy('servicos:tipo_servicos:list')
+            },
+            {
+                'header': 'Atendimentos a seguir',
+                'value': self.get_atendimentos_proximas_horas(),
+                'conclusion': f'nas próximas {self.DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES} horas',
+                'fa_icon': 'clock',
+                'link_module': reverse_lazy('servicos:agendamentos:list')
+            },
+            {
+                'header': 'Trabalhadores ocupados',
+                'value': self.get_trabalhadores_ocupados_agora(),
+                'conclusion': f'{self.get_porcentagem_trabalhadores_ocupados()} de todos estão ocupados',
+                'fa_icon': 'briefcase',
+                'link_module': reverse_lazy('cadastros:trabalhadores:list')
+            }
+        ]
+
+
+# TODO: implement -------------
+# class ClientesQuickInfoMixin(ViewComQuickInfoMixin):
+#     def get_item_querys(self):
+#         return [
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             }
+#         ]
+
+
+# class TrabalhadoresQuickInfoMixin(ViewComQuickInfoMixin):
+#     def get_item_querys(self):
+#         return [
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             }
+#         ]
+
+
+# class TipoServicosQuickInfoMixin(ViewComQuickInfoMixin):
+#     def get_item_querys(self):
+#         return [
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             }
+#         ]
+
+
+# class AgendamentosQuickInfoMixin(ViewComQuickInfoMixin):
+#     def get_item_querys(self):
+#         return [
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             },
+#             {
+#                 'header'
+#             }
+#         ]

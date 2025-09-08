@@ -8,3 +8,10 @@ class QuickInfoItem:
     conclusion: str
     fa_icon: str
     link_module: str
+
+@dataclass
+class QuickActionItem:
+    header: str
+    description: str
+    fa_icon: str
+    link_module: str

@@ -132,63 +132,6 @@ td.item-actions a:nth-child(4):hover{
   background-color: rgb(74, 129, 163);
 }
 
-/** grid-dashboards */
-div.grid-dashboard {
-  overflow: auto;
-}
-
-div.grid-dashboard div.grid {
-  max-height: 100%;
-  overflow: auto;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.625rem; /* gap-2.5 */
-
-  /* Large screen */
-}
-
-div.grid-dashboard div.grid div.worker {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border: 1px solid #9ca3af; /* border-gray-400 */
-}
-
-div.grid-dashboard div.grid div.worker div,
-div.grid-dashboard div.grid div.worker img {
-  min-width: 25%;
-  height: 100%;
-  max-width: 100%;
-}
-
-div.grid-dashboard div.grid div.worker div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-div.grid-dashboard div.grid div.worker div span {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  flex-grow: 1;
-  justify-content: space-around;
-  align-items: center;
-}
-
-
-div.grid-dashboard div.grid div.worker div span img {
-  width: 30%;
-  height: auto;
-}
-
-/* Force each inner child to have its own fixed proportion */
-div.grid-dashboard div.grid div.worker > * {
-  flex-basis: 25%;
-  flex-shrink: 0;
-}
-
 /* Quick Info (simple grid in row) */
 .quick-dashboard{
   display: grid;
@@ -278,6 +221,18 @@ a.dash-item:hover{
   }
 }
 
+/* Actions (grid, 4 itens) */
+.action-dashboard {
+  height: 10rem;
+  width: 10rem;
+}
+
+.action-dashboard .grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+}
 
 /* Modules */
 .modules-dashboard{

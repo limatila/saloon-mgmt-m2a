@@ -23,7 +23,7 @@ class TipoServicoListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDy
 class TipoServicoCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDynamicFormView, CreateView):
     model = TipoServico
     form_class = TipoServicoForm
-    success_url = reverse_lazy('cadastros:tipo_servicos:list')
+    success_url = reverse_lazy('servicos:tipo_servicos:list')
 
     def form_valid(self, form):
         return super().form_valid(form)

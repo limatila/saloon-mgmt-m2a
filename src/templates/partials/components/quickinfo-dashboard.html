@@ -1,17 +1,17 @@
 {% if quick_infos %}
     <div class="quick-dashboard dashboard">
         {% for info in quick_infos %} {% comment %} máximo desejável de 4-5 itens {% endcomment %}
-        <a class="dash-item" href="{{ info.link_module }}" title="Exibir todos os registros">
-            <div class="dash-item-content">
-                <p class="dash-header">{{ info.header }}</p>
-                <div>
-                    <h5 class="dash-value">{{ info.value }}</h5>
-                    <p class="dash-conclusion">{{ info.conclusion }}</p>
+            <a class="dash-item" href="{{ info.link_module }}" title="Exibir todos os registros">
+                <div class="dash-item-content">
+                    <p class="dash-header">{{ info.header }}</p>
+                    <div>
+                        <h5 class="dash-value">{{ info.value }}</h5>
+                        <p class="dash-conclusion">{{ info.conclusion }}</p>
+                    </div>
                 </div>
-            </div>
-            
-            <i class="fa-solid fa-{{ info.fa_icon }} dash-icon"></i>
-        </a>
+                
+                <i class="fa-solid fa-{{ info.fa_icon }} dash-icon"></i>
+            </a>
         {% endfor %}
     </div>
 {% endif %}

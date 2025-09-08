@@ -15,10 +15,16 @@ class TrabalhadoresListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Pess
     def get_queryset(self, **kwargs):
         queryset = super().get_queryset(**kwargs)
         queryset = queryset.annotate(
-            agendamentos_totais=Count('agendamento'),
-            agendamentos_pendentes=Count('agendamento', filter=Q(agendamento__status="PENDENTE"))
+            agendamentos_totais=Count('agendamentos'),
+            agendamentos_pendentes=Count('agendamentos', filter=Q(agendamentos__status="PENDENTE"))
         )
         return queryset
+
+    # TODO: mostrar annotated
+    # def get_fields_display(self):
+    #     fields_ordernados = super().get_fields_display()
+    #     fields_ordernados += ['agendamentos_totais', 'agendamentos_pendentes']
+    #     return fields_ordernados
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)

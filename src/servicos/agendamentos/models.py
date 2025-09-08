@@ -24,19 +24,22 @@ class Agendamento(BaseServicosModel):
         'clientes.Cliente',
         verbose_name="Cliente",
         on_delete=models.PROTECT,
-        null=False
+        null=False,
+        related_name='agendamentos'
     )
     servico = models.ForeignKey(
         'tipo_servicos.TipoServico',
         verbose_name="Serviço",
         on_delete=models.PROTECT,
-        null=False
+        null=False,
+        related_name='agendamentos'
     )
     trabalhador = models.ForeignKey(
         'trabalhadores.Trabalhador',
         verbose_name="Trabalhador",
         on_delete=models.PROTECT,
-        null=False
+        null=False,
+        related_name='agendamentos'
     )
 
     def __str__(self):

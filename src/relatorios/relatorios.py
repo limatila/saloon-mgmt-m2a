@@ -32,6 +32,13 @@ class BaseRelatorio:
             or getattr(self.request, 'empresa', None) and self.request.empresa.nome_fantasia
         )
 
+        # tamanhos de fontes
+        self.font_sizes = {
+            'title': 14,
+            'sub-title': 11,
+            'small': 9
+        }
+
         # Passo 1: Criar um documento PDF em branco na memória.
         self.doc = pymupdf.open()
         
@@ -74,14 +81,14 @@ class BaseRelatorio:
         ponto = pymupdf.Point(*origem)
         
         # Passo 4: Inserir texto na página (usa a fonte definida no __init__).
-        self.page.insert_text(ponto, f"Relatório de Atividade Mensal - {self.request.empresa.razao_social}", fontsize=14, fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Relatório de Atividade Mensal - {self.request.empresa.razao_social}", fontsize=self.font_sizes['title'], fontname=self.font_bold)
         
         # Movemos o ponto para baixo para a próxima linha de texto.
         ponto.y += 25
-        self.page.insert_text(ponto, f"Mês de referência: {self.mes_referencia}", fontsize=10, fontname=self.font_regular)
+        self.page.insert_text(ponto, f"Mês de referência: {self.mes_referencia}", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 20
-        self.page.insert_text(ponto, f"Emitido por: {self.emissor_nome}", fontsize=10, fontname=self.font_regular)
+        self.page.insert_text(ponto, f"Emitido por: {self.emissor_nome}", fontsize=self.font_sizes['small'], fontname=self.font_regular)
         
         # Adiciona uma linha horizontal para separar o cabeçalho.
         ponto.y += 20
@@ -179,49 +186,52 @@ class RelatorioAgendamentoMensal(BaseRelatorio):
     def desenhar_corpo(self, y_inicial: int) -> int:
         #Agendamentos
         ponto = pymupdf.Point(50, y_inicial)
-        self.page.insert_text(ponto, "Resumo do Mês", fontsize=16, fontname=self.font_bold)
+        self.page.insert_text(ponto, "Resumo do Mês", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.y += 25
-        self.page.insert_text(ponto, f"Faturamento Total: {self.formatar_moeda(self.faturamento_total_mes)}", fontsize=13, fontname=self.font_bold)
-        ponto.y += 20
-        self.page.insert_text(ponto, f"Total de Atendimentos Realizados/Finalizados: {self.total_agendamentos_finalizados}", fontsize=11, fontname=self.font_regular)
+        self.page.insert_text(ponto, f"Faturamento Total: {self.formatar_moeda(self.faturamento_total_mes)}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
+        ponto.y += 17
+        self.page.insert_text(ponto, f"Total de Atendimentos Realizados/Finalizados: {self.total_agendamentos_finalizados}", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 25
-        self.page.insert_text(ponto, f"Faturamento Total Perdido: {self.formatar_moeda(self.faturamento_total_cancelado)}", fontsize=13, fontname=self.font_bold)
-        ponto.y += 20
-        self.page.insert_text(ponto, f"Total de Atendimentos Cancelados: {self.total_agendamentos_cancelados}", fontsize=11, fontname=self.font_regular)
+        self.page.insert_text(ponto, f"Faturamento Total Perdido: {self.formatar_moeda(self.faturamento_total_cancelado)}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
+        ponto.y += 17
+        self.page.insert_text(ponto, f"Total de Atendimentos Cancelados: {self.total_agendamentos_cancelados}", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         #separação de seções
-        ponto.y += 20
+        ponto.y += 30
         self.page.draw_line(ponto, pymupdf.Point(ponto.x + 500, ponto.y))
 
         #Trabalhadores
         ponto.y += 35
-        self.page.insert_text(ponto, "Overview de funcionários", fontsize=16, fontname=self.font_bold)
+        self.page.insert_text(ponto, "Overview de funcionários", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.y += 30
         i: int = 0
-        self.page.insert_text(ponto, f"Top 3 funcionários com mais atendimentos finalizados", fontsize=12, fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Top 3 funcionários com mais atendimentos finalizados", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         for item in self.trabalhadores_mais_agendamentos_finalizados:
             i += 1
-            ponto.y += 25
-            self.page.insert_text(ponto, f"{i}. {item.get('nome', '')}: {item.get('total_finalizados')} atendimentos finalizados.", fontsize=10, fontname=self.font_regular)
+            ponto.y += 20
+            ponto_indentado = pymupdf.Point(ponto.x + 20, ponto.y)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_finalizados')} atendimentos finalizados.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 30
         i: int = 0
-        self.page.insert_text(ponto, f"Top 3 funcionários com mais atendimentos cancelados", fontsize=12, fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Top 3 funcionários com mais atendimentos cancelados", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         for item in self.trabalhadores_mais_agendamentos_cancelados:
             i += 1
-            ponto.y += 25
-            self.page.insert_text(ponto, f"{i}. {item.get('nome', '')}: {item.get('total_cancelados')} atendimentos cancelados.", fontsize=10, fontname=self.font_regular)
+            ponto.y += 20
+            ponto_indentado = pymupdf.Point(ponto.x + 20, ponto.y)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_cancelados')} atendimentos cancelados.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 30
         i: int = 0
-        self.page.insert_text(ponto, f"Top 3 funcionários com maior faturamento", fontsize=12, fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Top 3 funcionários com maior faturamento", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         for item in self.trabalhadores_maior_faturamento_total:
             i += 1
-            ponto.y += 25
-            self.page.insert_text(ponto, f"{i}. {item.get('nome', '')}: {self.formatar_moeda(item.get('valor_arrecadado_total'))}.", fontsize=10, fontname=self.font_regular)
+            ponto.y += 20
+            ponto_indentado = pymupdf.Point(ponto.x + 20, ponto.y)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {self.formatar_moeda(item.get('valor_arrecadado_total'))}.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         return y_inicial + 20
 
@@ -234,9 +244,3 @@ class RelatorioAgendamentoMensal(BaseRelatorio):
 
         # Passo 5: Finalizar o documento e obter seus bytes para a resposta HTTP.
         return self.doc.tobytes()
-
-
-# --- Funções de Interface Pública ---
-#
-# Estas funções serve como uma interface simples, delegando a lógica de
-# criação para a classe RelatorioAtividadeMensal.

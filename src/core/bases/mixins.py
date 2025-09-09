@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.db.models import Q, Sum
 from django.urls import reverse_lazy
+from django.utils import timezone
 
 from core.types import QuickActionItem, QuickInfoItem
 from cadastros.clientes.models import Cliente
@@ -117,6 +118,10 @@ class ViewComQuickActionMixin:
 class HomeQuickInfoMixin(ViewComQuickInfoMixin):
     DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES: int = 2
 
+    def _format_brl_currency(self, value: float | int) -> str:
+        """Formata um valor numérico para a moeda brasileira (BRL)."""
+        return f"R$ {value:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+
     def get_novos_clientes_ultimos_dias(self, tolerancia_dias: int = 7) -> str:
         """
         Especialização para menu Home/
@@ -124,7 +129,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         Args:
             tolerancia_dias (int, optional): quantos dias atrás. Default: 7.
         """
-        agora = datetime.now()
+        agora = timezone.now()
         start = agora - timedelta(days=tolerancia_dias)
         end = agora
         return f"+{
@@ -137,7 +142,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         } nos últimos {tolerancia_dias} dias"
 
     def get_faturamento_da_semana(self) -> str:
-        hoje = datetime.now()
+        hoje = timezone.now()
         start = (hoje - timedelta(days=hoje.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
         end = hoje
         total = Agendamento.objects.aggregate(
@@ -151,13 +156,10 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
             )
         ).get('sum') or 0
 
-        # Format for Brazilian currency #TODO: refactor repeated code
-        total_str = f"{total:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
-
-        return f"R$ {total_str}"
+        return self._format_brl_currency(total)
 
     def get_faturamento_do_mes(self) -> str:
-        hoje = datetime.now()
+        hoje = timezone.now()
         start = hoje.replace(day=1)
         end = hoje
         total = Agendamento.objects.aggregate(
@@ -171,17 +173,14 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                 )
             ).get('sum') or 0
         
-        # Format for Brazilian currency #TODO: refactor repeated code
-        total_str = f"{total:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
-        
-        return f"R$ {total_str} no mês"
+        return f"{self._format_brl_currency(total)} no mês"
     
     def get_atendimentos_proximas_horas(self, tolerancia_horas: int = DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES) -> str:
         """
         Args:
             horas (int, optional): quantas horas a partir de agora. Default: 1.
         """
-        agora = datetime.now()
+        agora = timezone.now()
         start = agora
         end = agora + timedelta(hours=tolerancia_horas)
         return f"{
@@ -199,7 +198,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         Args:
             tolerancia_minutos (int, optional): quantos minutos antes e depois de agora. Default: 20 (min.).
         """
-        agora = datetime.now()
+        agora = timezone.now()
         start = agora - timedelta(minutes=tolerancia_minutos)
         end = agora + timedelta(minutes=tolerancia_minutos)
         return f"{
@@ -213,13 +212,16 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         }"
 
     def get_porcentagem_trabalhadores_ocupados(self) -> str:
-        total_ocupados = int(self.get_trabalhadores_ocupados_agora())
+        total_ocupados_str = self.get_trabalhadores_ocupados_agora()
+        total_ocupados = int(total_ocupados_str) if total_ocupados_str.isdigit() else 0
         total_trabalhadores = Trabalhador.objects.filter(
             self.escopo_filter
         ).count()
 
+        if total_trabalhadores == 0:
+            return "0%"
         porcentagem = (total_ocupados / total_trabalhadores) * 100
-        return f"{int(porcentagem)}%"
+        return f"{porcentagem:.0f}%"
 
     def get_item_querys(self):
         return [

@@ -63,33 +63,56 @@ class BaseDynamicListView(ListView):
         
 
     def get_context_data(self, **kwargs):
+        def get_verbose_name(field_name):
+            """Obtém o verbose_name de um campo do modelo ou retorna o nome do campo."""
+            try:
+                return self.model._meta.get_field(field_name).verbose_name
+            except Exception:
+                # O campo pode ser uma anotação (annotation) ou propriedade, que não está em _meta.
+                # Retorna o nome do campo formatado.
+                return field_name.replace('_', ' ').title()
+        
+        def create_object_dict(obj: object, fields: list[str], accessors: list) -> dict:
+            """Cria um dicionário para um único objeto usando os acessadores pré-calculados."""
+            return {
+                field: accessor(obj)
+                for field, accessor in zip(fields, accessors)
+            }
+
         contexto = super().get_context_data(**kwargs)
 
         field_order = self.get_fields_display()
 
-        # Optional: Validate fields exist
-        for field in field_order:
-            try:
-                self.model._meta.get_field(field)
-            except Exception:
-                raise ImproperlyConfigured(f"'{field}' não é um field de {self.model.__name__}")
-
+        # Adiciona os campos anotados aos nomes de exibição
+        # (A validação anterior foi removida para permitir campos anotados)
         contexto['field_names'] = [
-            self.model._meta.get_field(field).verbose_name
-            for field in field_order
+            get_verbose_name(field) for field in field_order
         ]
+
+
+        # Otimização: Em vez de verificar a existência de 'get_..._display' para cada célula,
+        # criamos uma lista de "getters" uma vez e a reutilizamos para cada objeto.
+        fields_getters = []
+        for field in field_order:
+            # Tenta obter o método get_<field>_display
+            display_method = getattr(self.model, f"get_{field}_display", None)
+            if callable(display_method):
+                # Se o método existir no modelo (ex: de um choices), usa ele.
+                # Usamos uma lambda para capturar o 'field' e aplicá-lo ao objeto na iteração.
+                fields_getters.append(lambda obj, f=field: getattr(obj, f"get_{f}_display")())
+            else:
+                # Caso contrário, acessa o atributo diretamente.
+                fields_getters.append(lambda obj, f=field: getattr(obj, f))
+
+
         contexto['object_dicts'] = [
-            {
-                field: getattr(obj, f"get_{field}_display")()
-                if callable(getattr(obj, f"get_{field}_display", None))
-                else getattr(obj, field)
-                for field in field_order
-            }
+            create_object_dict(obj, field_order, fields_getters)
             for obj in contexto['object_list']
         ]
 
-        # em caso de empty
-        if self.get_queryset().count() == 0:
+        # Otimização: Em vez de fazer um novo .count() no banco de dados,
+        # verificamos se a lista de objetos já carregada no contexto está vazia.
+        if len(contexto['object_list']) == 0:
             contexto['app_name'], contexto['url_submodule_create'] = self.get_create_form_app_name_and_url()
             
 

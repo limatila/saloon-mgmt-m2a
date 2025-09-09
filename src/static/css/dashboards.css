@@ -244,6 +244,9 @@ a.dash-item:hover{
   justify-content: center;
   width: 100%;
   height: 100%;
+  color: black;
+
+  transition: filter 300ms ease-in-out;
 }
 
 .action-dashboard .grid-item-content{
@@ -251,7 +254,6 @@ a.dash-item:hover{
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  color: white;
   text-align: center;
   width: 100%;
   height: 83%;
@@ -262,16 +264,40 @@ a.dash-item:hover{
 }
 
 .action-dashboard .grid-item:nth-child(1){
-  background: #ceb80f
+  background: linear-gradient(
+    to right,
+    #864aee 0%,
+    #fffbea 200%
+  )
 }
+
 .action-dashboard .grid-item:nth-child(2){
-  background: #1bad0b
+  background: linear-gradient(
+    to right,
+    #1bad0b 0%,
+    #fffbea 200%
+  );
 }
+
 .action-dashboard .grid-item:nth-child(3){
-  background: var(--bg-color-mid)
+  background: linear-gradient(
+    to right,
+    #ffc20c 0%,
+    #fffbea 200%
+  );
 }
+
 .action-dashboard .grid-item:nth-child(4){
-  background: #000000
+  color: #ffffffda;
+  background: linear-gradient(
+    to right,
+    #000 0%,
+    #9c9c9c 200%
+  );
+}
+
+.action-dashboard .grid-item:hover{
+  filter: brightness(1.1);
 }
 
 /* Modules */

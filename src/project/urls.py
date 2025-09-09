@@ -24,8 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('core.urls', namespace='core')),
     path('cadastros/', include('cadastros.urls', namespace='cadastros')),
-    path('servicos/', include('servicos.urls', namespace='contratos')),
-    path('', HomePageView.as_view(), name='home'),
+    path('servicos/', include('servicos.urls', namespace='servicos')),
+    path('relatorios/', include('relatorios.urls', namespace='relatorios')),
+    path('', HomePageView.as_view(), name='home')
 ]
 
 from django.conf.urls.static import static

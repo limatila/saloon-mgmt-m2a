@@ -63,5 +63,17 @@
                 </div>
             </div>
         </section>
+
+        <section class="nav-section">
+            <a class="module-name" href="{% url "servicos:list" %}"><h5> Relatórios</h5></a>
+            <div class="submodules-nav">
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'relatorios:list' %}">
+                        <i class="fa-solid fa-file-invoice"></i>
+                        <span>Lista de Relatórios</span>
+                    </a>
+                </div>
+            </div>
+        </section>
     </nav>
 </div>

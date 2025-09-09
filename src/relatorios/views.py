@@ -5,7 +5,8 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
-from relatorios.reports import gerar_relatorio_atividade_mensal
+
+from relatorios.relatorios import RelatorioAgendamentoMensal
 
 
 class BaseReportView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, View):
@@ -16,7 +17,7 @@ class BaseReportView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, View):
     filename_prefix = 'relatorio'
 
     def get_file_report_name(self) -> str:
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+        timestamp = datetime.now().strftime('%Y-%m-%d_%Hh%Mm%Ss')
         return f'{self.filename_prefix} ({timestamp}).pdf'
 
     def generate_pdf(self, *args, **kwargs) -> bytes:
@@ -39,10 +40,20 @@ class BaseReportView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, View):
 
 #* Especializados: page, relatórios
 
-class RelatorioAtividadeMensalView(BaseReportView):
-    filename_prefix = 'relatorio_mensal'
+class RelatorioAgendamentosMensalView(BaseReportView):
+    """
+    Cria um PDF de atividade mensal, consolidando dados de agendamentos,
+    faturamentos, e trabalhadores notaveis.
+    """
+    filename_prefix = 'relatorio_agendamentos_mensal'
 
-    def generate_pdf(self, *args, **kwargs) -> bytes:
-        ano = datetime.now().year
-        mes = datetime.now().month
-        return gerar_relatorio_atividade_mensal(empresa=self.request.empresa, ano=ano, mes=mes)
+    def generate_pdf(self, *args, **kwargs) -> bytes:        
+        # Get year and month from GET parameters, defaulting to current year/month
+        try:
+            ano = int(self.request.GET.get('ano', datetime.now().year))
+            mes = int(self.request.GET.get('mes', datetime.now().month))
+        except ValueError:
+            raise Exception("Valores de ano e mês inseridos na geração de PDF não são válidos.")
+
+        relatorio = RelatorioAgendamentoMensal(self.request, ano, mes)
+        return relatorio.gerar()

@@ -79,6 +79,7 @@ TEMPLATES = [
             #Módulos
             BASE_DIR / 'cadastros' / 'templates',
             BASE_DIR / 'servicos' / 'templates',
+            BASE_DIR / 'relatorios' / 'templates',
 
 
             #submodulos
@@ -180,7 +181,11 @@ STATIC_URL = 'static/'
 #All dirs that include static files are required to be here.
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
-    
+
+    #Módulos
+    BASE_DIR / 'relatorios' / 'static',
+
+
     #submodulos
     BASE_DIR / 'core' / 'bases' / 'static',
     BASE_DIR / 'core' / 'pessoas' / 'static',

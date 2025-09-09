@@ -62,10 +62,12 @@ div.table-dashboard tr {
 }
 
 div.table-dashboard th {
-  font-size: 1.4rem;
+  font-size: 0.8rem;
+  padding: 0.4rem;
+  white-space: wrap;
+  width: fit-content;
   background-color: var(--bg-color-mid);
   color: white;
-  line-height: 3.6rem;
 }
 
 div.table-dashboard td {

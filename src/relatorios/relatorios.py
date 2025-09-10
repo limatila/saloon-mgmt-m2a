@@ -251,9 +251,6 @@ class RelatorioAtividadeMensal(BaseRelatorio):
 
     def desenhar_relatorio_trabalhadores(self, y_inicial: int) -> int:
         ponto = pymupdf.Point(50, y_inicial)
-
-        #Trabalhadores
-        ponto.y += 35
         self.page.insert_text(ponto, "Overview de funcionários", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.x += 20
@@ -278,12 +275,12 @@ class RelatorioAtividadeMensal(BaseRelatorio):
 
         ponto.y += 30
         i: int = 0
-        self.page.insert_text(ponto, f"Top 3 funcionários com maior faturamento", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Top 3 funcionários que geraram maior faturamento", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         for item in self.trabalhadores_maior_faturamento_total:
             i += 1
             ponto.y += 20
             ponto_indentado = pymupdf.Point(ponto.x + 20, ponto.y)
-            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {self.formatar_moeda(item.get('valor_arrecadado_total'))}.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {self.formatar_moeda(item.get('valor_arrecadado_total'))} total.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         del item
 
@@ -383,7 +380,7 @@ class RelatorioClientesMensal(BaseRelatorio):
             calculo_recorrencia = (self.clientes_recorrentes.count() / self.total_clientes_unicos) * 100
         except ZeroDivisionError:
             calculo_recorrencia = 0
-        self.porcentagem_recorrencia = f"{calculo_recorrencia:.2f}"
+        self.porcentagem_recorrencia = f"{calculo_recorrencia:.2f}%"
 
         self.top_clientes_recorrentes = sorted(
             self.clientes_recorrentes, key=lambda x: x["total_agendamentos"], reverse=True
@@ -442,7 +439,7 @@ class RelatorioClientesMensal(BaseRelatorio):
             ).filter(
                 total_agendamentos_geral__gt=1
             ).order_by("-data_criado")
-        )
+        )[:3]
 
 
     def desenhar_relatorio_clientes_atuais(self, y_inicial: int) -> int:
@@ -463,7 +460,7 @@ class RelatorioClientesMensal(BaseRelatorio):
             i += 1
             ponto.y += 20
             ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
-            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_marcados')}.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_marcados')} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 20
         i: int = 0
@@ -472,7 +469,7 @@ class RelatorioClientesMensal(BaseRelatorio):
             i += 1
             ponto.y += 20
             ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
-            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_finalizados')}.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_finalizados')} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 20
         i: int = 0
@@ -481,13 +478,13 @@ class RelatorioClientesMensal(BaseRelatorio):
             i += 1
             ponto.y += 20
             ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
-            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_cancelados')}.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_cancelados')} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 30
         self.page.insert_text(ponto, f"Cliente que gerou maior faturamento total no mês", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         ponto.y += 20
         ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
-        self.page.insert_text(ponto_indentado, f"{self.cliente_maior_faturamento_total.nome}: {self.formatar_moeda(self.cliente_maior_faturamento_total.faturamento_total)}.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+        self.page.insert_text(ponto_indentado, f"{self.cliente_maior_faturamento_total.nome}: {self.formatar_moeda(self.cliente_maior_faturamento_total.faturamento_total)} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
         ponto.y += 15 # type: ignore
         ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
         self.page.insert_text(ponto_indentado, f"(telefone: {self.cliente_maior_faturamento_total.telefone})", fontsize=self.font_sizes['small'], fontname=self.font_regular)
@@ -509,20 +506,20 @@ class RelatorioClientesMensal(BaseRelatorio):
         self.page.insert_text(pymupdf.Point(ponto.x + 139, ponto.y), str(self.clientes_recorrentes.count()), fontsize=self.font_sizes['small'], fontname=self.font_bold)
         
         ponto.y += 15
-        self.page.insert_text(ponto, f"Porcentagem de Recorrência do mês: {self.porcentagem_recorrencia}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Porcentagem de recorrência do mês: {self.porcentagem_recorrencia} dos clientes.", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
 
         ponto.y += 30
         i: int = 0
-        self.page.insert_text(ponto, f"Top 3 mais recorrentes", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Top 3 clientes mais recorrentes", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         for item in self.top_clientes_recorrentes:
             i += 1
             ponto.y += 20
             ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
-            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_agendamentos')}.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {item.get('total_agendamentos')} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 20
         i: int = 0
-        self.page.insert_text(ponto, f"Top 3 recorrentes antigos", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Top 3 clientes recorrentes antigos (nos últimos 6 meses)", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
 
         if len(self.top_clientes_antigos_recorrentes) == 0:
             ponto.y += 20 # type: ignore
@@ -551,7 +548,7 @@ class RelatorioClientesMensal(BaseRelatorio):
             ponto.y += 20 # type: ignore
             self.page.insert_text(pymupdf.Point(ponto.x + 15, ponto.y), "obs: Nenhum recorrente inativo encontrado.", fontsize=self.font_sizes['small'])
         else:
-            for item in self.clientes_inativos_antigos_recorrentes[:3]: # Limitar aos top 3
+            for item in self.clientes_inativos_antigos_recorrentes: # Limitar aos top 3
                 i += 1
                 ponto.y += 20
                 ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)

@@ -12,5 +12,6 @@ urlpatterns = [
 #selecione urlpatterns que devem se motrados na listagem de relatórios
 display_nomes: dict[str, str] = {
     #[urlpattern.name]: "nome para display"
-    'mensal': "Relatório de Atividade Mensal",
+    'atividade-mensal': "Relatório de Atividade Mensal",
+    'clientes-mensal': "Relatório de Clientes Mensal"
 }

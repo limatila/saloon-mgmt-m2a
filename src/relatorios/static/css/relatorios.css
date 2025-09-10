@@ -1,0 +1,37 @@
+.relatorios-wrapper{
+  width: 55%;
+  height: fit-content;
+  margin: auto;
+}
+
+.relatorios-dashboard{
+  width: 100%;
+  height: fit-content;
+  padding: 1.5rem;
+  gap: 0.5rem;
+  overflow-y: auto;
+  max-height: 100%;
+  & .relatorio-label, a{
+    margin: 0;
+    padding: 1rem;
+    border: solid #9a9090 1px ;
+  }
+}
+
+.relatorios-dashboard .relatorio-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.relatorio-item .relatorio-label{
+  width: 70%;
+}
+
+.relatorio-item a{
+  background-color: var(--base-bg-color);
+}
+
+/* place label -> link */
+/* link must be color var mid */

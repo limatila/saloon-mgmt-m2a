@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "css/dashboards.css" %}">
+    <link rel="stylesheet" href="{% static "css/relatorios.css" %}">
+{% endblock head %}
+
+{% block content %}
+    <div class="relatorios-wrapper">    
+        <div class="relatorios-dashboard dashboard">
+            {% for relatorio in relatorios_list %}
+            <div class="relatorio-item">
+                <h5 class="relatorio-label">{{ relatorio.nome }}</h5>
+                <a href="{{ relatorio.url }}">Gerar Relatório</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

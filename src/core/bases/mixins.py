@@ -266,8 +266,8 @@ class HomeQuickActionMixin(ViewComQuickActionMixin):
                 'link_module': reverse_lazy('servicos:agendamentos:create')
             },
             {
-                'header': 'Finalizar Atendimento',
-                'description': 'Adicione um registro',
+                'header': 'Finalizar Agendamento',
+                'description': 'Finalize o atendimento',
                 'fa_icon': 'check',
                 'link_module': '' #reverse_lazy('servicos:agendamentos:finalizar')
             },

@@ -34,7 +34,7 @@ class BaseReportView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, View):
         )
 
     def get(self, request, *args, **kwargs):
-        pdf_bytes = self.generate_pdf(request, *args, **kwargs)
+        pdf_bytes = self.generate_pdf(request)
         response = HttpResponse(pdf_bytes, content_type='application/pdf')
         response['Content-Disposition'] = f'inline; filename="{self.get_file_report_name()}"'
         return response
@@ -85,14 +85,14 @@ class RelatorioAgendamentosMensalView(BaseReportMensalView):
     """
     filename_prefix = 'relatorio_agendamentos_mensal'
 
-    def generate_pdf(self, *args, **kwargs) -> bytes:        
+    def generate_pdf(self, *args, **kwargs) -> bytes:
         params: dict = self.get_params_from_request()
         relatorio = RelatorioAgendamentosMensal(
             request=self.request,
             ano=params['ano'],
             mes=params['mes']
         )
-        return relatorio.gerar()
+        return relatorio.gerar_pdf()
 
 
 class RelatorioClientesMensalView(BaseReportMensalView):
@@ -102,11 +102,11 @@ class RelatorioClientesMensalView(BaseReportMensalView):
     """
     filename_prefix = 'relatorio_clientes_mensal'
 
-    def generate_pdf(self, *args, **kwargs) -> bytes:        
+    def generate_pdf(self, *args, **kwargs) -> bytes:
         params: dict = self.get_params_from_request()
         relatorio = RelatorioClientesMensal(
             request=self.request,
             ano=params['ano'],
             mes=params['mes']
         )
-        return relatorio.gerar()
+        return relatorio.gerar_pdf()

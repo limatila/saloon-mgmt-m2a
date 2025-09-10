@@ -5,7 +5,7 @@ from django.db.models import Q, Count, Sum
 from django.contrib.staticfiles import finders
 import pymupdf
 
-from cadastros.empresas.models import Empresa
+from cadastros.clientes.models import Cliente
 from cadastros.trabalhadores.models import Trabalhador
 from servicos.agendamentos.models import Agendamento
 from servicos.agendamentos.choices import (
@@ -31,19 +31,20 @@ class BaseRelatorio:
             or self.request.user.username
             or getattr(self.request, 'empresa', None) and self.request.empresa.nome_fantasia
         )
+        self.lista_execucao = [] #adicionar aqui todos os métodos representando seções
 
-        # tamanhos de fontes
+        # Passo 1: Criar um documento PDF em branco na memória.
+        self.doc = pymupdf.open()
+        # Passo 2: Adicionar uma página em branco ao documento.
+        self.page = self.doc.new_page()
+        
+        # configs de tamanhos do doc
         self.font_sizes = {
             'title': 14,
             'sub-title': 11,
             'small': 9
         }
-
-        # Passo 1: Criar um documento PDF em branco na memória.
-        self.doc = pymupdf.open()
-        
-        # Passo 2: Adicionar uma página em branco ao documento.
-        self.page = self.doc.new_page()
+        self.ponto_inicial = (50, 72)
 
         # Passo 3: Carregar e registrar fontes customizadas.
         try:
@@ -77,8 +78,7 @@ class BaseRelatorio:
     def desenhar_cabecalho(self) -> int:
         # Passo 3: Definir um ponto de partida para inserir texto.
         # As coordenadas (x, y) começam no canto superior esquerdo. O eixo Y cresce para baixo.
-        origem = (50, 72)
-        ponto = pymupdf.Point(*origem)
+        ponto = pymupdf.Point(*self.ponto_inicial)
         
         # Passo 4: Inserir texto na página (usa a fonte definida no __init__).
         self.page.insert_text(ponto, f"Relatório de Atividade Mensal - {self.request.empresa.razao_social}", fontsize=self.font_sizes['title'], fontname=self.font_bold)
@@ -97,30 +97,57 @@ class BaseRelatorio:
         # Retorna a próxima posição Y disponível para continuar desenhando.
         return ponto.y + 35
 
+    def desenhar_corpo(self, y_inicial: int) -> int:
+        ponto = pymupdf.Point(50, y_inicial)
+
+        if len(self.lista_execucao) > 0:
+            for funcao in self.lista_execucao:
+                ponto.y = funcao(ponto.y)
+                self.page.draw_line(ponto, pymupdf.Point(ponto.x + 500, ponto.y))
+                #separação de seções
+        else:
+            self.page.insert_text(ponto, f"Corpo base. Adicione novas seções na lista de execução.", fontsize=self.font_sizes['title'], fontname=self.font_bold)
+
+        return ponto.y + 20
+
     def coletar_dados(self) -> bytes:
         """
         Hook principal para coleta de dados a serem inseridos no PDF a ser gerado.
         """
         raise NotImplementedError("Subclasses devem implementar o método 'coletar_dados'.")
 
-    def gerar(self) -> bytes:
+    def desenhar(self) -> bytes:
         """
-        Hook principal para estruturação e gerar o PDF.
+        Orquestra principal para geração e impressão do PDF.
         """
-        raise NotImplementedError("Subclasses devem implementar o método 'generate'.")
+        self.coletar_dados()
+
+        y_pos = self.desenhar_cabecalho()
+        self.desenhar_corpo(y_pos)
+    
+    def gerar_pdf(self) -> bytes:
+        """
+        Entrega o documento em bytes para download.
+        """
+        self.desenhar()
+        return self.doc.tobytes()
 
 
 #* Especializados
 
-class RelatorioAgendamentoMensal(BaseRelatorio):
+class RelatorioAgendamentosMensal(BaseRelatorio):
     """
     Gera um relatório de atividade mensal simples.
 
     Este relatório mostra um resumo do faturamento e do número de atendimentos
     para um determinado mês.
     """
-    def __init__(self, request, ano: int, mes: int):
+    def __init__(self, request, ano, mes):
         super().__init__(request, ano, mes)
+        self.lista_execucao = [
+            self.desenhar_relatorio_agendamentos,
+            self.desenhar_relatorio_trabalhadores
+        ]
 
     def coletar_dados(self):
         """Busca e calcula os dados necessários no banco de dados."""
@@ -183,7 +210,7 @@ class RelatorioAgendamentoMensal(BaseRelatorio):
             trabalhadores_atividade, key=lambda x: x["valor_arrecadado_total"] or 0, reverse=True
         )[:3]
 
-    def desenhar_corpo(self, y_inicial: int) -> int:
+    def desenhar_relatorio_agendamentos(self, y_inicial: int):
         #Agendamentos
         ponto = pymupdf.Point(50, y_inicial)
         self.page.insert_text(ponto, "Resumo do Mês", fontsize=self.font_sizes['title'], fontname=self.font_bold)
@@ -198,9 +225,11 @@ class RelatorioAgendamentoMensal(BaseRelatorio):
         ponto.y += 17
         self.page.insert_text(ponto, f"Total de Atendimentos Cancelados: {self.total_agendamentos_cancelados}", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
-        #separação de seções
-        ponto.y += 30
-        self.page.draw_line(ponto, pymupdf.Point(ponto.x + 500, ponto.y))
+        return ponto.y + 20
+
+
+    def desenhar_relatorio_trabalhadores(self, y_inicial: int):
+        ponto = pymupdf.Point(50, y_inicial)
 
         #Trabalhadores
         ponto.y += 35
@@ -233,14 +262,8 @@ class RelatorioAgendamentoMensal(BaseRelatorio):
             ponto_indentado = pymupdf.Point(ponto.x + 20, ponto.y)
             self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {self.formatar_moeda(item.get('valor_arrecadado_total'))}.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
-        return y_inicial + 20
+        return ponto.y + 20
 
-    def gerar(self) -> bytes:
-        """Orquestra a criação do relatório mensal."""
-        self.coletar_dados()
-
-        y_pos = self.desenhar_cabecalho()
-        self.desenhar_corpo(y_pos)
-
-        # Passo 5: Finalizar o documento e obter seus bytes para a resposta HTTP.
-        return self.doc.tobytes()
+class RelatorioClientesMensal(BaseRelatorio):
+    def coletar_dados(self):
+        self.span = 'span'

@@ -1,11 +1,11 @@
 from django.urls import path
-from relatorios.views import SelecaoRelatoriosView, RelatorioAgendamentosMensalView, RelatorioClientesMensalView
+from relatorios.views import SelecaoRelatoriosView, RelatorioAtividadeMensalView, RelatorioClientesMensalView
 
 app_name = 'relatorios'
 
 urlpatterns = [
     path('', SelecaoRelatoriosView.as_view(), name='list'),
-    path('atividade-mensal/', RelatorioAgendamentosMensalView.as_view(), name='atividade-mensal'), # Exemplo de URL: /relatorios/atividade-mensal/?ano=2023&mes=10
+    path('atividade-mensal/', RelatorioAtividadeMensalView.as_view(), name='atividade-mensal'), # Exemplo de URL: /relatorios/atividade-mensal/?ano=2023&mes=10
     path('clientes-mensal/', RelatorioClientesMensalView.as_view(), name='clientes-mensal')
 ]
 

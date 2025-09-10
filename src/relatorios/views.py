@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from core.bases.views import BasePageView
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 
-from .relatorios import RelatorioAgendamentosMensal, RelatorioClientesMensal
+from .relatorios import RelatorioAtividadeMensal, RelatorioClientesMensal
 
 
 class BaseReportView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, View):
@@ -78,7 +78,7 @@ class SelecaoRelatoriosView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Base
         return contexto
 
 
-class RelatorioAgendamentosMensalView(BaseReportMensalView):
+class RelatorioAtividadeMensalView(BaseReportMensalView):
     """
     Cria um PDF de atividade mensal, consolidando dados de agendamentos,
     faturamentos, e trabalhadores notaveis.
@@ -87,7 +87,7 @@ class RelatorioAgendamentosMensalView(BaseReportMensalView):
 
     def generate_pdf(self, *args, **kwargs) -> bytes:
         params: dict = self.get_params_from_request()
-        relatorio = RelatorioAgendamentosMensal(
+        relatorio = RelatorioAtividadeMensal(
             request=self.request,
             ano=params['ano'],
             mes=params['mes']

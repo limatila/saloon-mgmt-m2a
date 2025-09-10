@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from core.bases.views import BasePageView
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 
-from .relatorios import RelatorioAgendamentoMensal
+from .relatorios import RelatorioAgendamentosMensal, RelatorioClientesMensal
 
 
 class BaseReportView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, View):
@@ -40,6 +40,18 @@ class BaseReportView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, View):
         return response
 
 
+class BaseReportMensalView(BaseReportView):
+    def get_params_from_request(self):
+        # Get year and month from GET parameters, defaulting to current year/month
+        try:
+            return {
+                'ano': int(self.request.GET.get('ano', datetime.now().year)),
+                'mes': int(self.request.GET.get('mes', datetime.now().month))
+            }
+        except ValueError:
+            raise Exception("Valores de ano e mês inseridos na geração de PDF não são válidos.")
+
+
 #* Especializados: page, relatórios
 
 class SelecaoRelatoriosView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BasePageView):
@@ -66,7 +78,7 @@ class SelecaoRelatoriosView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Base
         return contexto
 
 
-class RelatorioAgendamentosMensalView(BaseReportView):
+class RelatorioAgendamentosMensalView(BaseReportMensalView):
     """
     Cria um PDF de atividade mensal, consolidando dados de agendamentos,
     faturamentos, e trabalhadores notaveis.
@@ -74,12 +86,27 @@ class RelatorioAgendamentosMensalView(BaseReportView):
     filename_prefix = 'relatorio_agendamentos_mensal'
 
     def generate_pdf(self, *args, **kwargs) -> bytes:        
-        # Get year and month from GET parameters, defaulting to current year/month
-        try:
-            ano = int(self.request.GET.get('ano', datetime.now().year))
-            mes = int(self.request.GET.get('mes', datetime.now().month))
-        except ValueError:
-            raise Exception("Valores de ano e mês inseridos na geração de PDF não são válidos.")
+        params: dict = self.get_params_from_request()
+        relatorio = RelatorioAgendamentosMensal(
+            request=self.request,
+            ano=params['ano'],
+            mes=params['mes']
+        )
+        return relatorio.gerar()
 
-        relatorio = RelatorioAgendamentoMensal(self.request, ano, mes)
+
+class RelatorioClientesMensalView(BaseReportMensalView):
+    """
+    Cria um PDF de atividade mensal, consolidando dados de agendamentos,
+    faturamentos, e trabalhadores notaveis.
+    """
+    filename_prefix = 'relatorio_clientes_mensal'
+
+    def generate_pdf(self, *args, **kwargs) -> bytes:        
+        params: dict = self.get_params_from_request()
+        relatorio = RelatorioClientesMensal(
+            request=self.request,
+            ano=params['ano'],
+            mes=params['mes']
+        )
         return relatorio.gerar()

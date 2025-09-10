@@ -114,7 +114,6 @@ class BaseDynamicListView(ListView):
         # verificamos se a lista de objetos já carregada no contexto está vazia.
         if len(contexto['object_list']) == 0:
             contexto['app_name'], contexto['url_submodule_create'] = self.get_create_form_app_name_and_url()
-            
 
         contexto['description'] = f"Veja a listagem de tudo, verifique e modifique os dados que precisar."
         contexto['search'] = self.request.GET.get("search", "")

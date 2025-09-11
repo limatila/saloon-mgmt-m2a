@@ -251,7 +251,7 @@ class RelatorioAtividadeMensal(BaseRelatorio):
 
     def desenhar_relatorio_trabalhadores(self, y_inicial: int) -> int:
         ponto = pymupdf.Point(50, y_inicial)
-        self.page.insert_text(ponto, "Overview de funcionários", fontsize=self.font_sizes['title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, "Resumo de funcionários", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.x += 20
 
@@ -324,7 +324,7 @@ class RelatorioClientesMensal(BaseRelatorio):
                 ),
             )
         )
-        
+
         #quais clientes com mais atendimentos marcados
         self.clientes_mais_agendamentos_marcados = sorted(
             clientes_atividades, key=lambda x: x["total_marcados"], reverse=True
@@ -444,7 +444,7 @@ class RelatorioClientesMensal(BaseRelatorio):
 
     def desenhar_relatorio_clientes_atuais(self, y_inicial: int) -> int:
         ponto = pymupdf.Point(50, y_inicial)
-        self.page.insert_text(ponto, "Review de Clientes Atuais", fontsize=self.font_sizes['title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, "Resumo de Clientes Atuais", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.y += 25
         self.page.insert_text(ponto, "Total de Clientes Novos:", fontsize=self.font_sizes['sub-title'], fontname=self.font_regular) # type: ignore
@@ -493,7 +493,7 @@ class RelatorioClientesMensal(BaseRelatorio):
     
     def desenhar_relatorio_clientes_recorrentes(self, y_inicial: int) -> int:
         ponto = pymupdf.Point(50, y_inicial)
-        self.page.insert_text(ponto, "Review de Clientes Recorrentes", fontsize=self.font_sizes['title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, "Resumo de Clientes Recorrentes", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.y += 25
         self.page.insert_text(ponto, "Total de Clientes Únicos:", fontsize=self.font_sizes['small'], fontname=self.font_regular) # type: ignore
@@ -535,7 +535,7 @@ class RelatorioClientesMensal(BaseRelatorio):
     
     def desenhar_relatorio_clientes_inativos(self, y_inicial: int) -> int:
         ponto = pymupdf.Point(50, y_inicial)
-        self.page.insert_text(ponto, "Review de Clientes Inativos", fontsize=self.font_sizes['title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, "Resumo de Clientes Inativos", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.y += 25
         self.page.insert_text(ponto, f"Total de Clientes Inativos (nos últimos 6 meses): {self.total_clientes_inativos}", fontsize=self.font_sizes['small'], fontname=self.font_regular) # type: ignore

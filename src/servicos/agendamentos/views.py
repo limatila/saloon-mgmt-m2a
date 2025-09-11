@@ -1,13 +1,14 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from cadastros.empresas.views import BaseDynamicListView, BaseDynamicFormView, EscopoEmpresaFieldsFormView
+from core.bases.views import BaseDynamicListView, BaseDynamicFormView
+from cadastros.empresas.views import EscopoEmpresaFieldsFormView
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 from servicos.agendamentos.models import Agendamento
 from servicos.agendamentos.forms import AgendamentoForm
 
 
+#TODO verificar se está com LoginRequired -- bloqueante
 class AgendamentoListView(EscopoEmpresaQuerysetMixin, BaseDynamicListView):
     model = Agendamento
 

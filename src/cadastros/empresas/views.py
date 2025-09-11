@@ -5,15 +5,14 @@ from django.forms import ModelForm
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseServerError
 
-from core.bases.views import BaseDynamicListView, BaseDynamicFormView
+from core.bases.views import SelecaoDynamicListView, BaseDynamicFormView
 from cadastros.empresas.mixins import EscopoEmpresaFormMixin
 from cadastros.empresas.models import Empresa
 from cadastros.empresas.mixins import EmpresaDoUserQuerysetMixin
 
 
-class SelecaoEmpresasListView(LoginRequiredMixin, EmpresaDoUserQuerysetMixin, BaseDynamicListView):
+class SelecaoEmpresasListView(LoginRequiredMixin, EmpresaDoUserQuerysetMixin, SelecaoDynamicListView):
     model = Empresa
-    # baseado_em_empresa = False #não executa mixin atribuindo empresa à request
 
     def get_fields_display(self):
         return ['nome_fantasia', 'razao_social', 'cnpj']
@@ -36,11 +35,10 @@ class SelecaoEmpresasListView(LoginRequiredMixin, EmpresaDoUserQuerysetMixin, Ba
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto['title'] = "Selecione sua empresa"
-        contexto['description'] = "O aplicativo irá mostrar as informações da sua empresa registrada e ativa no sistema."
+        contexto['description'] = "O sistema irá mostrar as informações da sua empresa registrada e ativa no sistema."
         contexto['sidebar'] = False
         contexto['query'] = self.request.GET.get("query", "")
         return contexto
-
 
     def post(self, request, *args, **kwargs):
         empresa_id = request.POST.get("empresa_id")

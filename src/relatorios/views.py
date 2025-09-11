@@ -6,12 +6,12 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 
 from core.bases.views import BasePageView
-from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
+from cadastros.empresas.mixins import ContextoEmpresaMixin
 
 from .relatorios import RelatorioAtividadeMensal, RelatorioClientesMensal
 
 
-class BaseReportView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, View):
+class BaseReportView(LoginRequiredMixin, ContextoEmpresaMixin, View):
     """
     View base para gerar e retornar um relatório em PDF.
     Subclasses devem implementar o método `generate_pdf`.
@@ -54,7 +54,7 @@ class BaseReportMensalView(BaseReportView):
 
 #* Especializados: page, relatórios
 
-class SelecaoRelatoriosView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BasePageView):
+class SelecaoRelatoriosView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView):
     template_name = 'relatorios/selecao-relatorios.html'
 
     def get_relatorios_list(self) -> list[dict[str, str]]:

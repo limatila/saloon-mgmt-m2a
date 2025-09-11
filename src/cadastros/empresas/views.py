@@ -53,7 +53,7 @@ class SelecaoEmpresasListView(LoginRequiredMixin, EmpresaDoUserQuerysetMixin, Se
         return redirect("home")
 
 
-class EscopoEmpresaFieldsFormView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDynamicFormView):
+class FieldsComEscopoEmpresaFormView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDynamicFormView):
     fields_ignorados = ['empresa', 'data_criado', 'data_modificado']
 
     def get_form_kwargs(self):

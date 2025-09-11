@@ -269,7 +269,7 @@ class HomeQuickActionMixin(ViewComQuickActionMixin):
                 'header': 'Finalizar Agendamento',
                 'description': 'Finalize o atendimento',
                 'fa_icon': 'check',
-                'link_module': '' #reverse_lazy('servicos:agendamentos:finalizar')
+                'link_module': reverse_lazy('servicos:agendamentos:finalizar')
             },
             {
                 'header': 'Novo Cliente',

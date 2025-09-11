@@ -139,7 +139,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                     data_criado__lte=end
                 ) & self.escopo_filter
             ).count()
-        } nos últimos {tolerancia_dias} dias"
+        }"
 
     def get_faturamento_da_semana(self) -> str:
         hoje = timezone.now()
@@ -224,10 +224,12 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         return f"{porcentagem:.0f}%"
 
     def get_item_querys(self):
+        tolerancia_novos_clientes = 7
+
         return [
             {
-                'header': 'Clientes novos',
-                'value': self.get_novos_clientes_ultimos_dias(),
+                'header': 'Clientes novos na semana',
+                'value': self.get_novos_clientes_ultimos_dias(tolerancia_novos_clientes),
                 'conclusion': f'de um total de {Cliente.objects.filter(self.escopo_filter).count()} atuais',
                 'fa_icon': 'user',
                 'link_module': reverse_lazy('cadastros:clientes:list')

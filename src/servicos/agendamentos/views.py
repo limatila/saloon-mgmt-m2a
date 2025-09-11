@@ -86,7 +86,7 @@ class FinalizarAgendamentoView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, S
         agendamento_id = self.get_selecao_or_redirect(request)
 
         if not agendamento_id:
-            messages.warning(request, "Você precisa selecionar um agendamento.")
+            messages.warning(request, "⚠️ Você precisa selecionar um agendamento.")
             return redirect(request.path)  # back to the same page
         try:
             agendamento = get_object_or_404(

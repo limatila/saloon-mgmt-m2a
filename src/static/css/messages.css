@@ -1,0 +1,102 @@
+.message-container {
+  position: fixed;
+  height: fit-content;
+  width: fit-content;
+  top: 2rem; /* Positions the top edge of the div at 50% of the viewport height */
+  left: 50%; /* Positions the left edge of the div at 50% of the viewport width */
+  transform: translate(-50%, -50%); /* Shifts the div back by half its own width and height, effectively centering it */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1rem;
+  z-index: 9999;
+
+  opacity: 0;
+  transform: translateX(100%);
+
+  animation: slideIn 0.6s forwards;
+}
+
+.message-popup{
+  height: fit-content;
+  width: fit-content;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  gap: 1rem;
+  z-index: 9999;
+  
+  opacity: 0;
+  transform: translateX(100%);
+  
+  animation: slideIn 0.6s forwards;
+}
+
+.message-popup p {
+  margin: 0;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.message-popup .btn-close {
+  width: fit-content;
+  height: fit-content;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.message-popup .btn-close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.message-success {
+  background-color: #4CAF50; /* Green */
+}
+
+.message-error {
+  background-color: #f44336; /* Red */
+}
+
+.message-warning {
+  background-color: #ff9800; /* Orange */
+}
+
+.message-info, .message-debug {
+  background-color: #5b6c7b; /* Blue */
+}
+
+/* Animação de entrada/saída */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.message-popup.fade-out {
+  animation: slideOut 0.6s forwards;
+}

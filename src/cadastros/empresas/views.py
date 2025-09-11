@@ -37,13 +37,11 @@ class SelecaoEmpresasListView(LoginRequiredMixin, EmpresaDoUserQuerysetMixin, Se
         contexto['title'] = "Selecione sua empresa"
         contexto['description'] = "O sistema irá mostrar as informações da sua empresa registrada e ativa no sistema."
         contexto['sidebar'] = False
-        contexto['query'] = self.request.GET.get("query", "")
+        contexto['query'] = self.request.GET.get("query", "").strip()
         return contexto
 
     def post(self, request, *args, **kwargs):
-        empresa_id = request.POST.get("empresa_id")
-        if not empresa_id:
-            return redirect("cadastros:empresas:select")
+        empresa_id = self.get_selecao_or_redirect(request)
 
         empresa = get_object_or_404(
             Empresa.objects.filter(user=request.user),  # garante que a empresa é do user

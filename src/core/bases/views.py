@@ -1,8 +1,9 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.urls import NoReverseMatch, reverse
 from django.views.generic import TemplateView
 from django.views.generic import ListView, FormView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import NoReverseMatch, reverse
+from django.shortcuts import redirect
 
 from core.bases.mixins import HomeQuickInfoMixin, HomeQuickActionMixin
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
@@ -25,14 +26,12 @@ class BaseDynamicListView(ListView):
     var 'model' deve ser definido.
     método 'get_field_order' deve ser definido.
     """
-    def get_queryset(self):
-        return super().get_queryset()
     def get_fields_display(self):
         """
         Hook para definir fields_ordenados
         """
         raise ImproperlyConfigured(
-            f"{self.__class__.__name__} deve implementar get_field_order(), retornando uma list[str]."
+            f"{self.__class__.__name__} deve implementar {self.get_fields_display.__name__}(), retornando uma list[str]."
         )
 
     def get_create_form_app_name_and_url(self) -> tuple[str]:
@@ -201,7 +200,14 @@ class DynamicSubmodulesView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Base
 
 
 class SelecaoDynamicListView(BaseDynamicListView):
-    template_name = "partials/components/selection-dashboard.html"
+    template_name = "selection-menu.html"
+
+    def get_selecao_or_redirect(self, request) -> str:
+        selecao_id = request.POST.get("selecao_id")
+        if not selecao_id:
+            redirect(self.request.path)
+
+        return selecao_id
 
     def create_object_dict_for_display(self, obj: object, fields: list[str], getter: list) -> dict:
         """Cria um dicionário para um único objeto usando os acessadores pré-calculados."""

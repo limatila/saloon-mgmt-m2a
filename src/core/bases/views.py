@@ -25,6 +25,8 @@ class BaseDynamicListView(ListView):
     var 'model' deve ser definido.
     método 'get_field_order' deve ser definido.
     """
+    def get_queryset(self):
+        return super().get_queryset()
     def get_fields_display(self):
         """
         Hook para definir fields_ordenados
@@ -61,6 +63,12 @@ class BaseDynamicListView(ListView):
 
             return (app_name_plural, url)
         
+    def create_object_dict_for_display(self, obj: object, fields: list[str], getter: list) -> dict:
+        """Cria um dicionário para um único objeto usando os acessadores pré-calculados."""
+        return {
+            field: accessor(obj)
+            for field, accessor in zip(fields, getter)
+        }
 
     def get_context_data(self, **kwargs):
         def get_verbose_name(field_name):
@@ -72,12 +80,6 @@ class BaseDynamicListView(ListView):
                 # Retorna o nome do campo formatado.
                 return field_name.replace('_', ' ').title()
         
-        def create_object_dict(obj: object, fields: list[str], accessors: list) -> dict:
-            """Cria um dicionário para um único objeto usando os acessadores pré-calculados."""
-            return {
-                field: accessor(obj)
-                for field, accessor in zip(fields, accessors)
-            }
 
         contexto = super().get_context_data(**kwargs)
 
@@ -106,7 +108,7 @@ class BaseDynamicListView(ListView):
 
 
         contexto['object_dicts'] = [
-            create_object_dict(obj, field_order, fields_getters)
+            self.create_object_dict_for_display(obj, field_order, fields_getters)
             for obj in contexto['object_list']
         ]
 
@@ -196,3 +198,16 @@ class DynamicSubmodulesView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Base
         )
 
         return contexto
+
+
+class SelecaoDynamicListView(BaseDynamicListView):
+    template_name = "partials/components/selection-dashboard.html"
+
+    def create_object_dict_for_display(self, obj: object, fields: list[str], getter: list) -> dict:
+        """Cria um dicionário para um único objeto usando os acessadores pré-calculados."""
+        object_dict = {
+            field: accessor(obj)
+            for field, accessor in zip(fields, getter)
+        }
+        object_dict['pk'] = obj.pk  # certifique-se que pk está incluído
+        return object_dict

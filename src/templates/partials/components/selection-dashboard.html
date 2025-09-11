@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static "css/dashboards.css" %}">
+{% endblock head %}
+
+{% block content %}
+    {% include "partials/search-bar.html" %}
+
+    <form method="post" action="{% url 'cadastros:empresas:select' %}">
+        {% csrf_token %}
+
+        <div class="table-dashboard dashboard">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Selecionar</th>
+                        {% for field in field_names %}
+                            <th>{{ field }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dict in object_dicts %}
+                        <tr data-radio-id="radio-{{ forloop.counter }}">
+                            <!-- Coluna do radio button -->
+                            <td>
+                                <input type="radio" id="radio-{{ forloop.counter }}" name="empresa_id" value="{{ dict.pk }}">
+                            </td>
+
+                            <!-- Colunas de dados -->
+                            {% for key, value in dict.items %}
+                                {% if key != "pk" %}
+                                    <td>
+                                        {% if key == "imagem" and value %}
+                                            <img src="{{ value.url }}" alt="{{ dict.nome_fantasia }}'s photo">
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% empty %}
+                        <tr style="height:100%">
+                            <td colspan="{{ field_names|length|add:'1' }}">
+                                Nada encontrado. Favor contatar administrador.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="submit">Confirmar</button>
+    </form>
+{% endblock content %}
+
+
+{% block scripts %}
+    <script src="{% static "js/selection-observers.js" %}"></script>
+{% endblock scripts %}

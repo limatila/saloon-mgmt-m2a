@@ -4,12 +4,11 @@ from django.forms import Form, ValidationError
 from django.contrib.auth import authenticate, login, get_user_model, logout
 
 from django.shortcuts import redirect
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.urls import reverse_lazy
 
 from core.auth.forms import UserForm, LogoutForm
 
-GLOBAL_AUTH_TEMPLATE = "auth/auth.html"
+GLOBAL_AUTH_TEMPLATE = "partials/components/form-dashboard.html"
 
 #* Entrada
 class LoginView(FormView):

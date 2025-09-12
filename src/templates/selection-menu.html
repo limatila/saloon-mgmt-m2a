@@ -47,7 +47,12 @@
                     {% empty %}
                         <tr style="height:100%">
                             <td colspan="{{ field_names|length|add:'1' }}">
-                                Nada encontrado. Favor contatar administrador.
+                                Nada encontrado. 
+                                {% if "empresa" in title %}
+                                    Favor contatar administrador.
+                                {% else %}
+                                    Adicione novos {{app_name}} <a class="addition-link" href="{{ url_submodule_create }}"> Aqui </a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

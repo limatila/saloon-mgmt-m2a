@@ -8,6 +8,6 @@ class TipoServicoForm(forms.ModelForm):
         model = TipoServico
         fields = ['nome', 'preco']
         widgets = {
-            'nome': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "name de name"}),
+            'nome': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "nome de nome"}),
             'CPF': forms.TextInput(attrs={'class': 'form-field', 'placeholder': "R$ XX.xx"}),
         }

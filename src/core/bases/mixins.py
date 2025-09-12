@@ -32,6 +32,28 @@ class FormComArquivoMixin:
         return kwargs
 
 
+class DateSearchMixin:
+    def get_query_range_dates(self) -> tuple:
+        data_1 = self.request.GET.get("data_1")
+        data_2 = self.request.GET.get("data_2")
+        return (data_1, data_2)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        data_inicio, data_fim = self.get_query_range_dates()
+        if data_inicio:
+            queryset = queryset.filter(
+                data_criado__gte=data_inicio
+            )
+        if data_fim:
+            queryset = queryset.filter(
+                data_criado__lte=data_fim
+            )
+
+        return queryset
+
+
 class ViewComQuickInfoMixin:
     def get_item_querys(self) -> list[dict[str, str]]:
         """
@@ -114,6 +136,7 @@ class ViewComQuickActionMixin:
         context['quick_actions'] = self.get_quick_actions()
         return context
 
+
 #* Mixins especializados
 class HomeQuickInfoMixin(ViewComQuickInfoMixin):
     DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES: int = 2
@@ -174,7 +197,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
             ).get('sum') or 0
         
         return f"{self._format_brl_currency(total)} no mês"
-    
+
     def get_atendimentos_proximas_horas(self, tolerancia_horas: int = DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES) -> str:
         """
         Args:

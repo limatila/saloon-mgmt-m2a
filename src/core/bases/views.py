@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import NoReverseMatch, reverse
 from django.shortcuts import redirect
 
-from core.bases.mixins import HomeQuickInfoMixin, HomeQuickActionMixin
+from core.bases.mixins import DateSearchMixin, HomeQuickInfoMixin, HomeQuickActionMixin
 from cadastros.empresas.models import Empresa
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 
@@ -21,7 +21,7 @@ class BasePageView(TemplateView):
 
 
 # bases de componentes
-class BaseDynamicListView(ListView):
+class BaseDynamicListView(DateSearchMixin, ListView):
     """
     Uma view para iterar sobre campos de objetos.
     var 'model' deve ser definido.

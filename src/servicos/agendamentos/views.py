@@ -47,6 +47,11 @@ class FinalizarAgendamentoView(LoginRequiredMixin, AgendamentosSearchMixin, Esco
         Q(status=AGENDAMENTO_STATUS_PENDENTE) | Q(status=AGENDAMENTO_STATUS_EXECUTANDO)
     )
 
+    def get_queryset(self):
+        contexto = super().get_queryset()
+        contexto = contexto.filter(self.condicao_agendamento_valido)
+        return contexto
+
     def get_fields_display(self):
         return ['data_agendado', 'status', 'cliente', 'servico', 'trabalhador']
     

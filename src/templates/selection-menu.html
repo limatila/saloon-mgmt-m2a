@@ -3,11 +3,13 @@
 
 {% block head %}
     <link rel="stylesheet" href="{% static "css/dashboards.css" %}">
+    <link rel="stylesheet" href="{% static "css/search.css" %}">
+
 {% endblock head %}
 
 {% block content %}
     <div class="table-dashboard dashboard">
-        {% include "partials/search-bar.html" %}
+        {% include "partials/search/search-bar.html" %}
         
         <form method="post" action="">
             {% csrf_token %}
@@ -26,13 +28,13 @@
                         <tr data-radio-id="radio-{{ forloop.counter }}">
                             <!-- Coluna do radio button -->
                             <td>
-                                <input type="radio" id="radio-{{ forloop.counter }}" name="selecao_id" value="{{ dict.pk }}">
+                                <input class="radio-button" type="radio" id="radio-{{ forloop.counter }}" name="selecao_id" value="{{ dict.pk }}">
                             </td>
 
                             <!-- Colunas de dados -->
                             {% for key, value in dict.items %}
                                 {% if key != "pk" %}
-                                    <td>
+                                    <td class="radio-button">
                                         {% if key == "imagem" and value %}
                                             <img src="{{ value.url }}" alt="{{ dict.nome_fantasia }}'s photo">
                                         {% else %}

@@ -1,10 +1,11 @@
 {% load static %}
 {% block head %}
     <link rel="stylesheet" href="{% static "css/dashboards.css" %}">
+    <link rel="stylesheet" href="{% static "css/search.css" %}">
 {% endblock head %}
 
 <div class="table-dashboard dashboard">
-    {% include "partials/search-bar.html" %}
+    {% include "partials/search/search-bar.html" %}
     <table>
         {% comment %} display small list dashboard of all appointments w/ data {% endcomment %}
         <thead>

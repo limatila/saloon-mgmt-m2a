@@ -1,0 +1,14 @@
+<div class="search">
+    <div class="search-container">
+        {% include "partials/search/query-input.html" %}
+        
+        {% if not "empresa" in title %}
+            <input type="datetime-local" name="data_inicio" >
+            <input type="datetime-local" name="data_fim">
+        {% endif %}
+    </div>
+
+    {% if not "empresa" in title.lower %}
+            <a href="{{ url_submodule_create }}">Novo {{ app_name }}</a>
+    {% endif %}
+</div>

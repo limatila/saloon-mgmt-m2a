@@ -26,6 +26,9 @@ class BaseDynamicListView(ListView):
     var 'model' deve ser definido.
     método 'get_field_order' deve ser definido.
     """
+    def get_queryset(self):
+        return super().get_queryset().order_by("-data_criado")
+
     def get_fields_display(self):
         """
         Hook para definir fields_ordenados

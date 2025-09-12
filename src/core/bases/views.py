@@ -6,6 +6,7 @@ from django.urls import NoReverseMatch, reverse
 from django.shortcuts import redirect
 
 from core.bases.mixins import HomeQuickInfoMixin, HomeQuickActionMixin
+from cadastros.empresas.models import Empresa
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 
 
@@ -114,9 +115,7 @@ class BaseDynamicListView(ListView):
             for obj in contexto['object_list']
         ]
 
-        # Otimização: Em vez de fazer um novo .count() no banco de dados,
-        # verificamos se a lista de objetos já carregada no contexto está vazia.
-        if len(contexto['object_list']) == 0:
+        if not self.model is Empresa:
             contexto['app_name'], contexto['url_submodule_create'] = self.get_create_form_app_name_and_url()
 
         contexto['description'] = f"Veja a listagem de tudo, verifique e modifique os dados que precisar."

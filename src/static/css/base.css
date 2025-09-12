@@ -84,6 +84,13 @@ a.disabled:hover{
   display: flex;
 }
 
+/* utility to make vertical divisorys */
+.vertical-divisor {
+  width: 2px;
+  background-color: #cccccc87;  /* Solid border color */
+  align-self: stretch;
+}
+
 /* images with no stretch */
 img {
   object-fit: cover;

@@ -1,14 +1,26 @@
 <div class="search">
-    <div class="search-container">
+    <form class="search-container" method="get" action="." >
         {% include "partials/search/query-input.html" %}
         
         {% if not "empresa" in title %}
-            <input type="datetime-local" name="data_inicio" >
-            <input type="datetime-local" name="data_fim">
+            <div class="vertical-divisor"></div>
+
+            <div class="input-container">
+                <label for="data_1">Data Inicial</label>
+                <input type="datetime-local" name="data_1">
+            </div>
+            <p>Até</p>
+            <div class="input-container">
+                <label for="data_2">Data Final</label>
+                <input type="datetime-local" name="data_2">
+            </div>
         {% endif %}
-    </div>
+
+        <div class="vertical-divisor"></div>
+        <button type="submit">Buscar</button>
+    </form>
 
     {% if not "empresa" in title.lower %}
-            <a href="{{ url_submodule_create }}">Novo {{ app_name }}</a>
+        <a href="{{ url_submodule_create }}">Novo {{ app_name }}</a>
     {% endif %}
 </div>

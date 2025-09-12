@@ -15,10 +15,16 @@
   flex: 1;
 }
 
-/* Search form */
+/* full form */
 .search-container form {
   display: flex;
   align-items: center;
+  gap: 0.4rem;
+}
+
+.input-container{
+  display: flex;
+  flex-direction: column;
   gap: 0.4rem;
 }
 
@@ -31,7 +37,7 @@
 }
 
 .search-container button {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1rem;
   background-color: #eee;
   border: 1px solid #bbb;
 

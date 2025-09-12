@@ -139,11 +139,10 @@ class ViewComQuickActionMixin:
 
 class ViewComWorkerStatusMixin:
     def get_trabalhadores_status(self, limit: int = 20) -> list[dict]:
-        # Subquery pega o último agendamento em execução na última hora
         agora = timezone.now()
         uma_hora_atras = agora - timedelta(hours=1)
 
-        # Subquery pega o último agendamento em execução na última hora
+        # Subquery: último agendamento agendado na última hora
         ultimos_agendamentos_datas = Subquery(
             Agendamento.objects.filter(
                 empresa=self.request.empresa,
@@ -156,27 +155,25 @@ class ViewComWorkerStatusMixin:
             .values('data_agendado')[:1]
         )
 
-        return (
-            Trabalhador.objects.filter(
-                empresa=self.request.empresa,
-            )
-            .annotate(
-                ultimo_agendamento_data=ultimos_agendamentos_datas
-            )
+        # Trabalhadores anotados com a data do último agendamento agendado na última hora
+        queryset = (
+            Trabalhador.objects.filter(empresa=self.request.empresa)
+            .annotate(ultimo_agendamento_data=ultimos_agendamentos_datas)
             .values('id', 'nome', 'telefone', 'ultimo_agendamento_data')
-            .order_by('ultimo_agendamento_data')  # ocupados ultimo
-            [:limit]
+            .order_by('ultimo_agendamento_data')[:limit]
         )
+
+        return list(queryset)
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        
+
         trabalhadores_status_list = self.get_trabalhadores_status()
         for trabalhador in trabalhadores_status_list:
-            trabalhador['status'] = "disponível" if trabalhador['ultimo_agendamento_data'] else "ocupado"
+            # Se tiver agendamento agendado na última hora → ocupado
+            trabalhador['status'] = "ocupado" if trabalhador['ultimo_agendamento_data'] else "disponível"
 
         contexto['trabalhadores_status_list'] = trabalhadores_status_list
-
         return contexto
 
 

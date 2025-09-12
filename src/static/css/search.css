@@ -56,18 +56,3 @@
 
   font-size: 0.85rem;
 }
-
-/* New item link */
-.search a {
-  padding: 0.5rem 1rem;
-  background-color: #4CAF50;
-  color: #fff;
-
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
-}
-
-.search a:hover {
-  background-color: #45a049;
-}

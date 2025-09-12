@@ -70,6 +70,22 @@ a.disabled:hover{
   background-color: initial;
 }
 
+/* New item link */
+a.addition-link {
+  padding: 0.5rem 1rem;
+  background-color: #4CAF50;
+  color: #fff;
+
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+a.addition-link:hover {
+  background-color: #45a049;
+}
+
+
 /* Font Awesome Icon spacing */
 .fa::before, .fa-solid::before {
   margin-right: 4px;

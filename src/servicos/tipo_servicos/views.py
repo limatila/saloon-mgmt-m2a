@@ -1,4 +1,8 @@
+from math import floor
+from decimal import Decimal, InvalidOperation
+
 from django.views.generic import CreateView
+from django.db.models import Q
 from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,6 +17,25 @@ class TipoServicoListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDy
 
     def get_fields_display(self):
         return ['nome', 'preco']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get("query", "").strip()
+
+        if query:
+            condicao_nome = Q(nome__icontains=query)
+            try:
+                value = floor(Decimal(query))
+                condicao_preco = Q(preco__gte=value, preco__lt=value + 1)
+            except InvalidOperation:
+                # ignore invalid numbers, leave only name filter
+                pass
+
+            queryset = queryset.filter(
+                condicao_nome | condicao_preco
+            )
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)

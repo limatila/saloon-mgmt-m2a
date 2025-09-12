@@ -10,6 +10,7 @@ from cadastros.empresas.views import FieldsComEscopoEmpresaFormView
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 from servicos.agendamentos.models import Agendamento
 from servicos.agendamentos.forms import AgendamentoForm
+from servicos.agendamentos.mixins import AgendamentosSearchMixin
 from servicos.agendamentos.choices import (
     AGENDAMENTO_STATUS_PENDENTE,
     AGENDAMENTO_STATUS_EXECUTANDO,
@@ -18,16 +19,11 @@ from servicos.agendamentos.choices import (
 
 
 #TODO verificar se está com LoginRequired -- bloqueante
-class AgendamentoListView(EscopoEmpresaQuerysetMixin, BaseDynamicListView):
+class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, BaseDynamicListView):
     model = Agendamento
 
     def get_fields_display(self):
         return ['data_agendado', 'status', 'cliente', 'servico', 'trabalhador']
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.select_related('cliente', 'servico', 'trabalhador')
-        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -45,7 +41,7 @@ class AgendamentoCreateView(FieldsComEscopoEmpresaFormView, BaseDynamicFormView,
 
 
 #* Funcionalidades
-class FinalizarAgendamentoView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, SelecaoDynamicListView):
+class FinalizarAgendamentoView(LoginRequiredMixin, AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, SelecaoDynamicListView):
     model = Agendamento
     condicao_agendamento_valido = (
         Q(status=AGENDAMENTO_STATUS_PENDENTE) | Q(status=AGENDAMENTO_STATUS_EXECUTANDO)
@@ -53,26 +49,6 @@ class FinalizarAgendamentoView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, S
 
     def get_fields_display(self):
         return ['data_agendado', 'status', 'cliente', 'servico', 'trabalhador']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        query = self.request.GET.get("query", "").strip()
-
-        if query:
-            condicao_cliente = Q(cliente__nome__icontains=query)
-            condicao_servico = Q(servico__nome__icontains=query)
-            condicao_trabalhador = Q(trabalhador__nome__icontains=query)
-
-            queryset = queryset.filter(
-                condicao_cliente | condicao_servico | condicao_trabalhador
-            )
-
-        queryset = (
-            queryset.filter(self.condicao_agendamento_valido)
-            .select_related('cliente', 'servico', 'trabalhador')
-        )
-
-        return queryset
     
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)

@@ -15,17 +15,17 @@
 
             <section class="form-section">
                 <h2>Informações de {{ form_name }}</h2>
-                {% if user.is_authenticated %}
-                    {% if form_name == "Login" or form_name == "Registro" %}
+                {% if form_name == "Login" or form_name == "Registro" %}
+                    {% if user.is_authenticated %}
                         <ul>
                             <li>Você já está logado em uma conta!</li>
                         </ul>
                     {% endif %}
-                {% endif %}
-                {% if form_name == "Logout" and not user.is_authenticated %}
+                    {% if form_name == "Logout" and not user.is_authenticated %}
                     <ul>
                         <li>Você já está deslogado!</li>
                     </ul>
+                    {% endif %}
                 {% endif %}
                 
                 {% for field in form %}
@@ -41,7 +41,7 @@
             </section>
             
             {% if form_name == "Login" %}
-                <a href="{% url "core:auth:signup" %}">Não sou registrado</a>
+                <a id="not-registered" href="{% url "core:auth:signup" %}">Não sou registrado</a>
             {% endif %}
 
             {% include "partials/form-partials/submit.html" %}

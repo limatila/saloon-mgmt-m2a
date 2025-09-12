@@ -8,5 +8,11 @@
 
 {% block content %}
     {% include "partials/components/quickinfo-dashboard.html" %}
-    {% include "partials/components/actions-dashboard.html" %}
+
+    <section class="dashboard-partition">
+        {% include "partials/components/actions-dashboard.html" %}
+        {% include "partials/components/workers-dashboard.html" %}
+    </section>
+
+
 {% endblock content %}

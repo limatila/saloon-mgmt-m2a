@@ -1,0 +1,7 @@
+section.dashboard-partition{
+  display: flex;
+  flex: 0;
+  width: 100%;
+  align-items: center;
+  gap: 2rem;
+}

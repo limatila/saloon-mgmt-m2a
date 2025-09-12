@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import NoReverseMatch, reverse
 from django.shortcuts import redirect
 
-from core.bases.mixins import DateSearchMixin, HomeQuickInfoMixin, HomeQuickActionMixin
+from core.bases.mixins import DateSearchMixin, HomeQuickInfoMixin, HomeQuickActionMixin, ViewComWorkerStatusMixin
 from cadastros.empresas.models import Empresa
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 
@@ -143,7 +143,7 @@ class BaseDynamicFormView(FormView):
 
 
 #* Especializadas: home/ [nome_modulo]/
-class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, HomeQuickInfoMixin, HomeQuickActionMixin, BasePageView):
+class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, HomeQuickInfoMixin, HomeQuickActionMixin, ViewComWorkerStatusMixin, BasePageView):
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):

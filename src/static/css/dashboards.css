@@ -49,8 +49,9 @@
 /* Tbody (scrollable) */
 .table-dashboard tbody {
   height: 100%;
-  overflow-y: auto;
   width: 100%;
+  overflow-y: scroll;
+  max-height: 90vh;
 }
 
 /* Table rows and cells */
@@ -301,7 +302,69 @@ a.dash-item:hover{
   filter: brightness(1.1);
 }
 
-/* Modules */
+/* Workers */
+.worker-status-dashboard{
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  max-height: 42vh;
+  padding: 1rem;
+  flex-shrink: 1;
+  & .worker-desc, .worker-status{
+    display: flex;
+    flex-direction: column;
+  }
+  & p{
+    font-weight: light;
+  }
+  & p, h5{
+    padding: 0.4rem;
+    margin: 0;
+  }
+}
+
+.worker-status-dashboard .worker-list{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  overflow-y: auto;
+
+}
+
+.worker-status-dashboard h3{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  & .fa::before, .fa-solid::before{
+    margin: 0;
+  }
+}
+
+.worker-status-dashboard .dash-item{
+  display: flex;
+  padding: 0.5rem;
+  background-color: #cccccc41;
+  justify-content: space-between;
+}
+
+.worker-status-dashboard .worker-desc{
+  & h5.title-status{
+    font-family: sans-serif;
+  }
+}
+
+.worker-status-dashboard .worker-status{
+  & h5.status-disponível{
+    color: #7dd6b3;
+    background-color: #c1e8d8;
+  }
+  & h5.status-ocupado{
+    color: #ef7829;
+    background-color: #e9ccb9;
+  }
+}
+
+/* Modules (grid w/ inner-grid) */
 .modules-dashboard{
   display: grid;
   padding: 1.4rem;
@@ -384,22 +447,13 @@ a.dash-item:hover{
 }
 
 @media (max-width: 1024px) {
-  div.grid-dashboard div.grid div.worker {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  div.grid-dashboard div.grid div.worker div.eliminable {
-    display: none;
-  }
-  .daily-dashboard h2 {
+.daily-dashboard h2 {
     font-size: 1.125rem; /* text-lg */
   }
 }
 
 @media (max-width: 640px) {
-  div.grid-dashboard div.grid div.worker div span {
-    font-size: 12px;
-  }
-  .daily-dashboard h2 {
+.daily-dashboard h2 {
     font-size: 0.6rem;
   }
 }

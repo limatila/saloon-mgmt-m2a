@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, OuterRef, Subquery
 from django.urls import reverse_lazy
 from django.utils import timezone
 
@@ -135,6 +135,49 @@ class ViewComQuickActionMixin:
         context = super().get_context_data(**kwargs)
         context['quick_actions'] = self.get_quick_actions()
         return context
+
+
+class ViewComWorkerStatusMixin:
+    def get_trabalhadores_status(self, limit: int = 20) -> list[dict]:
+        # Subquery pega o último agendamento em execução na última hora
+        agora = timezone.now()
+        uma_hora_atras = agora - timedelta(hours=1)
+
+        # Subquery pega o último agendamento em execução na última hora
+        ultimos_agendamentos_datas = Subquery(
+            Agendamento.objects.filter(
+                empresa=self.request.empresa,
+                trabalhador=OuterRef('pk'),
+                status=AGENDAMENTO_STATUS_EXECUTANDO,
+                data_agendado__gte=uma_hora_atras,
+                data_agendado__lte=agora
+            )
+            .order_by('-data_agendado')
+            .values('data_agendado')[:1]
+        )
+
+        return (
+            Trabalhador.objects.filter(
+                empresa=self.request.empresa,
+            )
+            .annotate(
+                ultimo_agendamento_data=ultimos_agendamentos_datas
+            )
+            .values('id', 'nome', 'telefone', 'ultimo_agendamento_data')
+            .order_by('ultimo_agendamento_data')  # ocupados ultimo
+            [:limit]
+        )
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        
+        trabalhadores_status_list = self.get_trabalhadores_status()
+        for trabalhador in trabalhadores_status_list:
+            trabalhador['status'] = "disponível" if trabalhador['ultimo_agendamento_data'] else "ocupado"
+
+        contexto['trabalhadores_status_list'] = trabalhadores_status_list
+
+        return contexto
 
 
 #* Mixins especializados

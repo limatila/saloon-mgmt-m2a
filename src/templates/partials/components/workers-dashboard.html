@@ -1,0 +1,17 @@
+<div class="worker-status-dashboard dashboard">
+    <h3><i class="fa-solid fa-users-gear"></i> Status da Equipe</h4>
+    <div class="worker-list">
+        {% for trabalhador in trabalhadores_status_list %}
+            <div class="dash-item">
+                <div class="worker-desc">
+                    <h5>{{ trabalhador.nome }}</h5>
+                    <p>Tel: {{ trabalhador.telefone }}</p>
+                </div>
+                <div class="worker-status">
+                    <h5 class="title-status status-{{ trabalhador.status }}">{{ trabalhador.status|title }}</h5>
+                    <p>Desde {{ trabalhador.ultimo_agendamento_data|date:"d/m/Y H:i" }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

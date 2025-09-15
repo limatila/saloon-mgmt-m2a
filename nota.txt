@@ -1,6 +1,0 @@
-helper formatar_moeda:
-import locale
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-
-def formatar_moeda(self, valor):
-    return locale.currency(valor or 0.0, grouping=True)

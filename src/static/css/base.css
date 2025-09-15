@@ -9,7 +9,7 @@
 
   --border-color-dark: #4336557c;
 
-  --sidebar-width: 18vw;
+  --sidebar-width: 16vw;
   --headers-height: 5rem;
   --footer-height: 15rem;
   --footer-difference: calc((var(--footer-height) * -1) + 3rem);

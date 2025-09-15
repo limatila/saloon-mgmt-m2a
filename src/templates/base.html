@@ -32,15 +32,15 @@
                 <div class="wrapper header-content">
                     <div class="header-intro">
                         <h1 class="header-title">{{ title }}</h1>
-                        <p class="header-description">{{ description }}</p>
+                        <p class="header-description">{{ description|safe }}</p>
                     </div>
                     
                     <div class="header-actions">
                         {% if user.is_authenticated %}
-                            <a class="action profile" href="">Usuário Logado: {{ user.username }}</a>
+                            <a class="action profile" href="">Usuário Logado: {{ user.username }} <i class="fa-solid fa-circle-user"></i></a>
                             <a class="action logout" href="{% url "core:auth:logout" %}"><i class="fa-solid fa-power-off"></i></a>
                         {% else %}
-                            <a class="action profile" href="">Não está logado</a>
+                            <a class="action profile" href="">Não está logado <i class="fa-solid fa-user-slash"></i></a>
                         {% endif %}
                     </div>
                 </div>
@@ -58,11 +58,10 @@
                     {% comment %}  {% endcomment %}
                 </footer>
             {% endif %}
-            
         </main>
         
         {% if messages %}
-        <div class="message-container">
+        <div class="message-container {% if not sidebar %}message-container-in-center{% endif %}">
             {% for message in messages %}
             <div class="message-popup message-{{ message.tags }}">
                 <h3>

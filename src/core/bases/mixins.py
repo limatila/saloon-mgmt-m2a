@@ -4,6 +4,7 @@ from django.db.models import Q, Sum, OuterRef, Subquery
 from django.urls import reverse_lazy
 from django.utils import timezone
 
+from core.helpers import ConversionHelper
 from core.types import QuickActionItem, QuickInfoItem
 from cadastros.clientes.models import Cliente
 from cadastros.trabalhadores.models import Trabalhador
@@ -182,10 +183,6 @@ class ViewComWorkerStatusMixin:
 class HomeQuickInfoMixin(ViewComQuickInfoMixin):
     DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES: int = 2
 
-    def _format_brl_currency(self, value: float | int) -> str:
-        """Formata um valor numérico para a moeda brasileira (BRL)."""
-        return f"R$ {value:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
-
     def get_novos_clientes_ultimos_dias(self, tolerancia_dias: int = 7) -> str:
         """
         Especialização para menu Home/
@@ -196,14 +193,11 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         hoje = timezone.make_aware(datetime.combine(date.today(), datetime.max.time()))
         start = hoje - timedelta(days=tolerancia_dias)
         end = hoje
-        return f"+{
-            Cliente.objects.filter(
-                Q(
-                    data_criado__gte=start,
-                    data_criado__lte=end
-                ) & self.escopo_filter
-            ).count()
-        }"
+        quantidade = Cliente.objects.filter(
+            Q(data_criado__gte=start, data_criado__lte=end) & self.escopo_filter
+        ).count()
+
+        return f"+{quantidade}"
 
     def get_faturamento_da_semana(self) -> str:
         hoje = timezone.make_aware(datetime.combine(date.today(), datetime.max.time()))
@@ -220,7 +214,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
             )
         ).get('sum') or 0
 
-        return self._format_brl_currency(total)
+        return ConversionHelper.formatar_moeda(total)
 
     def get_faturamento_do_mes(self) -> str:
         hoje = timezone.make_aware(datetime.combine(date.today(), datetime.max.time()))
@@ -237,7 +231,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                 )
             ).get('sum') or 0
         
-        return f"{self._format_brl_currency(total)} no mês"
+        return f"{ConversionHelper.formatar_moeda(total)} no mês"
 
     def get_atendimentos_proximas_horas(self, tolerancia_horas: int = DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES) -> str:
         """
@@ -247,7 +241,8 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         agora = timezone.now()
         start = agora
         end = agora + timedelta(hours=tolerancia_horas)
-        return f"{
+        
+        quantidade = (
             Agendamento.objects.filter(
                 Q(
                     data_agendado__gte=start,
@@ -255,7 +250,9 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                     status__in=[AGENDAMENTO_STATUS_PENDENTE, AGENDAMENTO_STATUS_EXECUTANDO]
                 ) & self.escopo_filter
             ).count()
-        }"
+        )
+
+        return f"{quantidade}"
 
     def get_trabalhadores_ocupados_agora(self, tolerancia_minutos: int = 20) -> str:
         """
@@ -265,7 +262,8 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         agora = timezone.now()
         start = agora - timedelta(minutes=tolerancia_minutos)
         end = agora + timedelta(minutes=tolerancia_minutos)
-        return f"{
+        
+        quantidade = (
             Trabalhador.objects.filter(
                 Q(
                     agendamentos__status=AGENDAMENTO_STATUS_EXECUTANDO,
@@ -273,7 +271,9 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                     agendamentos__data_agendado__lte=end
                 ) & self.escopo_filter
             ).distinct().count()
-        }"
+        )
+        
+        return f"{quantidade}"
 
     def get_porcentagem_trabalhadores_ocupados(self) -> str:
         total_ocupados_str = self.get_trabalhadores_ocupados_agora()

@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.forms import Form, ValidationError
 from django.contrib.auth import authenticate, login, get_user_model, logout
+from django.contrib import messages
 
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -39,8 +40,10 @@ class LoginView(FormView):
             if url_redirecionamento:
                 return redirect(url_redirecionamento)
 
+            messages.success(self.request, "✅ Login realizado com sucesso!")
             return super().form_valid(form)
         else:
+            messages.warning(self.request, "⛔ Login falhou!")
             form.add_error(None, ValidationError("Usuário e/ou Senha são inválidos."))
             return self.form_invalid(form)
         
@@ -57,16 +60,17 @@ class SignUpView(LoginView):
     template_name = GLOBAL_AUTH_TEMPLATE
     success_url = reverse_lazy('home')
 
-    def form_valid(self, form: Form):
+    def form_valid(self, form: Form):   #TODO não ativar, disponibilizar para a staff verificar
         usuario: str = form.cleaned_data['username']
         senha: str = form.cleaned_data['password']
-        
+
         try:
             User = get_user_model()
             user = User.objects.create_user(username=usuario, password=senha, email='none@mail.com')
             user.first_name = usuario.split()[0]
             user.last_name = " ".join(usuario.split()[1:])
             user.save()
+            messages.success(self.request, "✅ Cadastro realizado com sucesso!")
         except Exception as err:
             raise err
 
@@ -87,18 +91,23 @@ class LogoutView(FormView, TemplateView):
     success_url = reverse_lazy('home')
     http_method_names = ['get', 'post']
 
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, "⛔ Logue em uma conta!")
+            return redirect(reverse_lazy('core:auth:login'))
+        
+        return super().get(request, *args, **kwargs)
+
     def form_valid(self, form: Form):
         senha = form.cleaned_data['password']
         user = self.request.user
-
-        if not user.is_authenticated:
-            return redirect(reverse_lazy('core:auth:login'))
 
         if not user.check_password(senha):
             form.add_error(None, ValidationError("Senha incorreta para deslogar usuário da sessão. Fale com administrador."))
             return self.form_invalid(form)
 
         logout(self.request)
+        messages.success(self.request, "✅ Logout realizado com sucesso, você saiu da sua conta!")
         return redirect(self.get_next_page())
 
     def get_next_page(self):

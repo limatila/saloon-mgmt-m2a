@@ -53,7 +53,6 @@ class SelecaoEmpresasListView(LoginRequiredMixin, EmpresaDoUserQuerysetMixin, Se
             id=empresa_id
         )
             request.session["empresa_id"] = empresa.id
-            messages.success(request, "✅ Login realizado com sucesso!")
         except Empresa.DoesNotExist:
             messages.error(request, "⚠️ Essa empresa não pode ser carregada.")     
         

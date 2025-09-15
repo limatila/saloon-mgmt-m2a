@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import date, datetime, timedelta 
 
 from django.db.models import Q, Sum, OuterRef, Subquery
 from django.urls import reverse_lazy
@@ -140,7 +140,8 @@ class ViewComQuickActionMixin:
 class ViewComWorkerStatusMixin:
     def get_trabalhadores_status(self, limit: int = 20) -> list[dict]:
         agora = timezone.now()
-        uma_hora_atras = agora - timedelta(hours=1)
+        start = agora - timedelta(hours=1)
+        end = agora + timedelta(hours=1)
 
         # Subquery: último agendamento agendado na última hora
         ultimos_agendamentos_datas = Subquery(
@@ -148,8 +149,8 @@ class ViewComWorkerStatusMixin:
                 empresa=self.request.empresa,
                 trabalhador=OuterRef('pk'),
                 status=AGENDAMENTO_STATUS_EXECUTANDO,
-                data_agendado__gte=uma_hora_atras,
-                data_agendado__lte=agora
+                data_agendado__gte=start,
+                data_agendado__lte=end
             )
             .order_by('-data_agendado')
             .values('data_agendado')[:1]
@@ -192,9 +193,9 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         Args:
             tolerancia_dias (int, optional): quantos dias atrás. Default: 7.
         """
-        agora = timezone.now()
-        start = agora - timedelta(days=tolerancia_dias)
-        end = agora
+        hoje = timezone.make_aware(datetime.combine(date.today(), datetime.max.time()))
+        start = hoje - timedelta(days=tolerancia_dias)
+        end = hoje
         return f"+{
             Cliente.objects.filter(
                 Q(
@@ -205,7 +206,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         }"
 
     def get_faturamento_da_semana(self) -> str:
-        hoje = timezone.now()
+        hoje = timezone.make_aware(datetime.combine(date.today(), datetime.max.time()))
         start = (hoje - timedelta(days=hoje.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
         end = hoje
         total = Agendamento.objects.aggregate(
@@ -222,8 +223,8 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         return self._format_brl_currency(total)
 
     def get_faturamento_do_mes(self) -> str:
-        hoje = timezone.now()
-        start = hoje.replace(day=1)
+        hoje = timezone.make_aware(datetime.combine(date.today(), datetime.max.time()))
+        start = datetime.combine(hoje.replace(day=1), datetime.min.time())
         end = hoje
         total = Agendamento.objects.aggregate(
                 sum=Sum('servico__preco', filter=(

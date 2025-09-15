@@ -149,7 +149,7 @@ class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, HomeQuickInfo
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         contexto["title"] = "Home"
-        contexto["description"] = f"Bem vindo, {self.request.user.first_name or "usuário"}! Aqui está o resumo de {self.request.empresa.nome_fantasia}."
+        contexto["description"] = f"Bem vindo, {self.request.user.first_name or "usuário"}! Aqui está o resumo de <b>{self.request.empresa.nome_fantasia}</b>."
         return contexto
 
 

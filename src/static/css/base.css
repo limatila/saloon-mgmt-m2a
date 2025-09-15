@@ -5,6 +5,9 @@
   --bg-color-mid: #876baa;
   --bg-color-light: #a08db6;
   --bg-color-fade: #876baa5c;
+  --bg-color-marginals: #f0f0f0;
+
+  --border-color-dark: #4336557c;
 
   --sidebar-width: 18vw;
   --headers-height: 5rem;
@@ -313,6 +316,7 @@ main {
 /* Header */
 header {
   background-color: var(--base-bg-color);
+  border-bottom: var(--border-color-dark) solid 1px;
   height: var(--headers-height);
   display: flex;
   align-items: center;
@@ -328,18 +332,19 @@ header .header-content {
   width: 94%;
   height: 80%;
   margin: 0 auto;
-  color: white;
 }
 
 header .header-intro {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  background-color: white;
+  color: white;
   height: 100%;
-  color: black;
   padding: 0.5rem;
   border-radius: 0.75rem;
+  & p.header-description{
+    font-size: 0.9rem;
+  }
 }
 
 header .header-intro h1.header-title,
@@ -410,8 +415,8 @@ footer {
   width: 100%;
   height: var(--footer-height);
 
-  background-color: var(--base-bg-color);
-  color: white;
+  background-color: var(--bg-color-marginals);
+  border-top: var(--border-color-dark) solid 1px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   

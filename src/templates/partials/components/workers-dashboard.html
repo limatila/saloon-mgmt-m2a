@@ -10,7 +10,7 @@
                 <div class="worker-status">
                     <h5 class="title-status status-{{ trabalhador.status }}">{{ trabalhador.status|title }}</h5>
                     {% if trabalhador.status == 'ocupado' %}
-                        <p>Ficou ocupado em {{ trabalhador.ultimo_agendamento_data|time:"H:i" }}</p>
+                        <p>Ficou ocupado às {{ trabalhador.ultimo_agendamento_data|time:"H:i" }}</p>
                     {% endif %}
                 </div>
             </div>

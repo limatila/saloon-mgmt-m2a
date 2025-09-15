@@ -18,7 +18,6 @@ from servicos.agendamentos.choices import (
 )
 
 
-#TODO verificar se está com LoginRequired -- bloqueante
 class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, BaseDynamicListView):
     model = Agendamento
 

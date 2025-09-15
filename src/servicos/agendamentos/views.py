@@ -37,7 +37,12 @@ class AgendamentoCreateView(FieldsComEscopoEmpresaFormView, BaseDynamicFormView,
     success_url = reverse_lazy('servicos:agendamentos:list')
 
     def form_valid(self, form):
+        messages.success(self.request, "✅ Agendamento registrado com sucesso!")  
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.warning(self.request, "⚠️ Não foi possível registrar o Agendamento!")  
+        return super().form_invalid(form)
 
 
 #* Funcionalidades

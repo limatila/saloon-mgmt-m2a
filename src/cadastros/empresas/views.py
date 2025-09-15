@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import ModelForm
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseServerError
+from django.contrib import messages
 
 from core.bases.views import SelecaoDynamicListView, BaseDynamicFormView
 from cadastros.empresas.mixins import EscopoEmpresaFormMixin
@@ -43,11 +44,19 @@ class SelecaoEmpresasListView(LoginRequiredMixin, EmpresaDoUserQuerysetMixin, Se
     def post(self, request, *args, **kwargs):
         empresa_id = self.get_selecao_or_redirect(request)
 
-        empresa = get_object_or_404(
+        if not empresa_id:
+            messages.warning(request, "⚠️ Você precisa selecionar uma empresa.")
+            return redirect(request.path)  # back to the same page
+        try:
+            empresa = get_object_or_404(
             Empresa.objects.filter(user=request.user),  # garante que a empresa é do user
             id=empresa_id
         )
-        request.session["empresa_id"] = empresa.id
+            request.session["empresa_id"] = empresa.id
+            messages.success(request, "✅ Login realizado com sucesso!")
+        except Empresa.DoesNotExist:
+            messages.error(request, "⚠️ Essa empresa não pode ser carregada.")     
+        
         return redirect("home")
 
 

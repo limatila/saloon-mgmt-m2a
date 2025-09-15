@@ -1,5 +1,6 @@
 .logs
 .env
+**/venv
 **/database.sqlite3
 .vscode/settings.json
 **/__pycache__/

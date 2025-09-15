@@ -1,4 +1,6 @@
 <div class="form-submit">
-    <button type="button" onclick="history.back()">Cancelar</buttton>
-    <button type="submit">Confirmar</button>
+    {% if not "empresa" in title %}
+        <button type="button" onclick="history.back()">Cancelar</buttton>
+    {% endif %}
+    <button class="" type="submit">Confirmar</button>
 </div>

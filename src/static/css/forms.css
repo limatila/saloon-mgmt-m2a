@@ -87,10 +87,21 @@
   align-self: flex-end; /* place-self-end */
 }
 
-.form-dashboard form div.form-submit button[type="submit"] {
+.dashboard form button[type="submit"] {
   padding: 0.5rem 1rem; /* px-4 py-2 */
   background-color: #2563eb; /* bg-blue-600 */
   color: white;
+  border: none;
+
+  transition: box-shadow 150ms ease-in-out;
+}
+
+.dashboard form button:hover{
+  cursor: pointer;
+}
+
+.dashboard form button[type="submit"]:hover {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* shadow-outline-blue */
 }
 
 .form-dashboard form div.form-submit a[href$="home"] {

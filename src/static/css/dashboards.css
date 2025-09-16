@@ -98,7 +98,7 @@
   overflow: hidden;
   & a{
     font-size: 0.8rem;
-    height: 2rem;
+    /* height: 2rem; */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -110,17 +110,16 @@
   }
 }
 
-td.item-actions a.fa-circle-info{color: var(--bg-color-mid);}
-td.item-actions a.action-dashboardfa-clock-rotate-left{color: rgb(74, 129, 163);}
-td.item-actions a.fa-rocket, td.item-actions a.fa-circle-edit{color: rgb(20, 19, 16);}
-td.item-actions a.fa-circle-minus{color: rgb(209, 83, 52);}
+td.item-actions a:has(.fa-circle-info) {color: var(--bg-color-mid);}
+td.item-actions a:has(.fa-clock-rotate-left){color: rgb(74, 129, 163);}
+td.item-actions a:has(.fa-rocket), td.item-actions a:has(.fa-pencil){color: rgb(243, 183, 30)}
+td.item-actions a:has(.fa-circle-minus){color: rgb(209, 83, 52);}
 
-td.item-actions a.fa-circle-info:hover{background-color: var(--bg-color-mid);}
-td.item-actions a.action-dashboardfa-clock-rotate-left:hover{background-color: rgb(74, 129, 163);}
-td.item-actions a.fa-rocket:hover, 
-td.item-actions a.fa-circle-edit:hover
-{background-color: rgb(243, 183, 30);}
-td.item-actions a.fa-circle-minus:hover{background-color: rgb(255, 0, 0);}
+td.item-actions a:has(.fa-circle-info):hover{background-color: var(--bg-color-mid);}
+td.item-actions a:has(.fa-clock-rotate-left):hover{background-color: rgb(74, 129, 163);}
+td.item-actions a:has(.fa-rocket):hover,
+td.item-actions a:has(.fa-pencil):hover {background-color: rgb(243, 183, 30);}
+td.item-actions a:has(.fa-circle-minus):hover{background-color: rgb(255, 0, 0);}
 
 /* Quick Info (simple grid in row) */
 .quick-dashboard{

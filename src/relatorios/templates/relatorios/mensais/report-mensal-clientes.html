@@ -1,0 +1,77 @@
+{% extends "relatorios/base-report.html" %}
+
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "relatorios/mensais/mensal-clientes.css" %}">
+{% endblock head %}
+
+{% block content %}
+    <section>
+        <h2>Resumo Financeiro</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Faturamento total do mês</td>
+                    <td>{{ faturamento_total_mes }}</td>
+                </tr>
+                <tr>
+                    <td>Faturamento total cancelado</td>
+                    <td>{{ faturamento_total_cancelado }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Atendimentos</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total de agendamentos finalizados</td>
+                    <td>{{ total_agendamentos_finalizados }}</td>
+                </tr>
+                <tr>
+                    <td>Total de agendamentos cancelados</td>
+                    <td>{{ total_agendamentos_cancelados }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Top 3 Trabalhadores</h2>
+
+        <h3>Mais atendimentos finalizados</h3>
+        <ol>
+        {% for t in trabalhadores_mais_agendamentos_finalizados %}
+            <li>{{ t.nome }} ({{ t.total_finalizados }} finalizados)</li>
+        {% endfor %}
+        </ol>
+
+        <h3>Mais atendimentos cancelados</h3>
+        <ol>
+        {% for t in trabalhadores_mais_agendamentos_cancelados %}
+            <li>{{ t.nome }} ({{ t.total_cancelados }} cancelados)</li>
+        {% endfor %}
+        </ol>
+
+        <h3>Maior faturamento total</h3>
+        <ol>
+        {% for t in trabalhadores_maior_faturamento_total %}
+            <li>{{ t.nome }} ({{ t.valor_arrecadado_total|default:"0,00" }})</li>
+        {% endfor %}
+        </ol>
+    </section>
+{% endblock content %}

@@ -1,0 +1,41 @@
+
+section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 14pt;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 3px;
+}
+
+h3 {
+    font-size: 12pt;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+table, th, td {
+    border: 1px solid #000;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 5px;
+}
+
+td {
+    padding: 5px;
+}
+
+ol {
+    margin-left: 20px;
+}

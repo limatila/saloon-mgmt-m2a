@@ -1,0 +1,96 @@
+{% extends "relatorios/base-report.html" %}
+
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "relatorios/mensais/mensal-atividade.css" %}">
+{% endblock head %}
+
+{% block content %}
+    <section>
+        <h2>Clientes</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total de clientes novos</td>
+                    <td>{{ total_clientes_novos }}</td>
+                </tr>
+                <tr>
+                    <td>Total de clientes únicos</td>
+                    <td>{{ total_clientes_unicos }}</td>
+                </tr>
+                <tr>
+                    <td>Porcentagem de recorrência</td>
+                    <td>{{ porcentagem_recorrencia }}</td>
+                </tr>
+                <tr>
+                    <td>Total de clientes inativos</td>
+                    <td>{{ total_clientes_inativos }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Top Clientes</h2>
+
+        <h3>Mais agendamentos marcados</h3>
+        <ol>
+            {% for c in clientes_mais_agendamentos_marcados %}
+                <li>{{ c.nome }} ({{ c.total_marcados }} agendamentos)</li>
+            {% endfor %}
+        </ol>
+
+        <h3>Mais agendamentos finalizados</h3>
+        <ol>
+            {% for c in clientes_mais_agendamentos_finalizados %}
+                <li>{{ c.nome }} ({{ c.total_finalizados }} finalizados)</li>
+            {% endfor %}
+        </ol>
+
+        <h3>Mais agendamentos cancelados</h3>
+        <ol>
+            {% for c in clientes_mais_agendamentos_cancelados %}
+                <li>{{ c.nome }} ({{ c.total_cancelados }} cancelados)</li>
+            {% endfor %}
+        </ol>
+
+        <h3>Maior faturamento total</h3>
+        <p>{{ cliente_maior_faturamento_total.nome }} ({{ cliente_maior_faturamento_total.faturamento_total|default:"0,00" }})</p>
+    </section>
+
+    <section>
+        <h2>Clientes Recorrentes</h2>
+
+        <h3>Top recorrentes atuais</h3>
+        <ol>
+        {% for c in top_clientes_recorrentes %}
+            <li>{{ c.nome }} ({{ c.total_agendamentos }} agendamentos)</li>
+        {% endfor %}
+        </ol>
+
+        <h3>Top recorrentes antigos</h3>
+        <ol>
+        {% for c in top_clientes_antigos_recorrentes %}
+            <li>{{ c.nome }} ({{ c.total_agendamentos }} agendamentos)</li>
+        {% endfor %}
+        </ol>
+
+        <h3>Clientes inativos que já foram recorrentes</h3>
+        <ol>
+        {% for c in clientes_inativos_antigos_recorrentes %}
+            <li>{{ c.nome }} ({{ c.total_agendamentos_geral }} agendamentos)</li>
+        {% endfor %}
+        </ol>
+    </section>
+
+    <footer>
+        <hr>
+        <p>Relatório gerado automaticamente em {{ mes_referencia }}</p>
+    </footer>
+{% endblock content %}

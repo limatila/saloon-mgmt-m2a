@@ -9,7 +9,7 @@
 
   --border-color-dark: #4336557c;
 
-  --sidebar-width: 16vw;
+  --sidebar-width: 17vw;
   --headers-height: 5rem;
   --footer-height: 15rem;
   --footer-difference: calc((var(--footer-height) * -1) + 3rem);
@@ -109,6 +109,19 @@ a.addition-link:hover {
   background-color: #cccccc87;  /* Solid border color */
   align-self: stretch;
 }
+
+/* background overlay for popups */
+.popup-overlay {
+  display: none;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+}
+
 
 /* images with no stretch */
 img {

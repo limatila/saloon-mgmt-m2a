@@ -53,7 +53,7 @@
   display: none;
   position: fixed; 
   top: 50%;
-  left: 50%;
+  left: var(--main-content-left-pos);
   transform: translate(-50%, -50%);
   z-index: 101;
   background: white;
@@ -77,24 +77,32 @@
   width: 100%;
   padding: 0.3rem;
   box-sizing: border-box;
+  border: none;
+  border-bottom: solid 2px var(--bg-color-mid);
+}
+
+.popup-actions {
+  display: flex;
+  gap: 0.6rem;
 }
 .popup-mes-ano button {
-  padding: 0.5rem 1rem;
+  padding: 1rem;
+  color: white;
   cursor: pointer;
+  transition: filter 200ms ease-in-out;
 }
-.popup-mes-ano .btn-fechar {
+.popup-mes-ano button:hover {
+  filter: brightness(1.1);
+}
+
+.popup-mes-ano button[type="submit"] {
+  background-color: #2da732;
+}
+.popup-mes-ano #btnFecharPopup {
+  padding: 1rem 0.3rem;
+  transform: scale(0.9);
+  width: fit-content;
+  height: fit-content;
   background-color: #ef4444;
-  color: white;
   float: right;
-}
-.popup-mes-ano .btn-fechar:hover {
-  background-color: #b91c1c;
-}
-.popup-mes-ano .btn-submit {
-  background-color: #10b981;
-  color: white;
-  width: 100%;
-}
-.popup-mes-ano .btn-submit:hover {
-  background-color: #059669;
 }

@@ -15,7 +15,7 @@ class TipoServicoTableOptionsMixin(BaseViewComTableOptionsMixin):
             {
                 'nome': 'Adicionar Com Serviço',
                 'description': 'adicione um agendamento com esse serviço',
-                'fa_icon': 'circle-edit',
+                'fa_icon': 'pencil',
                 'link_module': 'cadastros:tipo_servicos:edit'
             },
             {

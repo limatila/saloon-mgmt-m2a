@@ -13,6 +13,8 @@
   --headers-height: 5rem;
   --footer-height: 15rem;
   --footer-difference: calc((var(--footer-height) * -1) + 3rem);
+
+  --main-content-left-pos: 58.5%;
 }
 
 /* Reset and global styles */
@@ -71,6 +73,10 @@ a.disabled{
 a.disabled:hover{
   color: initial;
   background-color: initial;
+}
+
+button{
+  border: solid 1px #dbdada;
 }
 
 /* New item link */

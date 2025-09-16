@@ -3,7 +3,7 @@
   height: fit-content;
   width: fit-content;
   top: 2.5rem; /* centraliza vertical */
-  left: 59%; /* centraliza horizontal */
+  left: var(--main-content-left-pos); /* centraliza horizontal */
   transform: translate(-50%, -50%); /* move pro centro exato */
   
   display: flex;

@@ -3,18 +3,55 @@
 {% load static %}
 {% block head %}
     <link rel="stylesheet" href="{% static "css/dashboards.css" %}">
-    <link rel="stylesheet" href="{% static "css/relatorios.css" %}">
+    <link rel="stylesheet" href="{% static "relatorios/css/relatorios.css" %}">
+    <link rel="stylesheet" href="{% static "css/forms.css" %}">
+    <link rel="stylesheet" href="{% static "css/search.css" %}">
 {% endblock head %}
 
 {% block content %}
-    <div class="relatorios-wrapper">    
+    <div class="relatorios-wrapper">
         <div class="relatorios-dashboard dashboard">
-            {% for relatorio in relatorios_list %}
-            <div class="relatorio-item">
-                <h5 class="relatorio-label">{{ relatorio.nome }}</h5>
-                <a href="{{ relatorio.url }}" target="_blank">Gerar Relatório</a>
-            </div>
+            {% for grupo in relatorios_grupos %}
+                <div class="relatorios-group">
+                    <h2>{{ grupo.nome }}</h2>
+                    <div>
+                        {% for relatorio in grupo.relatorios %}
+                            <div class="relatorio-item">
+                                <h4 class="relatorio-label">{{ relatorio.nome }}</h4>
+                                <button class="btn-gerar-relatorio" data-url="{{ relatorio.url }}">
+                                    Gerar Relatório
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
+
+    <!-- Popup de seleção de data -->
+    <div class="popup-mes-ano" id="popupMesAno">
+        <form class="search" method="get" id="formMesAno">
+            <div class="input-container">
+                <label for="mes">Mês</label>
+                <input type="number" max="12" min="1" value="{% now 'n' %}" name="mes" required>
+            </div>
+            <p>até</p>
+            <div class="input-container">
+                <label for="ano">Ano</label>
+                <input type="number" max="2200" min="1950" value="{% now 'Y' %}" name="ano" required>
+            </div>
+
+            <div class="vertical-divisor"></div>
+
+            <div class="popup-actions">
+                <button type="submit">Gerar</button>
+                <button type="button" id="btnFecharPopup">Cancelar</button>
+            </div>
+        </form>
+    </div>
 {% endblock content %}
+
+{% block scripts %}
+    <script src="{% static "relatorios/js/popup-selecao-data.js" %}"></script>
+{% endblock scripts %}

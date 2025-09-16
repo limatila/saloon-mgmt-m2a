@@ -1,0 +1,100 @@
+.relatorios-wrapper{
+  width: 65%;
+  height: fit-content;
+  margin: auto;
+}
+
+.relatorios-dashboard{
+  width: 100%;
+  height: fit-content;
+  padding: 1.5rem;
+  overflow-x: hidden;
+  max-height: 100%;
+  & .relatorio-label, button{
+    margin: 0;
+  }
+}
+
+.relatorios-dashboard .relatorio-item{
+  display: flex;
+  padding: 0.5rem;
+  justify-content: space-between;
+  border: solid #9a9090 1px;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.2rem;
+  & * {
+    font-weight: lighter;
+  }
+}
+
+.relatorio-item button{
+  padding: 1rem;
+  background-color: var(--base-bg-color);
+  border: solid #9a9090 1px;
+  cursor: pointer;
+}
+
+.input-container input[type="number"]{
+  text-align: center;
+  width: 5rem;
+}
+
+.relatorio-item + .relatorio-item {
+  margin-top: 0.5rem;
+}
+
+.relatorios-group + .relatorios-group {
+  margin-top: 1rem;
+}
+
+/* month selection popup */
+.popup-mes-ano {
+  display: none;
+  position: fixed; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  background: white;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* popup content */
+.popup-mes-ano h2 {
+  margin-top: 0;
+}
+.popup-mes-ano .input-container {
+  margin-bottom: 1rem;
+}
+.popup-mes-ano label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+.popup-mes-ano input {
+  width: 100%;
+  padding: 0.3rem;
+  box-sizing: border-box;
+}
+.popup-mes-ano button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.popup-mes-ano .btn-fechar {
+  background-color: #ef4444;
+  color: white;
+  float: right;
+}
+.popup-mes-ano .btn-fechar:hover {
+  background-color: #b91c1c;
+}
+.popup-mes-ano .btn-submit {
+  background-color: #10b981;
+  color: white;
+  width: 100%;
+}
+.popup-mes-ano .btn-submit:hover {
+  background-color: #059669;
+}

@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Submit form
     form.addEventListener('submit', e => {
         e.preventDefault();
-        const mes = form.querySelector('[name="mes"]').value;
-        const ano = form.querySelector('[name="ano"]').value;
+        const mes = document.getElementById('mes').value;
+        const ano = document.getElementById('ano').value;
         if (currentUrl) {
             const url = new URL(currentUrl, window.location.origin);
             url.searchParams.set('mes', mes);

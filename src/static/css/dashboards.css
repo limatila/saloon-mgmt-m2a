@@ -110,30 +110,17 @@
   }
 }
 
-td.item-actions a:nth-child(1){
-  color: var(--bg-color-mid);
-}
-td.item-actions a:nth-child(2){
-  color: rgb(209, 83, 52);
-}
-td.item-actions a:nth-child(3){
-  color: rgb(243, 183, 30);
-}
-td.item-actions a:nth-child(4){
-  color: rgb(74, 129, 163);
-}
-td.item-actions a:nth-child(1):hover{
-  background-color: var(--bg-color-mid);
-}
-td.item-actions a:nth-child(2):hover{
-  background-color: rgb(255, 0, 0);
-}
-td.item-actions a:nth-child(3):hover{
-  background-color: rgb(243, 183, 30);
-}
-td.item-actions a:nth-child(4):hover{
-  background-color: rgb(74, 129, 163);
-}
+td.item-actions a.fa-circle-info{color: var(--bg-color-mid);}
+td.item-actions a.action-dashboardfa-clock-rotate-left{color: rgb(74, 129, 163);}
+td.item-actions a.fa-rocket, td.item-actions a.fa-circle-edit{color: rgb(20, 19, 16);}
+td.item-actions a.fa-circle-minus{color: rgb(209, 83, 52);}
+
+td.item-actions a.fa-circle-info:hover{background-color: var(--bg-color-mid);}
+td.item-actions a.action-dashboardfa-clock-rotate-left:hover{background-color: rgb(74, 129, 163);}
+td.item-actions a.fa-rocket:hover, 
+td.item-actions a.fa-circle-edit:hover
+{background-color: rgb(243, 183, 30);}
+td.item-actions a.fa-circle-minus:hover{background-color: rgb(255, 0, 0);}
 
 /* Quick Info (simple grid in row) */
 .quick-dashboard{
@@ -429,18 +416,10 @@ a.dash-item:hover{
 }
 
 /* specific inner grid childs colors */
-.modules-dashboard div.module div.inner-grid a:nth-child(1){
-  background-color: var(--bg-color-mid);
-}
-.modules-dashboard div.module div.inner-grid a:nth-child(2){
-  background-color: rgb(110, 199, 58);
-}
-.modules-dashboard div.module div.inner-grid a:nth-child(3){
-  background-color: rgb(243, 183, 30);
-}
-.modules-dashboard div.module div.inner-grid a:nth-child(4){
-  background-color: rgb(74, 129, 163);
-}
+.modules-dashboard div.module div.inner-grid a:nth-child(1){background-color: var(--bg-color-mid);}
+.modules-dashboard div.module div.inner-grid a:nth-child(2){background-color: rgb(110, 199, 58);}
+.modules-dashboard div.module div.inner-grid a:nth-child(3){background-color: rgb(243, 183, 30);}
+.modules-dashboard div.module div.inner-grid a:nth-child(4){background-color: rgb(74, 129, 163);}
 
 /* Responsive */
 @media (min-width: 1024px) {

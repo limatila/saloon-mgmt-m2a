@@ -542,6 +542,6 @@ class RelatorioClientesMensal(BaseRelatorio):
                 i += 1
                 ponto.y += 20
                 ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
-                self.page.insert_text(ponto_indentado, f"{i}. {item.nome}: {item.total_agendamentos} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+                self.page.insert_text(ponto_indentado, f"{i}. {item.nome}: {item.total_agendamentos_geral} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         return ponto.y

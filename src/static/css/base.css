@@ -5,7 +5,7 @@
   --bg-color-mid: #876baa;
   --bg-color-light: #a08db6;
   --bg-color-fade: #876baa5c;
-  --bg-color-marginals: #f0f0f0;
+  --bg-color-marginals: #e1e0e0;
 
   --border-color-dark: #4336557c;
 
@@ -416,7 +416,7 @@ footer {
   height: var(--footer-height);
 
   background-color: var(--bg-color-marginals);
-  border-top: var(--border-color-dark) solid 1px;
+  border-top: var(--border-color-dark) solid 2px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   

@@ -1,3 +1,4 @@
+from django.views import View
 from django.views.generic import CreateView
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,6 +13,8 @@ from servicos.agendamentos.models import Agendamento
 from servicos.agendamentos.forms import AgendamentoForm
 from servicos.agendamentos.mixins import AgendamentosSearchMixin
 from servicos.agendamentos.choices import (
+    AGENDAMENTO_STATUS_CANCELADO,
+    C_TIPO_STATUS_AGENDAMENTO,
     AGENDAMENTO_STATUS_PENDENTE,
     AGENDAMENTO_STATUS_EXECUTANDO,
     AGENDAMENTO_STATUS_FINALIZADO 
@@ -42,6 +45,46 @@ class AgendamentoCreateView(FieldsComEscopoEmpresaFormView, BaseDynamicFormView,
     def form_invalid(self, form):
         messages.warning(self.request, "⚠️ Não foi possível registrar o Agendamento!")  
         return super().form_invalid(form)
+
+
+class AtualizarStatusFluxoAgendamentoView(View):
+    model = Agendamento
+    fields = ['status']
+    sucess_url = reverse_lazy('servicos:agendamentos:list')
+    
+    def get_object(self):
+        return get_object_or_404(self.model, pk=self.kwargs["pk"])
+    
+    def post(self, request, *args, **kwargs):
+        agendamento = self.get_object()
+
+        status_requerido = request.GET.get("status") #P, E, F, C...
+        status_choice = [
+            choice
+            for choice, _ in C_TIPO_STATUS_AGENDAMENTO
+            if choice == status_requerido
+        ][0]
+
+        if status_requerido:
+            agendamento.status = status_choice
+            agendamento.save()
+        else:
+            # Consegue próximo status em P -> E -> F.
+            for i, (choice, _) in enumerate(C_TIPO_STATUS_AGENDAMENTO):
+                if choice == agendamento.status:
+                    if i + 1 < len(C_TIPO_STATUS_AGENDAMENTO): # garante que não vai estourar o index
+                        novo_status = C_TIPO_STATUS_AGENDAMENTO[i + 1][0]
+                        if novo_status != AGENDAMENTO_STATUS_CANCELADO:
+                            agendamento.status = novo_status
+                            agendamento.save()
+                        messages.success(request, f"✅ Status atualizado para {agendamento.get_status_display()}.")
+                    else:
+                        messages.warning(request, "⚠️ Não há mais status para avançar.")
+                        return redirect(self.success_url)
+
+        messages.success(request, f"✅ Status atualizado para {status_requerido.title()}.")
+        return redirect(self.success_url)
+
 
 
 #* Funcionalidades

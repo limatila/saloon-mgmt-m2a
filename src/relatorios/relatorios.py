@@ -274,8 +274,6 @@ class RelatorioAtividadeMensal(BaseRelatorio):
             ponto_indentado = pymupdf.Point(ponto.x + 20, ponto.y)
             self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {ConversionHelper.formatar_moeda(item.get('valor_arrecadado_total'))} total.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
-        del item
-
         return ponto.y
 
 class RelatorioClientesMensal(BaseRelatorio):

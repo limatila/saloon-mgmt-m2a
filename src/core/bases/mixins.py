@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 
 from core.helpers import ConversionHelper
-from core.types import QuickActionItem, QuickInfoItem
+from core.types import QuickActionItem, QuickInfoItem, TableOptionItemModal
 from cadastros.clientes.models import Cliente
 from cadastros.trabalhadores.models import Trabalhador
 from servicos.agendamentos.models import Agendamento
@@ -177,6 +177,66 @@ class ViewComWorkerStatusMixin:
 
         contexto['trabalhadores_status_list'] = trabalhadores_status_list
         return contexto
+
+
+class BaseViewComTableOptionsMixin:
+    def get_options_modal(self) -> list[dict[str, str]]:
+        """
+        Hook para definição de querys dos itens de quick actions
+
+        * Formato necessário:
+        
+            {
+                'nome': '...',
+                'description': '...',
+                'fa_icon': 'classe FontAwesome, sem 'fa-''
+                'link_module: 'reverse_lazy('caminho:pelo:namespace')'
+            }
+        """
+        return [
+            {
+                'nome': None,
+                'description': None,
+                'fa_icon': None,
+                'link_module': None
+            }
+        ]
+
+    def get_item_options_for_obj(self, obj) -> list[TableOptionItemModal]:
+        """
+        Generate item options with TableOptionItemModal for a single object, injecting the pk.
+        """
+        actions = []
+        for blueprint in self.get_item_options_blueprint():
+            reverse_name = blueprint.get("reverse_name")
+            # reverse the URL with obj.pk
+            if reverse_name:
+                link = reverse_lazy(reverse_name, args=[obj.pk])
+            else:
+                link = None
+            actions.append(
+                TableOptionItemModal(
+                    nome=blueprint.get("nome"),
+                    description=blueprint.get("description"),
+                    fa_icon=blueprint.get("fa_icon"),
+                    link_module=link
+                )
+            )
+        return actions
+
+    def get_table_options(self) -> list[list[TableOptionItemModal]]:
+        """
+        Returns a list of lists: each row in object_list has its own list of actions.
+        """
+        table_options = []
+        for obj in getattr(self, "object_list", []):
+            table_options.append(self.get_item_options_for_obj(obj))
+        return table_options
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["quick_actions"] = self.get_table_options()
+        return context
 
 
 #* Mixins especializados

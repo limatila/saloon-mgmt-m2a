@@ -1,10 +1,11 @@
 import calendar
 from datetime import datetime, timedelta
 
-from django.db.models import Q, Count, Sum, Max
+from django.db.models import Q, Count, Sum
 from django.contrib.staticfiles import finders
 import pymupdf
 
+from core.helpers import ConversionHelper
 from cadastros.clientes.models import Cliente
 from cadastros.trabalhadores.models import Trabalhador
 from servicos.agendamentos.models import Agendamento
@@ -75,13 +76,6 @@ class BaseRelatorio:
             # Se não encontrar as fontes, usa as fontes padrão do módulo
             self.font_regular = "helv"   # Helvetica Regular
             self.font_bold = "helvB"     # Helvetica Bold
-
-    #TODO refatorar para um helper core
-    def formatar_moeda(self, valor: float) -> str:
-        """Helper para formatar um valor numérico para a moeda brasileira (BRL)."""
-        if valor is None:
-            valor = 0.0
-        return f"R$ {valor:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
     
     def desenhar_cabecalho(self) -> int:
         # Passo 3: Definir um ponto de partida para inserir texto.
@@ -127,8 +121,6 @@ class BaseRelatorio:
             )
 
         return ponto.y
-    
-    #TODO: def desenhar rodape
 
     def coletar_dados(self):
         """
@@ -237,12 +229,12 @@ class RelatorioAtividadeMensal(BaseRelatorio):
         ponto.x += 20
         
         ponto.y += 25
-        self.page.insert_text(ponto, f"Faturamento Total: {self.formatar_moeda(self.faturamento_total_mes)}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Faturamento Total: {ConversionHelper.formatar_moeda(self.faturamento_total_mes)}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         ponto.y += 17
         self.page.insert_text(ponto, f"Total de Atendimentos Realizados/Finalizados: {self.total_agendamentos_finalizados}", fontsize=self.font_sizes['small'], fontname=self.font_regular) # type: ignore
 
         ponto.y += 25
-        self.page.insert_text(ponto, f"Faturamento Total Perdido: {self.formatar_moeda(self.faturamento_total_cancelado)}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
+        self.page.insert_text(ponto, f"Faturamento Total Perdido: {ConversionHelper.formatar_moeda(self.faturamento_total_cancelado)}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         ponto.y += 17
         self.page.insert_text(ponto, f"Total de Atendimentos Cancelados: {self.total_agendamentos_cancelados}", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
@@ -280,7 +272,7 @@ class RelatorioAtividadeMensal(BaseRelatorio):
             i += 1
             ponto.y += 20
             ponto_indentado = pymupdf.Point(ponto.x + 20, ponto.y)
-            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {self.formatar_moeda(item.get('valor_arrecadado_total'))} total.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+            self.page.insert_text(ponto_indentado, f"{i}. {item.get('nome', '')}: {ConversionHelper.formatar_moeda(item.get('valor_arrecadado_total'))} total.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         del item
 
@@ -484,7 +476,7 @@ class RelatorioClientesMensal(BaseRelatorio):
         self.page.insert_text(ponto, f"Cliente que gerou maior faturamento total no mês", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         ponto.y += 20
         ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
-        self.page.insert_text(ponto_indentado, f"{self.cliente_maior_faturamento_total.nome}: {self.formatar_moeda(self.cliente_maior_faturamento_total.faturamento_total)} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+        self.page.insert_text(ponto_indentado, f"{self.cliente_maior_faturamento_total.nome}: {ConversionHelper.formatar_moeda(self.cliente_maior_faturamento_total.faturamento_total)} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
         ponto.y += 15 # type: ignore
         ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
         self.page.insert_text(ponto_indentado, f"(telefone: {self.cliente_maior_faturamento_total.telefone})", fontsize=self.font_sizes['small'], fontname=self.font_regular)
@@ -523,7 +515,7 @@ class RelatorioClientesMensal(BaseRelatorio):
 
         if len(self.top_clientes_antigos_recorrentes) == 0:
             ponto.y += 20 # type: ignore
-            self.page.insert_text(pymupdf.Point(ponto.x + 15, ponto.y), "obs: Nenhum recorrente antigo encontrado.", fontsize=self.font_sizes['small'])
+            self.page.insert_text(pymupdf.Point(ponto.x + 15, ponto.y), "Nenhum recorrente antigo encontrado.", fontsize=self.font_sizes['small'])
         else:
             for item in self.top_clientes_antigos_recorrentes:
                 i += 1
@@ -546,7 +538,7 @@ class RelatorioClientesMensal(BaseRelatorio):
         
         if len(self.clientes_inativos_antigos_recorrentes) == 0: # Alterado para a lista correta de inativos recorrentes
             ponto.y += 20 # type: ignore
-            self.page.insert_text(pymupdf.Point(ponto.x + 15, ponto.y), "obs: Nenhum recorrente inativo encontrado.", fontsize=self.font_sizes['small'])
+            self.page.insert_text(pymupdf.Point(ponto.x + 15, ponto.y), "Nenhum recorrente inativo encontrado.", fontsize=self.font_sizes['small'])
         else:
             for item in self.clientes_inativos_antigos_recorrentes: # Limitar aos top 3
                 i += 1

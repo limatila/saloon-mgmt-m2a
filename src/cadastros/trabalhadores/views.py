@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from core.pessoas.views import PessoasListView, PessoasCreateView
-from servicos.agendamentos.choices import AGENDAMENTO_STATUS_PENDENTE
+from servicos.agendamentos.choices import AGENDAMENTO_STATUS_PENDENTE, AGENDAMENTO_STATUS_FINALIZADO
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.trabalhadores.models import Trabalhador
 from cadastros.trabalhadores.forms import TrabalhadoresForm
@@ -16,14 +16,14 @@ class TrabalhadoresListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Pess
     def get_queryset(self, **kwargs):
         queryset = super().get_queryset(**kwargs)
         queryset = queryset.annotate(
-            agendamentos_totais=Count('agendamentos'),
+            agendamentos_totais_finalizados=Count('agendamentos', filter=Q(agendamentos__status=AGENDAMENTO_STATUS_FINALIZADO)),
             agendamentos_pendentes=Count('agendamentos', filter=Q(agendamentos__status=AGENDAMENTO_STATUS_PENDENTE))
         )
         return queryset
 
     def get_fields_display(self):
         fields_ordernados = super().get_fields_display()
-        fields_ordernados += ['agendamentos_totais', 'agendamentos_pendentes']
+        fields_ordernados += ['agendamentos_totais_finalizados', 'agendamentos_pendentes']
         return fields_ordernados
 
     def get_context_data(self, **kwargs):

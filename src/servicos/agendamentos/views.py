@@ -86,6 +86,7 @@ class AtualizarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoEmpresaMix
                 if next_status != AGENDAMENTO_STATUS_CANCELADO:
                     agendamento.status = next_status
                     agendamento.save()
+                    messages.success(request, f"✅ Status atualizado para {agendamento.get_status_display()}.")
                     break
             else:
                 messages.warning(request, "⚠️ Agendamento já chegou no fim do ciclo.")

@@ -8,12 +8,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from core.bases.views import BaseDynamicListView, BaseDynamicFormView, BaseDeleteView
+from core.bases.mixins import AtivosQuerysetMixin
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from servicos.tipo_servicos.models import TipoServico
 from servicos.tipo_servicos.forms import TipoServicoForm
 
 
-class TipoServicoListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDynamicListView):
+class TipoServicoListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, AtivosQuerysetMixin, BaseDynamicListView):
     model = TipoServico
 
     def get_fields_display(self):
@@ -60,3 +61,4 @@ class TipoServicoCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDyna
 
 class TipoServicoDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDeleteView):
     model = TipoServico
+    success_url = reverse_lazy('servicos:tipo_servicos:list')

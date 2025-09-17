@@ -4,13 +4,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from core.pessoas.views import PessoasListView, PessoasCreateView, PessoasDeleteView
+from core.bases.mixins import AtivosQuerysetMixin
 from servicos.agendamentos.choices import AGENDAMENTO_STATUS_PENDENTE, AGENDAMENTO_STATUS_FINALIZADO
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.trabalhadores.models import Trabalhador
 from cadastros.trabalhadores.forms import TrabalhadoresForm
 
 
-class TrabalhadoresListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, PessoasListView):
+class TrabalhadoresListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, AtivosQuerysetMixin, PessoasListView):
     model = Trabalhador
 
     def get_queryset(self, **kwargs):
@@ -48,3 +49,4 @@ class TrabalhadorCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, PessoasC
 
 class TrabalhadorDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, PessoasDeleteView):
     model = Trabalhador
+    success_url = reverse_lazy('cadastros:trabalhadores:list')

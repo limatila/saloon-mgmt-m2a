@@ -7,8 +7,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 
 from core.bases.views import BaseDynamicListView, BaseDynamicFormView, SelecaoDynamicListView, BaseDeleteView
-from cadastros.empresas.views import FieldsComEscopoEmpresaFormView
-from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
+from core.bases.mixins import AtivosQuerysetMixin
+from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, ContextoEmpresaMixin, FormFieldsComEscopoEmpresaMixin
 from servicos.agendamentos.models import Agendamento
 from servicos.agendamentos.forms import AgendamentoForm
 from servicos.agendamentos.mixins import AgendamentosSearchMixin
@@ -21,7 +21,7 @@ from servicos.agendamentos.choices import (
 )
 
 
-class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, BaseDynamicListView):
+class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, AtivosQuerysetMixin, BaseDynamicListView):
     model = Agendamento
 
     def get_fields_display(self):
@@ -33,7 +33,7 @@ class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, B
         return context
 
 
-class AgendamentoCreateView(FieldsComEscopoEmpresaFormView, BaseDynamicFormView, CreateView):
+class AgendamentoCreateView(FormFieldsComEscopoEmpresaMixin, BaseDynamicFormView, CreateView):
     model = Agendamento
     form_class = AgendamentoForm
     success_url = reverse_lazy('servicos:agendamentos:list')
@@ -47,11 +47,11 @@ class AgendamentoCreateView(FieldsComEscopoEmpresaFormView, BaseDynamicFormView,
         return super().form_invalid(form)
 
 
-class AtualizarStatusFluxoAgendamentoView(View):
+class AtualizarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoEmpresaMixin, View):
     model = Agendamento
     fields = ['status']
     success_url = reverse_lazy('servicos:agendamentos:list')
-    
+
     def get_object(self):
         return get_object_or_404(self.model, pk=self.kwargs["pk"])
     
@@ -136,5 +136,6 @@ class FinalizarAgendamentoView(LoginRequiredMixin, AgendamentosSearchMixin, Esco
         return redirect("home")
 
 
-class AgendamentoDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDeleteView):
+class AgendamentoDeleteView(LoginRequiredMixin, ContextoEmpresaMixin, BaseDeleteView):
     model = Agendamento
+    success_url = reverse_lazy('servicos:agendamentos:list')

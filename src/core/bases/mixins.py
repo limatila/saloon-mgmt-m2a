@@ -16,6 +16,17 @@ from servicos.agendamentos.choices import (
 )
 
 
+class AtivosQuerysetMixin:
+    @property
+    def ativos_filter(self):
+        return Q(ativo=True)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(self.ativos_filter)
+        return queryset
+
+
 class FormComArquivoMixin:
     """
     Inclui também os arquivos (FILES) no form.
@@ -55,6 +66,7 @@ class DateSearchMixin:
         return queryset
 
 
+#* Para exibições de dashboards padrões
 class ViewComQuickInfoMixin:
     def get_item_querys(self) -> list[dict[str, str]]:
         """
@@ -240,7 +252,7 @@ class BaseViewComTableOptionsMixin:
 
 
 #* Mixins especializados
-class HomeQuickInfoMixin(ViewComQuickInfoMixin):
+class HomeQuickInfoMixin(AtivosQuerysetMixin, ViewComQuickInfoMixin):
     DEFAULT_TOLERANCIA_ATENDIMENTOS_SEGUINTES: int = 2
 
     def get_novos_clientes_ultimos_dias(self, tolerancia_dias: int = 7) -> str:
@@ -254,7 +266,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         start = hoje - timedelta(days=tolerancia_dias)
         end = hoje
         quantidade = Cliente.objects.filter(
-            Q(data_criado__gte=start, data_criado__lte=end) & self.escopo_filter
+            Q(data_criado__gte=start, data_criado__lte=end) & self.empresa_filter & self.ativos_filter
         ).count()
 
         return f"+{quantidade}"
@@ -270,7 +282,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                     data_agendado__gte=start,
                     data_agendado__lte=end,
                     status=AGENDAMENTO_STATUS_FINALIZADO,
-                ) & self.escopo_filter
+                ) & self.empresa_filter & self.ativos_filter
             )
         ).get('sum') or 0
 
@@ -286,7 +298,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                             data_agendado__gte=start,
                             data_agendado__lte=end,
                             status=AGENDAMENTO_STATUS_FINALIZADO
-                        ) & self.escopo_filter
+                        ) & self.empresa_filter & self.ativos_filter
                     )
                 )
             ).get('sum') or 0
@@ -308,7 +320,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                     data_agendado__gte=start,
                     data_agendado__lte=end,
                     status__in=[AGENDAMENTO_STATUS_PENDENTE, AGENDAMENTO_STATUS_EXECUTANDO]
-                ) & self.escopo_filter
+                ) & self.empresa_filter & self.ativos_filter
             ).count()
         )
 
@@ -329,7 +341,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
                     agendamentos__status=AGENDAMENTO_STATUS_EXECUTANDO,
                     agendamentos__data_agendado__gte=start,
                     agendamentos__data_agendado__lte=end
-                ) & self.escopo_filter
+                ) & self.empresa_filter & self.ativos_filter
             ).distinct().count()
         )
         
@@ -339,7 +351,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
         total_ocupados_str = self.get_trabalhadores_ocupados_agora()
         total_ocupados = int(total_ocupados_str) if total_ocupados_str.isdigit() else 0
         total_trabalhadores = Trabalhador.objects.filter(
-            self.escopo_filter
+            self.empresa_filter & self.ativos_filter
         ).count()
 
         if total_trabalhadores == 0:
@@ -354,7 +366,7 @@ class HomeQuickInfoMixin(ViewComQuickInfoMixin):
             {
                 'header': 'Clientes novos na semana',
                 'value': self.get_novos_clientes_ultimos_dias(tolerancia_novos_clientes),
-                'conclusion': f'de um total de {Cliente.objects.filter(self.escopo_filter).count()} atuais',
+                'conclusion': f'de um total de {Cliente.objects.filter(self.empresa_filter & self.ativos_filter).count()} atuais',
                 'fa_icon': 'user',
                 'link_module': reverse_lazy('cadastros:clientes:list')
             },

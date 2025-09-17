@@ -3,12 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from core.pessoas.views import PessoasListView, PessoasCreateView, PessoasDeleteView
+from core.bases.mixins import AtivosQuerysetMixin
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.clientes.models import Cliente
 from cadastros.clientes.forms import ClientesForm
 
 
-class ClientesListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, PessoasListView):
+class ClientesListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, AtivosQuerysetMixin, PessoasListView):
     model = Cliente
 
     def get_context_data(self, *args, **kwargs):
@@ -33,3 +34,4 @@ class ClienteCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, PessoasCreat
 
 class ClienteDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, PessoasDeleteView):
     model = Cliente
+    success_url = reverse_lazy('cadastros:clientes:list')

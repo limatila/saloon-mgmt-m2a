@@ -1,4 +1,5 @@
-from django.db.models import Q
+from django.db.models import Q, Model, ForeignKey
+from django.forms import ModelForm
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseServerError
 
@@ -9,7 +10,7 @@ class ContextoEmpresaMixin:
     """
     Adiciona self.empresa à viewm baseado em 'empresa_id' presente na session do Django.
     Ou se não existe empresa_id, volta pra página de seleção de empresa
-    """    
+    """
     def dispatch(self, request, *args, **kwargs):
         empresa_id = request.session.get("empresa_id", None)
 
@@ -25,12 +26,12 @@ class EscopoEmpresaQuerysetMixin(ContextoEmpresaMixin):
     Filtra toda a queryset para mostrar a empresa registrada da request
     """
     @property
-    def escopo_filter(self):
+    def empresa_filter(self):
         return Q(empresa=self.request.empresa)
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(self.escopo_filter)
+        queryset = queryset.filter(self.empresa_filter)
         return queryset
 
 
@@ -55,3 +56,26 @@ class EmpresaDoUserQuerysetMixin:
 
         queryset = queryset.filter(user=self.request.user)
         return queryset
+
+
+class FormFieldsComEscopoEmpresaMixin(EscopoEmpresaFormMixin):
+    fields_ignorados = ['empresa', 'data_criado', 'data_modificado']
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        # injeta a empresa que o ContextoEmpresaMixin já colocou em request
+        kwargs["empresa"] = self.request.empresa
+        return kwargs
+
+    def form_valid(self, form: ModelForm):
+        for field in form._meta.model._meta.get_fields():
+            if field in self.fields_ignorados: continue
+
+            # se o valor do field não pertence a empresa logada na sessão
+            if isinstance(field, ForeignKey):
+                field_obj: Model = form.cleaned_data.get(field.name, None)
+                if ((field_obj and hasattr(field_obj, "empresa")) and
+                    (field_obj.empresa.id != self.request.empresa.id)):
+                    raise HttpResponseServerError(f"Erro em {self.__class__.__name__}, field {field.verbose_name} não obteve valor válido para empresa em sessão.")
+
+        return super().form_valid(form)

@@ -96,7 +96,7 @@ class SelecaoRelatoriosView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageVi
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         mes, ano = self.get_ano_mes()
-        contexto["title"] = "Lista de relatórios"
+        contexto["title"] = "Relatórios Administrativos"
         contexto["description"] = "Selecione um relatório para exibição em PDF."
         contexto["ano"] = ano
         contexto["mes"] = mes

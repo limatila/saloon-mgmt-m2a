@@ -15,7 +15,9 @@
             <thead>
                 <tr>
                     {% for field in field_names %}
-                        <th>{{ field }}</th>
+                        {% if key != "pk" %}
+                            <th>{{ field }}</th>
+                        {% endif %}
                     {% endfor %}
                     <th class="header-item-actions">Ações</th>
                 </tr>
@@ -24,15 +26,17 @@
                 {% for dict in object_dicts %}
                     <tr>
                         {% for key, value in dict.items %}
-                        <td>
-                            {% if key == "imagem" %}
-                                <img src="{{ value.url }}" alt="{{ dict.nome }}'s photo" title="{{ dict.nome }}">
-                            {% elif key == "preco" %}
-                                R$ {{ value }}
-                            {% else %}
-                                {{ value }}
+                            {% if key != "pk" %}
+                                <td>
+                                    {% if key == "imagem" %}
+                                    <img src="{{ value.url }}" alt="{{ dict.nome }}'s photo" title="{{ dict.nome }}">
+                                    {% elif key == "preco" %}
+                                    R$ {{ value }}
+                                    {% else %}
+                                    {{ value }}
+                                    {% endif %}
+                                </td>
                             {% endif %}
-                        </td>
                         {% endfor %}
                         <td class="item-actions">
                             {% block actions-modal %}

@@ -10,20 +10,6 @@
   box-shadow: 0px 0px 30px -18px rgba(0,0,0,0.8);
 }
 
-.dashboard div.dashboard-head {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.dashboard div.dashboard-head a {
-  font-family: sans-serif;
-  font-weight: 600;
-  color: #2563eb; /* text-blue-600 */
-  align-self: center;
-  justify-self: end;
-}
-
 /** table dashboards */
 .table-dashboard {
   overflow-x: hidden;
@@ -34,21 +20,26 @@
 .table-dashboard table {
   height: 100%;
   width: 100%;
+  margin-top: 0.6rem;
   table-layout: fixed;
 }
-
 /* Thead (fixed) */
 .table-dashboard thead {
-  display: table;
-  width: 100%;
+  /*
+    Ajusta o thead para alinhar com o tbody que tem scroll.
+    'overflow-y: scroll' força o thead a reservar espaço para uma barra de rolagem,
+    alinhando as colunas.
+  */
+  display: block;
+  width: calc(100% - 17px); /* Subtrai a largura da barra de rolagem */
 }
 
 /* Tbody (scrollable) */
 .table-dashboard tbody {
-  height: 100%;
+  display: block; /** Essencial para permitir o overflow */
   width: 100%;
   overflow-y: scroll;
-  max-height: 10vh;
+  height: calc(100% - 40px); 
 }
 
 /* Table rows and cells */

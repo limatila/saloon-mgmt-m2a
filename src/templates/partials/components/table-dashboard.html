@@ -40,12 +40,10 @@
                 </tr>
             {% empty %}
                 <tr style="height:100%">
-                    <td colspan="{{ field_names|length }}" class="addition-link">Nenhum {{ app_name }} encontrado.<br> Porfavor adicione
-                        <button>
-                            <a href="{{ url_submodule_create }}">
+                    <td colspan="{{ field_names|length }}" >Nenhum {{ app_name }} encontrado.<br> Porfavor adicione
+                            <a href="{{ url_submodule_create }}" class="addition-link">
                                 aqui
                             </a>
-                        </button>
                     </td>
                 </tr>
             {% endfor %}

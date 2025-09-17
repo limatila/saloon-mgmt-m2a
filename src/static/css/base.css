@@ -9,7 +9,7 @@
 
   --border-color-dark: #4336557c;
 
-  --sidebar-width: 17vw;
+  --sidebar-width: 18vw;
   --headers-height: 5rem;
   --footer-height: 15rem;
   --footer-difference: calc((var(--footer-height) * -1) + 3rem);
@@ -97,12 +97,6 @@ a.addition-link:hover {
   background-color: #45a049;
 }
 
-
-/* Font Awesome Icon spacing */
-.side-nav-bar .fa::before, .fa-solid::before {
-  margin-right: 4px;
-}
-
 /* keep items centered */
 .wrapper {
   margin: auto auto;
@@ -148,19 +142,44 @@ aside {
   border-right: 2px solid rgba(0, 0, 0, 0.4);
   border-radius: 0;
   flex-shrink: 0;
+  overflow-y: auto;
 }
+
+/* costumize thiner scroll */
+/* For webkit browsers */
+aside::-webkit-scrollbar {
+  margin-left: 4px;
+  width: 8px;
+  background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background-color: var(--bg-color-light);
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+  transform: scaleX(1.2);
+}
+
+aside::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 
 aside .wrapper {
   width: 94%;
   height: 98%;
 }
 
+
 .side-nav-bar {
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100%;
-  overflow-y: auto;
   width: 100%;
 }
 
@@ -192,6 +211,11 @@ aside .wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Font Awesome Icon spacing */
+.side-nav-bar .fa::before, .fa-solid::before {
+  margin-right: 4px;
 }
 
 .side-nav-bar h4 {

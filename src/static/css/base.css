@@ -99,7 +99,7 @@ a.addition-link:hover {
 
 
 /* Font Awesome Icon spacing */
-.fa::before, .fa-solid::before {
+.side-nav-bar .fa::before, .fa-solid::before {
   margin-right: 4px;
 }
 

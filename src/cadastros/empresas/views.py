@@ -57,26 +57,3 @@ class SelecaoEmpresasListView(LoginRequiredMixin, EmpresaDoUserQuerysetMixin, Se
             messages.error(request, "⚠️ Essa empresa não pode ser carregada.")     
         
         return redirect("home")
-
-
-class FieldsComEscopoEmpresaFormView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDynamicFormView):
-    fields_ignorados = ['empresa', 'data_criado', 'data_modificado']
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        # injeta a empresa que o ContextoEmpresaMixin já colocou em request
-        kwargs["empresa"] = self.request.empresa
-        return kwargs
-
-    def form_valid(self, form: ModelForm):
-        for field in form._meta.model._meta.get_fields():
-            if field in self.fields_ignorados: continue
-
-            # se o valor do field não pertence a empresa logada na sessão
-            if isinstance(field, ForeignKey):
-                field_obj: Model = form.cleaned_data.get(field.name, None)
-                if ((field_obj and hasattr(field_obj, "empresa")) and
-                    (field_obj.empresa.id != self.request.empresa.id)):
-                    raise HttpResponseServerError(f"Erro em {self.__class__.__name__}, field {field.verbose_name} não obteve valor válido para empresa em sessão.")
-
-        return super().form_valid(form)

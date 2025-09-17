@@ -1,5 +1,36 @@
-{% extends "base.html" %}
+{% extends "partials/components/table-dashboard.html" %}
 
-{% block content %}
-    {% include "partials/components/table-dashboard.html" %}
-{% endblock content %}
+{% block actions-modal %}
+    <form action="" method="get">
+        <button type="submit" title="ver em detalhe">
+            <i class="fa-solid fa-circle-info"></i> Detalhar
+        </button>
+    </form>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" title="deletar">
+            <i class="fa-solid fa-circle-minus"></i> Deletar
+        </button>
+    </form>
+
+    <form action="{% url 'servicos:agendamentos:next-status' dict.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" title="avançar no fluxo de agendamento">
+            <i class="fa-solid fa-rocket"></i> Avançar Status
+        </button>
+    </form>
+
+    <form action="" method="get">
+        <button type="submit" title="histórico">
+            <i class="fa-solid fa-clock-rotate-left"></i> Histórico
+        </button>
+    </form>
+
+{% endblock actions-modal %}
+
+{% comment %} 
+    {% url 'servicos:agendamentos:detail' dict.pk %}
+    {% url 'servicos:agendamentos:delete' dict.pk %}
+    {% url 'servicos:agendamentos:history' dict.pk %} 
+{% endcomment %}

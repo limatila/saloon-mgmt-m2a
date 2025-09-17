@@ -1,5 +1,36 @@
-{% extends "base.html" %}
+{% extends "partials/components/table-dashboard.html" %}
 
-{% block content %}
-    {% include "partials/components/table-dashboard.html" %}
-{% endblock content %}
+{% block actions-modal %}
+    <form action="" method="get" style="display:inline;">
+        <button type="submit" title="ver em detalhe">
+            <i class="fa-solid fa-circle-info"></i> Detalhar
+        </button>
+    </form>
+
+    <form action="" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" title="deletar">
+            <i class="fa-solid fa-circle-minus"></i> Deletar
+        </button>
+    </form>
+
+    <form action="" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" title="editar">
+            <i class="fa-solid fa-pencil"></i> Editar
+        </button>
+    </form>
+
+    <form action="" method="get" style="display:inline;">
+        <button type="submit" title="histórico">
+            <i class="fa-solid fa-clock-rotate-left"></i> Histórico
+        </button>
+    </form>
+{% endblock actions-modal %}
+
+{% comment %} 
+    {% url 'servicos:clientes:detail' dict.pk %}
+    {% url 'servicos:clientes:delete' dict.pk %}
+    {% url 'servicos:clientes:edit' dict.pk %}
+    {% url 'servicos:clientes:history' dict.pk %}
+ {% endcomment %}

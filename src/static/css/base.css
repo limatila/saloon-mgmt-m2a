@@ -80,6 +80,9 @@ button{
 }
 
 /* New item link */
+td:has(.addition-link){
+  line-height: 3rem;
+}
 a.addition-link {
   padding: 0.5rem 1rem;
   background-color: #4CAF50;

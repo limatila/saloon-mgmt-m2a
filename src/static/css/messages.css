@@ -2,13 +2,12 @@
   position: fixed;
   height: fit-content;
   width: fit-content;
-  top: 2.5rem; /* centraliza vertical */
-  left: var(--main-content-left-pos); /* centraliza horizontal */
-  transform: translate(-50%, -50%); /* move pro centro exato */
+  top: 2rem;
+  left: var(--main-content-left-pos);
+  transform: translateX(-50%);
   
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
   gap: 1rem;
   z-index: 9999;
@@ -30,16 +29,17 @@
   z-index: 9999;
   
   opacity: 0;
-  transform: translateY(2rem);
-  
-  animation: slideIn 1s forwards;
+  animation: slideIn 0.5s forwards;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.95rem;
 }
 
-.message-popup p {
-  margin: 0;
-  font-size: 1rem;
-  color: #fff;
-}
+.message-success { background-color: #4CAF50; }    /* Green */
+.message-error   { background-color: #f44336; }    /* Red */
+.message-warning { background-color: #ff9800; }    /* Orange */
+.message-info, .message-debug { background-color: #5b6c7b; } /* Blue */
+
 
 .message-popup .btn-close {
   width: fit-content;
@@ -58,29 +58,11 @@
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.message-success {
-  background-color: #4CAF50; /* Green */
-  color: white;
-}
-
-.message-error {
-  background-color: #f44336; /* Red */
-  color: white;
-}
-
-.message-warning {
-  background-color: #ff9800; /* Orange */
-}
-
-.message-info, .message-debug {
-  background-color: #5b6c7b; /* Blue */
-}
-
-/* Animação de entrada/saída */
+/* Slide animations on closure */
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(2rem);
+    transform: translateY(-2rem);
   }
   to {
     opacity: 1;
@@ -88,17 +70,22 @@
   }
 }
 
-@keyframes slideOut {
-  from {
+/* Slide out to left */
+@keyframes slideOutLeft {
+  0% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
-  to {
+  60%{
     opacity: 0;
-    transform: translateY(2rem);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-10%);
   }
 }
 
 .message-popup.fade-out {
-  animation: slideOut 0.6s forwards;
+  animation: slideOutLeft 0.6s forwards;
 }
+

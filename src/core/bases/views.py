@@ -68,10 +68,12 @@ class BaseDynamicListView(DateSearchMixin, ListView):
         
     def create_object_dict_for_display(self, obj: object, fields: list[str], getter: list) -> dict:
         """Cria um dicionário para um único objeto usando os acessadores pré-calculados."""
-        return {
+        object_dict = {
             field: accessor(obj)
             for field, accessor in zip(fields, getter)
         }
+        object_dict['pk'] = obj.pk  # certifique-se que pk está incluído
+        return object_dict
 
     def get_context_data(self, **kwargs):
         def get_verbose_name(field_name):
@@ -210,12 +212,3 @@ class SelecaoDynamicListView(BaseDynamicListView):
             redirect(self.request.path)
 
         return selecao_id
-
-    def create_object_dict_for_display(self, obj: object, fields: list[str], getter: list) -> dict:
-        """Cria um dicionário para um único objeto usando os acessadores pré-calculados."""
-        object_dict = {
-            field: accessor(obj)
-            for field, accessor in zip(fields, getter)
-        }
-        object_dict['pk'] = obj.pk  # certifique-se que pk está incluído
-        return object_dict

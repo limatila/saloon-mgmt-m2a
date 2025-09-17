@@ -147,12 +147,7 @@ class BaseDynamicFormView(FormView):
 
 class BaseDeleteView(UpdateView):
     template_name = "partials/components/form-dashboard.html"
-    success_url = reverse_lazy("home")
-
-    def get_success_url(self):
-        model_name = self.model._meta.verbose_name_plural.lower().replace(' ', '_')
-        app_name = self.model.module_label
-        return reverse_lazy(f"{app_name}:{model_name}:list")
+    fields = ['ativo']
 
     def get_object(self, queryset = None):
         obj = super().get_object(queryset)
@@ -171,7 +166,7 @@ class BaseDeleteView(UpdateView):
         else:
             messages.error(self.request, f"⛔ O {self.model._meta.verbose_name.title()} já está deletado!")
 
-        return redirect(self.get_success_url())
+        return redirect(self.success_url or 'home')
 
 
 #* Especializadas: home/ [nome_modulo]/

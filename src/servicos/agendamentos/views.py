@@ -50,7 +50,7 @@ class AgendamentoCreateView(FieldsComEscopoEmpresaFormView, BaseDynamicFormView,
 class AtualizarStatusFluxoAgendamentoView(View):
     model = Agendamento
     fields = ['status']
-    sucess_url = reverse_lazy('servicos:agendamentos:list')
+    success_url = reverse_lazy('servicos:agendamentos:list')
     
     def get_object(self):
         return get_object_or_404(self.model, pk=self.kwargs["pk"])
@@ -58,33 +58,40 @@ class AtualizarStatusFluxoAgendamentoView(View):
     def post(self, request, *args, **kwargs):
         agendamento = self.get_object()
 
-        status_requerido = request.GET.get("status") #P, E, F, C...
-        status_choice = [
-            choice
-            for choice, _ in C_TIPO_STATUS_AGENDAMENTO
-            if choice == status_requerido
-        ][0]
+        status_requerido = request.POST.get("status")  # P, E, F, C...
+        status_choice = next(
+            (choice for choice, _ in C_TIPO_STATUS_AGENDAMENTO if choice == status_requerido),
+            None
+        )
 
-        if status_requerido:
+        if status_choice:
+            # Only set if status_choice exists
             agendamento.status = status_choice
             agendamento.save()
+            messages.success(request, f"✅ Status atualizado para {agendamento.get_status_display()}.")
+
         else:
-            # Consegue próximo status em P -> E -> F.
-            for i, (choice, _) in enumerate(C_TIPO_STATUS_AGENDAMENTO):
-                if choice == agendamento.status:
-                    if i + 1 < len(C_TIPO_STATUS_AGENDAMENTO): # garante que não vai estourar o index
-                        novo_status = C_TIPO_STATUS_AGENDAMENTO[i + 1][0]
-                        if novo_status != AGENDAMENTO_STATUS_CANCELADO:
-                            agendamento.status = novo_status
-                            agendamento.save()
-                        messages.success(request, f"✅ Status atualizado para {agendamento.get_status_display()}.")
-                    else:
-                        messages.warning(request, "⚠️ Não há mais status para avançar.")
-                        return redirect(self.success_url)
+            # Auto-advance to the next valid status
+            current_index = next(
+                (i for i, (choice, _) in enumerate(C_TIPO_STATUS_AGENDAMENTO) if choice == agendamento.status),
+                None
+            )
 
-        messages.success(request, f"✅ Status atualizado para {status_requerido.title()}.")
+            if current_index is None:
+                raise Exception(f"Status atual '{agendamento.get_status_display()}' inválido.")
+
+            # Find the next non-cancelled status
+            for next_index in range(current_index + 1, len(C_TIPO_STATUS_AGENDAMENTO)):
+                next_status = C_TIPO_STATUS_AGENDAMENTO[next_index][0]
+                if next_status != AGENDAMENTO_STATUS_CANCELADO:
+                    agendamento.status = next_status
+                    agendamento.save()
+                    break
+            else:
+                messages.warning(request, "⚠️ Agendamento já chegou no fim do ciclo.")
+                messages.success(request, f"✅ Status atualizado para {agendamento.get_status_display()}.")
+
         return redirect(self.success_url)
-
 
 
 #* Funcionalidades

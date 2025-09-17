@@ -158,8 +158,8 @@ class DynamicSubmodulesView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Base
     Uma view para mostragem de todos os submódulos,
     e links da url config para eles
     """
-    all_cadastros_modules: list[str] = []# = ["clientes", "empresas", "servicos", "trabalhadores"]
-    all_servicos_modules: list[str] = []# = ["agendamentos", ]
+    all_cadastros_modules: list[str] = []# = ["clientes", "empresas",  "trabalhadores"]
+    all_servicos_modules: list[str] = []# = ["agendamentos", "servicos" ]
 
     def generate_dynamic_urls(self, prefix: str, modules_list: list[str]) -> list[dict[str, str | dict[str, str]]]:    
         if modules_list is None or len(modules_list) == 0:

@@ -87,6 +87,11 @@
   align-self: flex-end; /* place-self-end */
 }
 
+.dashboard form button{
+  cursor: pointer;
+  height: 100%;
+}
+
 .dashboard form button[type="submit"] {
   padding: 0.5rem 1rem; /* px-4 py-2 */
   background-color: #2563eb; /* bg-blue-600 */
@@ -94,10 +99,6 @@
   border: none;
 
   transition: box-shadow 150ms ease-in-out;
-}
-
-.dashboard form button:hover{
-  cursor: pointer;
 }
 
 .dashboard form button[type="submit"]:hover {

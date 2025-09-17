@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
-from core.pessoas.views import PessoasListView, PessoasCreateView
+from core.pessoas.views import PessoasListView, PessoasCreateView, PessoasDeleteView
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.clientes.models import Cliente
 from cadastros.clientes.forms import ClientesForm
@@ -29,3 +29,7 @@ class ClienteCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, PessoasCreat
     def form_invalid(self, form):
         messages.warning(self.request, "⚠️ Não foi possível registrar o Cliente!")
         return super().form_invalid(form)
+
+
+class ClienteDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, PessoasDeleteView):
+    model = Cliente

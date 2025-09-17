@@ -1,7 +1,7 @@
 from django.views.generic import CreateView
 from django.db.models import Q
 
-from core.bases.views import BaseDynamicListView, BaseDynamicFormView
+from core.bases.views import BaseDynamicListView, BaseDynamicFormView, BaseDeleteView
 from core.bases.mixins import FormComArquivoMixin
 
 
@@ -27,4 +27,8 @@ class PessoasListView(BaseDynamicListView):
 
 
 class PessoasCreateView(FormComArquivoMixin, BaseDynamicFormView, CreateView):
+    pass
+
+
+class PessoasDeleteView(BaseDeleteView):
     pass

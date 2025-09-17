@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 
-from core.bases.views import BaseDynamicListView, BaseDynamicFormView, SelecaoDynamicListView
+from core.bases.views import BaseDynamicListView, BaseDynamicFormView, SelecaoDynamicListView, BaseDeleteView
 from cadastros.empresas.views import FieldsComEscopoEmpresaFormView
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 from servicos.agendamentos.models import Agendamento
@@ -134,3 +134,7 @@ class FinalizarAgendamentoView(LoginRequiredMixin, AgendamentosSearchMixin, Esco
             messages.error(request, "⚠️ Esse agendamento não pôde ser finalizado.")            
 
         return redirect("home")
+
+
+class AgendamentoDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDeleteView):
+    model = Agendamento

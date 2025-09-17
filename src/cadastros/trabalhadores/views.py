@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
-from core.pessoas.views import PessoasListView, PessoasCreateView
+from core.pessoas.views import PessoasListView, PessoasCreateView, PessoasDeleteView
 from servicos.agendamentos.choices import AGENDAMENTO_STATUS_PENDENTE, AGENDAMENTO_STATUS_FINALIZADO
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.trabalhadores.models import Trabalhador
@@ -44,3 +44,7 @@ class TrabalhadorCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, PessoasC
     def form_invalid(self, form):
         messages.warning(self.request, "⚠️ Não foi possível registrar o Trabalhador!")  
         return super().form_invalid(form)
+
+
+class TrabalhadorDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, PessoasDeleteView):
+    model = Trabalhador

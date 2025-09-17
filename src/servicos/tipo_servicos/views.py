@@ -5,9 +5,9 @@ from django.views.generic import CreateView
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.contrib import messages
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from core.bases.views import BaseDynamicListView, BaseDynamicFormView
+
+from core.bases.views import BaseDynamicListView, BaseDynamicFormView, BaseDeleteView
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from servicos.tipo_servicos.models import TipoServico
 from servicos.tipo_servicos.forms import TipoServicoForm
@@ -56,3 +56,7 @@ class TipoServicoCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDyna
     def form_invalid(self, form):
         messages.warning(self.request, "⚠️ Não foi possível criar o Tipo de serviço!")  
         return super().form_invalid(form)
+
+
+class TipoServicoDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDeleteView):
+    model = TipoServico

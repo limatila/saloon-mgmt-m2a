@@ -1,13 +1,14 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.views.generic import TemplateView
-from django.views.generic import ListView, FormView#, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
+from django.views.generic import TemplateView, ListView, FormView, UpdateView #, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import NoReverseMatch, reverse
+from django.urls import NoReverseMatch, reverse, reverse_lazy
 from django.shortcuts import redirect
+from django.contrib import messages
 
 from core.bases.mixins import DateSearchMixin, HomeQuickInfoMixin, HomeQuickActionMixin, ViewComWorkerStatusMixin
 from cadastros.empresas.models import Empresa
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
+from core.bases.models import BaseModel
 
 
 #* Base views -- que podem devem ser herdadas por views especializadas
@@ -142,6 +143,35 @@ class BaseDynamicFormView(FormView):
         contexto["sidebar"] = True
 
         return contexto
+
+
+class BaseDeleteView(UpdateView):
+    template_name = "partials/components/form-dashboard.html"
+    success_url = reverse_lazy("home")
+
+    def get_success_url(self):
+        model_name = self.model._meta.verbose_name_plural.lower().replace(' ', '_')
+        app_name = self.model.module_label
+        return reverse_lazy(f"{app_name}:{model_name}:list")
+
+    def get_object(self, queryset = None):
+        obj = super().get_object(queryset)
+        if obj.empresa != self.request.empresa:
+            messages.error(self.request, "⚠️ Você não tem permissão para editar este objeto.")
+            redirect(self.request.path)
+        return obj
+
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+
+        if obj.ativo:
+            obj.ativo = False
+            obj.save()
+            messages.success(self.request, f"✅ {self.model._meta.verbose_name.title()} deletado com sucesso!")
+        else:
+            messages.error(self.request, f"⛔ O {self.model._meta.verbose_name.title()} já está deletado!")
+
+        return redirect(self.get_success_url())
 
 
 #* Especializadas: home/ [nome_modulo]/

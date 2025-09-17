@@ -23,9 +23,19 @@ class AgendamentoForm(forms.ModelForm):
         
         super().__init__(*args, **kwargs)     
         
+        fields_models = {
+            "cliente": Cliente,
+            "servico": TipoServico,
+            "trabalhador": Trabalhador
+        }
+
         if empresa:
-            self.fields["cliente"].queryset = Cliente.objects.filter(empresa=empresa)
-            self.fields["trabalhador"].queryset = Trabalhador.objects.filter(empresa=empresa)
-            self.fields["servico"].queryset = TipoServico.objects.filter(empresa=empresa)
+            for field in fields_models.keys():
+                    self.fields[field].queryset = (
+                        fields_models[field].objects.filter(
+                            empresa=empresa,
+                            ativo=True
+                        ).order_by("nome")
+                    )
         else:
             raise Exception(f"Erro no form {self.__class__.__name__}, empresa não está na sessão.")

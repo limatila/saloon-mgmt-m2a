@@ -96,30 +96,32 @@
   grid-template-rows: repeat(2, 1fr);
   gap: 3px;
   overflow: hidden;
-  & a{
+  & form button[type='submit']{
     font-size: 0.8rem;
-    /* height: 2rem; */
+    background-color: white;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    transition: all 100ms ease-in-out !important;
   }
-  & a:hover{
+  & form button[type='submit']:hover{
+    box-shadow: none !important;
     color: white;
   }
 }
 
-td.item-actions a:has(.fa-circle-info) {color: var(--bg-color-mid);}
-td.item-actions a:has(.fa-clock-rotate-left){color: rgb(74, 129, 163);}
-td.item-actions a:has(.fa-rocket), td.item-actions a:has(.fa-pencil){color: rgb(243, 183, 30)}
-td.item-actions a:has(.fa-circle-minus){color: rgb(209, 83, 52);}
+td.item-actions form button[type='submit']:has(.fa-circle-info) {color: var(--bg-color-mid);}
+td.item-actions form button[type='submit']:has(.fa-clock-rotate-left){color: rgb(74, 129, 163);}
+td.item-actions form button[type='submit']:has(.fa-rocket), td.item-actions form button[type='submit']:has(.fa-pencil){color: rgb(243, 183, 30)}
+td.item-actions form button[type='submit']:has(.fa-circle-minus){color: rgb(209, 83, 52);}
 
-td.item-actions a:has(.fa-circle-info):hover{background-color: var(--bg-color-mid);}
-td.item-actions a:has(.fa-clock-rotate-left):hover{background-color: rgb(74, 129, 163);}
-td.item-actions a:has(.fa-rocket):hover,
-td.item-actions a:has(.fa-pencil):hover {background-color: rgb(243, 183, 30);}
-td.item-actions a:has(.fa-circle-minus):hover{background-color: rgb(255, 0, 0);}
+td.item-actions form button[type='submit']:has(.fa-circle-info):hover{background-color: var(--bg-color-mid);}
+td.item-actions form button[type='submit']:has(.fa-clock-rotate-left):hover{background-color: rgb(74, 129, 163);}
+td.item-actions form button[type='submit']:has(.fa-rocket):hover,
+td.item-actions form button[type='submit']:has(.fa-pencil):hover {background-color: rgb(243, 183, 30);}
+td.item-actions form button[type='submit']:has(.fa-circle-minus):hover{background-color: rgb(255, 0, 0);}
 
 /* Quick Info (simple grid in row) */
 .quick-dashboard{

@@ -18,3 +18,7 @@ class TipoServico(BaseServicosModel):
 
     def __str__(self):
         return f"{self.nome} por R${self.preco}"
+    
+    class Meta:
+        verbose_name = "Tipo de Serviço"
+        verbose_name_plural = "Tipos de Serviços"

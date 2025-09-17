@@ -89,7 +89,6 @@ class AtualizarStatusFluxoAgendamentoView(View):
                     break
             else:
                 messages.warning(request, "⚠️ Agendamento já chegou no fim do ciclo.")
-                messages.success(request, f"✅ Status atualizado para {agendamento.get_status_display()}.")
 
         return redirect(self.success_url)
 

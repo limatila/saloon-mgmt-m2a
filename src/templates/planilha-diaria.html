@@ -14,10 +14,14 @@
             </a>
 
             <div class="data-nav-display">
-                <p class="data-referencia-display">{{ data_referencia_display }}</p>
+                <h3 class="data-referencia-display">{{ data_referencia_display }}</h3>
                 <span class="data-faded"><i class="fa-solid fa-calendar-days"></i>  {{ data_referencia }}</span>
                 {% if data_referencia_display == "Hoje" %}
                     <p class="badge badge-today">Hoje</p>
+                {% else %}
+                    <a href="{% url 'servicos:agendamentos:planilha_diaria' 0 %}" class="nav-link-hoje">
+                        <p>Voltar para Hoje</p>
+                    </a>
                 {% endif %}
             </div>
 

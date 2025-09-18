@@ -13,7 +13,7 @@ nav.data-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 15%;
+    height: 20%;
     border: 1px solid #bdbdbd;
     background-color: #ffffff;
     border-radius: 0.8rem;
@@ -32,8 +32,37 @@ nav.data-nav.data-nav-hoje {
 .data-nav-display{
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
-    gap: 0.2rem;
+    height: 90%;
+}
+h3.data-referencia-display{
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+a.nav-link-hoje, .badge{
+    --color-border: #dddddd;
+
+    padding: 0.4rem;
+    font-size: 0.7rem;
+    border: 2px solid var(--color-border);
+    transition: all 100ms ease-in-out;
+    & p {
+        font-size: inherit;
+    }
+}
+a.nav-link-hoje:hover{
+    background-color: var(--bg-color-mid);
+    color: white;
+    font-weight: bolder;
+    border-color: var(--bg-color-mid);
+}
+
+.badge-today{
+    color: white;
+    background-color: var(--bg-color-mid);
+    border: none;
 }
 
 .data-nav-link {
@@ -48,11 +77,6 @@ nav.data-nav.data-nav-hoje {
 }
 .data-nav-link:hover {
     background-color: #dddddd;
-}
-
-
-.data-referencia-display{
-    font-weight: bold;
 }
 
 .planilha-diaria > section {

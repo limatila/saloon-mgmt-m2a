@@ -1,0 +1,63 @@
+<div class="agendamento-card">
+    <div class="card-header">
+        <b class="card-client">
+            <i class="fa-solid fa-circle-user"></i>
+            {{ agendamento.cliente.nome }}
+        </b>
+        <p class="card-time badge badge-{{ agendamento.get_status_display }}">
+            <i class="fa-regular fa-clock"></i>
+            {{ agendamento.get_status_display }}
+        </p>
+    </div>
+    <div class="card-body">
+        <p class="card-time">
+            <i class="fa-solid fa-clock"></i>
+            {{ agendamento.data_agendado|time:"H:i" }}
+
+            {% comment %} TODO adicionar delta tempo para mostragem{% endcomment %}
+        </p>
+        <p class="card-service">
+            <i class="fa-solid fa-scissors"></i>
+            {{ agendamento.servico.nome }}
+        </p>
+        <p class="card-price">
+            <i class="fa-solid fa-dollar-sign"></i>
+            {{ agendamento.servico.preco }}
+        </p>
+
+        <hr>
+        <p class="card-worker">
+            <i class="fa-solid fa-briefcase"></i>
+            {{ agendamento.trabalhador.nome }}
+        </p>
+        <hr>
+    </div>
+    <div class="card-actions">
+        {# Formulário para voltar no status #}
+        <form action="{# {% url "servicos:agendamentos:last-status" agendamento.pk %}#}"  method="post">
+            {% csrf_token %}
+            
+            {% if agendamento.status == 'E' or agendamento.status == 'F' %}
+                <button type="submit" class="btn-action btn-revert"><i class="fa-solid fa-chevron-left"></i></button>
+            {% endif %}
+        </form>
+        {# Formulário para avançar no status #}
+        <form action="{% url 'servicos:agendamentos:next-status' agendamento.pk %}" method="post">
+            {% csrf_token %}
+
+            {% if agendamento.status == 'P' or agendamento.status == 'E' %}
+                <button type="submit" class="btn-action btn-start">Avançar</button>
+            {% endif %}
+        </form>
+        {# Formulário para cancelar #}
+        {% if agendamento.status != 'F' and agendamento.status != 'C' %}
+            <form action="{% url 'servicos:agendamentos:next-status' agendamento.pk %}" method="post">
+                {% csrf_token %}
+
+                <input type="hidden" name="status" value="C">
+                <button type="submit" class="btn-action btn-cancel"><i class="fa-solid fa-circle-xmark"></i></button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+    

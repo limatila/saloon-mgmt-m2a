@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.views import View
 from django.views.generic import CreateView
 from django.db.models import Q
@@ -6,7 +8,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 
-from core.bases.views import BaseDynamicListView, BaseDynamicFormView, SelecaoDynamicListView, BaseDeleteView
+from core.bases.views import BasePageView, BaseDynamicListView, BaseDynamicFormView, SelecaoDynamicListView, BaseDeleteView
 from core.bases.mixins import AtivosQuerysetMixin
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, ContextoEmpresaMixin, FormFieldsComEscopoEmpresaMixin
 from servicos.agendamentos.models import Agendamento
@@ -21,6 +23,70 @@ from servicos.agendamentos.choices import (
 )
 
 
+#Main
+class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView):
+    template_name = "planilha-diaria.html"
+    model = Agendamento
+    data_proxima_nomes_display: dict[int, str] = {
+        -2: "Anteontem",
+        -1: "Ontem",
+        0: "Hoje",
+        1: "Amanhã",
+        2: "Depois de amanhã"
+    }
+
+    def get_data_agendado_offset(self) -> tuple[date, int]:
+        """
+        Calcula a data de referência e a diferença de dias a partir do parâmetro da URL.
+        Retorna uma tupla com (data_referencia, diferenca_dias).
+        """
+        diferenca_dias_str = self.kwargs.get("data_difference", None)
+
+        if diferenca_dias_str is None:
+            diferenca_dias = 0
+        else:
+            try:
+                diferenca_dias = int(diferenca_dias_str)
+            except ValueError:
+                messages.warning(self.request, "⚠️ Parâmetro de data inválido. Mostrando agendamentos de hoje.")
+                redirect(self.request.path)
+
+        data_referencia = date.today() + timedelta(days=diferenca_dias)
+        return data_referencia, diferenca_dias
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+
+        data_referencia, diferenca_dias = self.get_data_agendado_offset()
+
+        agendamentos_do_dia = self.model.objects.filter(
+            empresa=self.request.empresa,
+            data_agendado__date=data_referencia
+        ).select_related(
+            'cliente', 'servico', 'trabalhador'
+        ).order_by("data_agendado")
+
+        contexto["title"] = "Planilha Diária de Agendamentos"
+        contexto["description"] = "Visualize seus agendamentos do dia a dia."
+
+        # dict[list]
+        contexto["agendamentos_fluxo_dict"] = {
+            "pendente": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_PENDENTE),
+            "executando": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_EXECUTANDO),
+            "finalizado": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_FINALIZADO),
+        }
+        contexto["agendamentos_cancelados"] = agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_CANCELADO)
+
+        contexto["data_referencia_display"] = self.data_proxima_nomes_display.get(diferenca_dias, None) or data_referencia.strftime("%d/%m/%Y")
+        contexto["data_referencia"] = data_referencia.strftime("%d/%m/%Y")
+        contexto["dia_anterior_diff"] = diferenca_dias - 1
+        contexto["dia_seguinte_diff"] = diferenca_dias + 1
+        contexto["dia_anterior_diff_display"] = (data_referencia - timedelta(days=1)).strftime("%d/%m")
+        contexto["dia_seguinte_diff_display"] = (data_referencia + timedelta(days=1)).strftime("%d/%m")
+        
+        return contexto
+
+#* CRUD
 class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, AtivosQuerysetMixin, BaseDynamicListView):
     model = Agendamento
 

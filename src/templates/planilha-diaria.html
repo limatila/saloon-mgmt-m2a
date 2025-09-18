@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/dashboards.css' %}">
+    <link rel="stylesheet" href="{% static 'css/planilha/planilha-diaria.css' %}">
+{% endblock head %}
+
+{% block content %}
+    <div class="planilha-diaria dashboard">
+        <nav class="date-nav">
+            <a href="{% url 'servicos:agendamentos:planilha_diaria' dia_anterior_diff %}" class="date-nav-link">
+                <i class="fa-solid fa-chevron-left"></i> {{ dia_anterior_diff_display }}
+            </a>
+
+            <div class="date-nav-display">
+                <p class="data-display"><i class="fa-solid fa-calendar-days"></i>  {{ data_referencia_display }}</p>
+                <span class="data-faded">{{ data_referencia }}</span>
+                {% if data_referencia_display == "Hoje" %}
+                    <p class="badge badge-today">Hoje</p>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'servicos:agendamentos:planilha_diaria' dia_seguinte_diff %}" class="date-nav-link">
+                {{ dia_seguinte_diff_display }} <i class="fa-solid fa-chevron-right"></i> 
+            </a>
+        </nav>
+
+        <main>
+            {% for status, agendamentos in agendamentos_fluxo_dict.items %}
+                <section class="status-column">
+                    <h2 class="status-title status-{{ status }}">{{ status|title }}</h2>
+                    <div class="cards-container">
+                        {% for agendamento in agendamentos %}
+                            {% include "partials/planilhas/card.html" %}
+                        {% empty %}
+                            <div class="cards-empty">
+                                <p>Nenhum agendamento encontrado. Adicione mais 
+                                    <a href="{% url 'servicos:agendamentos:create' %}" class="addition-link">aqui</a>.
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+        </main>
+    </div>
+{% endblock content %}

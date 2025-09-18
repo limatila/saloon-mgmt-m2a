@@ -1,0 +1,147 @@
+/* --- Layout Principal da Planilha Diária (Kanban) --- */
+.planilha-diaria > main {
+    display: grid;
+    /* Cria 4 colunas de largura igual */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto; /* Permite rolagem horizontal se as colunas não couberem */
+    padding: 0.5rem;
+}
+
+/* --- Colunas de Status (Pendente, Em Andamento, etc.) --- */
+.status-column {
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f2f4; /* Cor de fundo suave para as colunas */
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    height: 100%;
+    max-height: 75vh; /* Altura máxima para a coluna */
+}
+
+.status-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: white;
+    border-radius: 0.25rem;
+}
+
+/* Cores específicas para cada título de status */
+.status-P { background-color: #60a5fa; } /* Azul para Pendente */
+.status-E { background-color: #facc15; } /* Amarelo para Em Andamento */
+.status-F { background-color: #4ade80; } /* Verde para Finalizado */
+.status-C { background-color: #f87171; } /* Vermelho para Cancelado */
+
+/* --- Contêiner dos Cartões --- */
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto; /* Adiciona rolagem se os cartões excederem a altura */
+    padding: 0.25rem;
+    flex-grow: 1; /* Faz o contêiner crescer para preencher o espaço da coluna */
+}
+
+/* Mensagem para quando não há agendamentos */
+.cards-empty {
+    padding: 1rem;
+    text-align: center;
+    color: #6b7280;
+}
+.cards-empty .addition-link {
+    color: var(--bg-color-mid);
+    font-weight: bold;
+}
+
+/* --- Estilo do Cartão de Agendamento --- */
+.agendamento-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-left: 5px solid transparent; /* Borda para indicar status */
+    transition: box-shadow 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.agendamento-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.card-header, .card-body, .card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-header {
+    justify-content: space-between;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.card-client {
+    font-weight: bold;
+}
+
+.card-body {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    color: #4b5563;
+}
+
+.card-body hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 0.25rem 0;
+}
+
+/* --- Ações do Cartão (Botões) --- */
+.card-actions {
+    margin-top: 0.5rem;
+    justify-content: space-between;
+}
+
+.card-actions form {
+    flex-grow: 1;
+}
+
+.card-actions .btn-action {
+    width: 100%;
+    padding: 0.5rem;
+    border: none; /* Remove bordas */
+    border-radius: 0.25rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: background-color 200ms ease-in-out, filter 200ms ease-in-out;
+}
+
+.card-actions .btn-action:hover {
+    filter: brightness(1.1);
+}
+
+/* Botão de reverter status: simples */
+.btn-revert {
+    background-color: #9ca3af; /* Cinza */
+}
+
+/* Botão de avançar/iniciar: cor principal */
+.btn-start {
+    background-color: var(--bg-color-mid);
+}
+
+/* Botão de cancelar: avermelhado */
+.btn-cancel {
+    background-color: #ef4444; /* Vermelho */
+}

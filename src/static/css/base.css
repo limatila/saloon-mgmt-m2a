@@ -166,6 +166,7 @@ aside {
   border-radius: 0;
   flex-shrink: 0;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* costumize thiner scroll */

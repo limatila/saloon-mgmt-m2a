@@ -57,6 +57,7 @@ h3 { font-size: 1rem; }
 p, span, td {
   font-size: 0.8rem;
   font-family: inherit;
+  margin: 0;
 }
 
 /* Links -> Button-Style */
@@ -201,6 +202,31 @@ aside .wrapper {
   color: white;
   gap: 0.2rem;
 }
+
+.side-nav-bar .nav-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.side-nav-bar .nav-divider::before,
+.side-nav-bar .nav-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid rgba(203, 203, 203, 0.85);
+}
+
+.side-nav-bar .divider-text {
+  padding: 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(203, 203, 203, 0.85);
+  white-space: nowrap;
+  height: fit-content;
+}
+
 
 .side-nav-bar .nav-header .nav-header-title h2 {
   font-size: 1.5rem;

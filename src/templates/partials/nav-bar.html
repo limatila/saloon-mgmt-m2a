@@ -1,4 +1,3 @@
-{% load static %}
 
 <div class="wrapper">
     <nav class="side-nav-bar">
@@ -11,9 +10,30 @@
             </div>
 
             <hr>
+
+            <a class="home-nav" href="{% url "home" %}"><i class="fa-solid fa-house"></i> Home</a>
         </div>
 
-        <a class="home-nav" href="{% url "home" %}"><i class="fa-solid fa-house"></i> Home</a>
+        {% comment %} * Links de módulos começam aqui. {% endcomment %}
+        
+        <div class="nav-divider">
+            <span class="divider-text">Planilhas</span>
+        </div>
+
+        <section class="nav-section">
+            <div class="submodules-nav">
+                <div class="nav-item">
+                    <a class="nav-link" href="{% url 'servicos:agendamentos:planilha_diaria' 0 %}">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Planilha Diária</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div class="nav-divider">
+            <span class="divider-text">Listagens</span>
+        </div>
 
         <section class="nav-section">
             <a class="module-name" href="{% url 'cadastros:list' %}"><h5>Cadastros</h5></a>
@@ -39,7 +59,6 @@
             </div>
         </section>
 
-
         <section class="nav-section">
             <a class="module-name" href="{% url "servicos:list" %}"><h5> Serviços</h5></a>
             <div class="submodules-nav">
@@ -64,16 +83,20 @@
             </div>
         </section>
 
+        <div class="nav-divider">
+            <span class="divider-text">Relatórios</span>
+        </div>
+
         <section class="nav-section">
-            <a class="module-name" href="{% url "servicos:list" %}"><h5> Relatórios</h5></a>
             <div class="submodules-nav">
                 <div class="nav-item">
                     <a class="nav-link" href="{% url 'relatorios:list' %}">
                         <i class="fa-solid fa-file-invoice"></i>
-                        <span>Lista de Relatórios</span>
+                        <span>Relatórios Administrativos</span>
                     </a>
                 </div>
             </div>
         </section>
+
     </nav>
 </div>

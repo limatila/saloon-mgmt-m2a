@@ -5,6 +5,7 @@ from django.views.generic import CreateView
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 
@@ -127,14 +128,21 @@ class AgendamentoCreateView(FormFieldsComEscopoEmpresaMixin, BaseDynamicFormView
         return super().form_invalid(form)
 
 
-class AtualizarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoEmpresaMixin, View):
+class AtualizarOuAvancarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoEmpresaMixin, View):
     model = Agendamento
     fields = ['status']
     success_url = reverse_lazy('servicos:agendamentos:list')
 
     def get_object(self):
+        obj = get_object_or_404(self.model, pk=self.kwargs["pk"])
+        if obj.empresa != self.request.empresa:
+            raise Http404("Agendamento não encontrado ou você não tem permissão para acessá-lo.")
+
         return get_object_or_404(self.model, pk=self.kwargs["pk"])
     
+    def adicionar_mensagem_sucesso(self, agendamento: Agendamento):
+            messages.success(self.request, f"✅ Agendamento de {agendamento.cliente.nome} atualizado para {agendamento.get_status_display()}.")
+
     def post(self, request, *args, **kwargs):
         agendamento = self.get_object()
 
@@ -148,7 +156,7 @@ class AtualizarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoEmpresaMix
             # Only set if status_choice exists
             agendamento.status = status_choice
             agendamento.save()
-            messages.success(request, f"✅ Status atualizado para {agendamento.get_status_display()}.")
+            self.adicionar_mensagem_sucesso(agendamento)
 
         else:
             # Auto-advance to the next valid status
@@ -165,11 +173,37 @@ class AtualizarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoEmpresaMix
                 next_status = C_TIPO_STATUS_AGENDAMENTO[next_index][0]
                 if next_status != AGENDAMENTO_STATUS_CANCELADO:
                     agendamento.status = next_status
-                    agendamento.save()
-                    messages.success(request, f"✅ Status atualizado para {agendamento.get_status_display()}.")
+                    agendamento.save(update_fields=self.fields)
+                    self.adicionar_mensagem_sucesso(agendamento)
                     break
             else:
                 messages.warning(request, "⚠️ Agendamento já chegou no fim do ciclo.")
+
+        return redirect(self.success_url)
+
+
+class VoltarStatusFluxoAgendamentoView(AtualizarOuAvancarStatusFluxoAgendamentoView):
+    def post(self, request, *args, **kwargs):
+        agendamento = self.get_object()
+
+        current_index = next(
+            (i for i, (choice, _) in enumerate(C_TIPO_STATUS_AGENDAMENTO) if choice == agendamento.status),
+            None
+        )
+
+        if current_index is None:
+            raise Exception(f"Status atual '{agendamento.get_status_display()}' inválido.")
+
+        # Find the previous non-cancelled status
+        for index_anterior in range(current_index - 1, -1, -1):
+            status_anterior = C_TIPO_STATUS_AGENDAMENTO[index_anterior][0]
+            if status_anterior != AGENDAMENTO_STATUS_CANCELADO:
+                agendamento.status = status_anterior
+                agendamento.save(update_fields=self.fields)
+                self.adicionar_mensagem_sucesso(agendamento)
+                break
+        else:
+            messages.warning(request, "⚠️ Agendamento já está no início do ciclo.")
 
         return redirect(self.success_url)
 
@@ -209,7 +243,7 @@ class FinalizarAgendamentoView(LoginRequiredMixin, AgendamentosSearchMixin, Esco
                 id=agendamento_id
             )
             agendamento.status = AGENDAMENTO_STATUS_FINALIZADO
-            agendamento.save()
+            agendamento.save(update_fields=['status'])
             messages.success(request, "✅ Agendamento finalizado com sucesso!")
         except Agendamento.DoesNotExist:
             messages.error(request, "⚠️ Esse agendamento não pôde ser finalizado.")            

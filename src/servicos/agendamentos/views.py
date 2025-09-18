@@ -74,8 +74,8 @@ class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView)
             "pendente": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_PENDENTE),
             "executando": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_EXECUTANDO),
             "finalizado": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_FINALIZADO),
+            "cancelado": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_CANCELADO)
         }
-        contexto["agendamentos_cancelados"] = agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_CANCELADO)
 
         contexto["data_referencia_display"] = self.data_proxima_nomes_display.get(diferenca_dias, None) or data_referencia.strftime("%d/%m/%Y")
         contexto["data_referencia"] = data_referencia.strftime("%d/%m/%Y")

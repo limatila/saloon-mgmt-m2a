@@ -8,20 +8,20 @@
 
 {% block content %}
     <div class="planilha-diaria dashboard">
-        <nav class="date-nav">
-            <a href="{% url 'servicos:agendamentos:planilha_diaria' dia_anterior_diff %}" class="date-nav-link">
+        <nav class="data-nav {% if data_referencia_display == "Hoje" %}data-nav-hoje{% endif %}">
+            <a href="{% url 'servicos:agendamentos:planilha_diaria' dia_anterior_diff %}" class="data-nav-link">
                 <i class="fa-solid fa-chevron-left"></i> {{ dia_anterior_diff_display }}
             </a>
 
-            <div class="date-nav-display">
-                <p class="data-display"><i class="fa-solid fa-calendar-days"></i>  {{ data_referencia_display }}</p>
-                <span class="data-faded">{{ data_referencia }}</span>
+            <div class="data-nav-display">
+                <p class="data-referencia-display">{{ data_referencia_display }}</p>
+                <span class="data-faded"><i class="fa-solid fa-calendar-days"></i>  {{ data_referencia }}</span>
                 {% if data_referencia_display == "Hoje" %}
                     <p class="badge badge-today">Hoje</p>
                 {% endif %}
             </div>
 
-            <a href="{% url 'servicos:agendamentos:planilha_diaria' dia_seguinte_diff %}" class="date-nav-link">
+            <a href="{% url 'servicos:agendamentos:planilha_diaria' dia_seguinte_diff %}" class="data-nav-link">
                 {{ dia_seguinte_diff_display }} <i class="fa-solid fa-chevron-right"></i> 
             </a>
         </nav>

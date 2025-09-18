@@ -1,24 +1,83 @@
-/* --- Layout Principal da Planilha Diária (Kanban) --- */
-.planilha-diaria > main {
+/* Layout Principal da Planilha Diária (Kanban) */
+.planilha-diaria {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+nav.data-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 15%;
+    border: 1px solid #bdbdbd;
+    background-color: #ffffff;
+    border-radius: 0.8rem;
+}
+
+/* custom quando dia de hoje */
+nav.data-nav.data-nav-hoje {
+    background-color: var(--bg-color-light);
+    box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 0.5);
+    color: white;
+    & .data-nav-link:hover{
+        background-color: var(--bg-color-mid)
+    }
+}
+
+.data-nav-display{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.data-nav-link {
+    text-decoration: none;
+    padding: 1rem 0.5rem;
+    margin: 1rem;
+    border-radius: 0.4rem;
+    & * {
+        width: fit-content;
+        height: fit-content;
+    }
+}
+.data-nav-link:hover {
+    background-color: #dddddd;
+}
+
+
+.data-referencia-display{
+    font-weight: bold;
+}
+
+.planilha-diaria > section {
     display: grid;
     /* Cria 4 colunas de largura igual */
     grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    gap: 0.8rem;
     width: 100%;
-    height: 100%;
-    overflow-x: auto; /* Permite rolagem horizontal se as colunas não couberem */
-    padding: 0.5rem;
+    height: 90%;
+    padding: 0.4rem;
+    padding-bottom: 0.3rem;
+    max-height: 70vh;
+    overflow: hidden;
 }
 
-/* --- Colunas de Status (Pendente, Em Andamento, etc.) --- */
-.status-column {
+.status-coluna {
     display: flex;
+    height: 100%;
+    flex: 0;
     flex-direction: column;
-    background-color: #f1f2f4; /* Cor de fundo suave para as colunas */
+    background-color: #e7e8e9;
     border-radius: 0.5rem;
     padding: 0.5rem;
-    height: 100%;
-    max-height: 75vh; /* Altura máxima para a coluna */
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 .status-title {
@@ -33,18 +92,19 @@
 }
 
 /* Cores específicas para cada título de status */
-.status-P { background-color: #60a5fa; } /* Azul para Pendente */
-.status-E { background-color: #facc15; } /* Amarelo para Em Andamento */
-.status-F { background-color: #4ade80; } /* Verde para Finalizado */
-.status-C { background-color: #f87171; } /* Vermelho para Cancelado */
+.status-pendente { background-color: #60a5fa; } /* Azul para Pendente */
+.status-executando { background-color: #facc15; } /* Amarelo para Em Andamento */
+.status-finalizado { background-color: #4ade80; } /* Verde para Finalizado */
+.status-cancelado { background-color: #f87171; } /* Vermelho para Cancelado */
 
-/* --- Contêiner dos Cartões --- */
+/* cards */
 .cards-container {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.6rem;
     overflow-y: auto; /* Adiciona rolagem se os cartões excederem a altura */
     padding: 0.25rem;
+    padding-left: 0;
     flex-grow: 1; /* Faz o contêiner crescer para preencher o espaço da coluna */
 }
 
@@ -52,29 +112,32 @@
 .cards-empty {
     padding: 1rem;
     text-align: center;
+    line-height: 2rem;
     color: #6b7280;
 }
-.cards-empty .addition-link {
-    color: var(--bg-color-mid);
-    font-weight: bold;
-}
 
-/* --- Estilo do Cartão de Agendamento --- */
+/* Estilo do Cartão de Agendamento */
 .agendamento-card {
     background-color: white;
     border-radius: 0.5rem;
+    border-width: 0.3rem;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-    padding: 0.75rem;
+    padding: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    border-left: 5px solid transparent; /* Borda para indicar status */
-    transition: box-shadow 200ms ease-in-out, transform 200ms ease-in-out;
+    border-left: 0.3rem solid #e9dff9;
+    transition: all 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.agendamento-card:last-child {
+    /* Espaço vazio para scroll */
+    margin-bottom: 7rem;
 }
 
 .agendamento-card:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    border-left: 0.3rem solid #c4b5fd;
+    box-shadow: 0 3px 8px -2px rgba(0, 0, 0, 0.2);
 }
 
 .card-header, .card-body, .card-actions {
@@ -90,6 +153,15 @@
 
 .card-client {
     font-weight: bold;
+    font-size: 0.9rem;
+    padding: 0;
+    text-wrap: wrap;
+}
+
+.card-time {
+    font-size: 0.8rem;
+    color: #6b7280;
+    text-wrap: nowrap;
 }
 
 .card-body {
@@ -102,18 +174,28 @@
 .card-body hr {
     width: 100%;
     border: none;
-    border-top: 1px solid #e5e7eb;
-    margin: 0.25rem 0;
+    border-top: 2px solid #e5e7eb;
+    margin: 0.25rem 0 0;
 }
 
-/* --- Ações do Cartão (Botões) --- */
+/* Ações do Cartão (Botões) */
 .card-actions {
-    margin-top: 0.5rem;
+    margin-top: 0.2rem;
+    width: 100%;
     justify-content: space-between;
 }
 
 .card-actions form {
     flex-grow: 1;
+    display: flex;
+}
+
+form.small-action {
+    max-width: calc(100% / 6);
+}
+
+form.medium-action {
+    max-width: calc(100% / 2);
 }
 
 .card-actions .btn-action {
@@ -124,24 +206,36 @@
     font-weight: bold;
     color: white;
     cursor: pointer;
-    transition: background-color 200ms ease-in-out, filter 200ms ease-in-out;
+    transition: all 200ms ease-in-out, filter 250ms ease-in-out;
 }
 
 .card-actions .btn-action:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.08);
 }
 
-/* Botão de reverter status: simples */
 .btn-revert {
     background-color: #9ca3af; /* Cinza */
 }
 
-/* Botão de avançar/iniciar: cor principal */
-.btn-start {
+.btn-next {
     background-color: var(--bg-color-mid);
 }
 
-/* Botão de cancelar: avermelhado */
 .btn-cancel {
     background-color: #ef4444; /* Vermelho */
+}
+
+.btn-voltar-pendente {
+    background-color: #6098f3; /* Azul */
+}
+
+/* movimento em ações */
+.btn-revert:hover, .btn-voltar-pendente:hover{
+    transform: translateX(-2px);
+}
+.btn-next:hover{
+    transform: translateX(2px);
+}
+.btn-cancel:hover{
+    transform: scale(0.95);
 }

@@ -3,7 +3,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/dashboards.css' %}">
-    <link rel="stylesheet" href="{% static 'css/planilha/planilha-diaria.css' %}">
+    <link rel="stylesheet" href="{% static 'css/planilhas/planilha-diaria.css' %}">
 {% endblock head %}
 
 {% block content %}
@@ -26,9 +26,9 @@
             </a>
         </nav>
 
-        <main>
+        <section>
             {% for status, agendamentos in agendamentos_fluxo_dict.items %}
-                <section class="status-column">
+                <section class="status-coluna">
                     <h2 class="status-title status-{{ status }}">{{ status|title }}</h2>
                     <div class="cards-container">
                         {% for agendamento in agendamentos %}
@@ -36,13 +36,13 @@
                         {% empty %}
                             <div class="cards-empty">
                                 <p>Nenhum agendamento encontrado. Adicione mais 
-                                    <a href="{% url 'servicos:agendamentos:create' %}" class="addition-link">aqui</a>.
+                                    <a href="{% url 'servicos:agendamentos:create' %}" class="addition-link">aqui</a>
                                 </p>
                             </div>
                         {% endfor %}
                     </div>
                 </section>
             {% endfor %}
-        </main>
+        </section>
     </div>
 {% endblock content %}

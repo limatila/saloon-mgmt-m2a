@@ -31,7 +31,7 @@
     <div class="card-actions">
         {# Formulário para voltar no status #}
         {% if agendamento.status == 'E' or agendamento.status == 'F' %}
-            <form action="{# {% url "servicos:agendamentos:last-status" agendamento.pk %}#}"  method="post" class="small-action">
+            <form action="{% url 'servicos:agendamentos:last-status' agendamento.pk %}"  method="post" class="small-action">
                 {% csrf_token %}
             
                 <button type="submit" class="btn-action btn-revert"><i class="fa-solid fa-chevron-left"></i></button>

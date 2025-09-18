@@ -21,6 +21,28 @@
 * {
   box-sizing: border-box;
   border-radius: 0.75rem;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  margin-left: 4px;
+  width: 8px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--bg-color-light);
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+  transform: scaleX(1.2);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 html {
@@ -148,27 +170,6 @@ aside {
 
 /* costumize thiner scroll */
 /* For webkit browsers */
-aside::-webkit-scrollbar {
-  margin-left: 4px;
-  width: 8px;
-  background: transparent;
-}
-
-aside::-webkit-scrollbar-thumb {
-  background-color: var(--bg-color-light);
-  border-radius: 8px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-aside::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-  transform: scaleX(1.2);
-}
-
-aside::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
 
 aside .wrapper {
   width: 94%;
@@ -240,7 +241,8 @@ aside .wrapper {
 }
 
 /* Font Awesome Icon spacing */
-.side-nav-bar .fa::before, .fa-solid::before {
+.side-nav-bar .fa::before, 
+.side-nav-bar .fa-solid::before {
   margin-right: 4px;
 }
 

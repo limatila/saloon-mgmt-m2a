@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, register_converter
 
 from core.bases.views import HomePageView
+from core.helpers import NegativeIntUrlConverter
+
+#custom path params
+register_converter(NegativeIntUrlConverter, 'negint')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

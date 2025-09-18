@@ -53,6 +53,20 @@ class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView)
 
         data_referencia = date.today() + timedelta(days=diferenca_dias)
         return data_referencia, diferenca_dias
+    
+    def get_data_referencia_display(self, diferenca_dias: int) -> str:
+        data_display = self.data_proxima_nomes_display.get(diferenca_dias, None)
+
+        if not data_display:
+            if diferenca_dias < 0:
+                data_display = f"Há {abs(diferenca_dias)} dias atrás"
+            elif diferenca_dias > 0:
+                data_display = f"Em {diferenca_dias} dias"
+            else:
+                # não deve chegar aqui, pois 0 está coberto no dict
+                data_display = "Erro desconhecido"
+        
+        return data_display
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
@@ -77,7 +91,7 @@ class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView)
             "cancelado": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_CANCELADO)
         }
 
-        contexto["data_referencia_display"] = self.data_proxima_nomes_display.get(diferenca_dias, None) or data_referencia.strftime("%d/%m/%Y")
+        contexto["data_referencia_display"] = self.get_data_referencia_display(diferenca_dias)
         contexto["data_referencia"] = data_referencia.strftime("%d/%m/%Y")
         contexto["dia_anterior_diff"] = diferenca_dias - 1
         contexto["dia_seguinte_diff"] = diferenca_dias + 1
@@ -102,7 +116,7 @@ class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, A
 class AgendamentoCreateView(FormFieldsComEscopoEmpresaMixin, BaseDynamicFormView, CreateView):
     model = Agendamento
     form_class = AgendamentoForm
-    success_url = reverse_lazy('servicos:agendamentos:list')
+    success_url = reverse_lazy('servicos:agendamentos:list') #! TODO redirecionar para página de origem da navegação
 
     def form_valid(self, form):
         messages.success(self.request, "✅ Agendamento registrado com sucesso!")  

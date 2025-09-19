@@ -11,7 +11,6 @@
     <div class="table-dashboard dashboard">
         {% include "partials/search/search-bar.html" %}
         <table>
-            {% comment %} display small list dashboard of all appointments w/ data {% endcomment %}
             <thead>
                 <tr>
                     {% for field in field_names %}
@@ -29,11 +28,11 @@
                             {% if key != "pk" %}
                                 <td>
                                     {% if key == "imagem" %}
-                                    <img src="{{ value.url }}" alt="{{ dict.nome }}'s photo" title="{{ dict.nome }}">
+                                        <img src="{{ value.url }}" alt="{{ dict.nome }}'s photo" title="{{ dict.nome }}">
                                     {% elif key == "preco" %}
-                                    R$ {{ value }}
+                                        R$ {{ value }}
                                     {% else %}
-                                    {{ value }}
+                                        {{ value }}
                                     {% endif %}
                                 </td>
                             {% endif %}

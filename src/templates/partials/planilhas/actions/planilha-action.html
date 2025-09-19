@@ -1,0 +1,19 @@
+
+<form action="{% url action_url agendamento.pk %}"  method="post" class="{{ size|add:"-action" }}">
+    {% csrf_token %}
+
+    {% include "partials/redirection-input.html" %}
+
+    {% if status_update %}
+        <input type="hidden" name="status" value="{{ status_update }}">
+    {% endif %}
+    <button type="submit" class="btn-action btn-{{ button_class }}">
+        {% if button_text == "Avançar" %}
+            {{ button_text }}
+            <i class="fa-solid fa-{{ fa_icon }}"></i>
+        {% else %}
+            <i class="fa-solid fa-{{ fa_icon }}"></i>
+            {{ button_text }}
+        {% endif %}
+    </button>
+</form>

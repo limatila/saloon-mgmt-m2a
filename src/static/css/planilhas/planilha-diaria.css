@@ -105,20 +105,25 @@ a.nav-link-hoje:hover{
 }
 
 .status-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
-    font-weight: bold;
-    padding: 0.5rem;
+    font-weight: lighter;
+    padding: 0.6rem 0.7rem;
     margin-bottom: 0.5rem;
     text-align: center;
     color: white;
     border-radius: 0.25rem;
+    text-align: left;
 }
 
 /* Cores específicas para cada título de status */
 .status-pendente { background-color: #60a5fa; } /* Azul para Pendente */
-.status-executando { background-color: #facc15; } /* Amarelo para Em Andamento */
-.status-finalizado { background-color: #4ade80; } /* Verde para Finalizado */
+.status-executando { background-color: #ff9706; } /* Amarelo para Em Andamento */
+.status-finalizado { background-color: #42c572; } /* Verde para Finalizado */
 .status-cancelado { background-color: #f87171; } /* Vermelho para Cancelado */
 
 /* cards */

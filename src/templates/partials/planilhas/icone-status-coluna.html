@@ -1,0 +1,9 @@
+{% if status == "pendente" %}
+    <i class="fa-regular fa-clock"></i>
+{% elif status == "executando" %}
+    <i class="fa-solid fa-user-gear"></i>
+{% elif status == "finalizado" %}
+    <i class="fa-solid fa-check"></i>
+{% elif status == "cancelado" %}
+    <i class="fa-solid fa-xmark"></i>
+{% endif %}

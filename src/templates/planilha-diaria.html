@@ -33,7 +33,10 @@
         <section>
             {% for status, agendamentos in agendamentos_fluxo_dict.items %}
                 <section class="status-coluna">
-                    <h2 class="status-title status-{{ status }}">{{ status|title }}</h2>
+                    <h2 class="status-title status-{{ status }}">
+                        {{ status|title }}
+                        {% include "partials/planilhas/icone-status-coluna.html" %}
+                    </h2>
                     <div class="cards-container">
                         {% for agendamento in agendamentos %}
                             {% include "partials/planilhas/card.html" %}

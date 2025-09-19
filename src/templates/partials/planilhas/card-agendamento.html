@@ -1,15 +1,16 @@
-<a class="agendamento-card" href="{% url 'servicos:agendamentos:list' %}"> {% comment %} TODO mudar para Detail do agendamento {% endcomment %}
-    <div class="card-header">
-        <h4 class="card-client">
-            <i class="fa-solid fa-circle-user"></i>
-            {{ agendamento.cliente.nome }}
-        </h4>
-        <p class="card-time">
-            <i class="fa-solid fa-clock"></i>
-            {{ agendamento.data_agendado|time:"H:i" }}
-        </p>
-    </div>
-    <div class="card-body">
+<div class="agendamento-card"> {% comment %} TODO mudar para Detail do agendamento {% endcomment %}
+    <a href="{% url 'servicos:agendamentos:list' %}" class="card-content">    
+        <div class="card-header">
+            <h4 class="card-client">
+                <i class="fa-solid fa-circle-user"></i>
+                {{ agendamento.cliente.nome }}
+            </h4>
+            <p class="card-time">
+                <i class="fa-solid fa-clock"></i>
+                {{ agendamento.data_agendado|time:"H:i" }}
+            </p>
+        </div>
+        <div class="card-body">
             {% comment %} TODO adicionar delta tempo para mostragem{% endcomment %}
         </p>
         <p class="card-service">
@@ -20,14 +21,15 @@
             <i class="fa-solid fa-dollar-sign"></i>
             {{ agendamento.servico.preco }}
         </p>
-
+        
         <hr>
         <p class="card-worker">
             <i class="fa-solid fa-briefcase"></i>
             {{ agendamento.trabalhador.nome }}
         </p>
-        <hr>
     </div>
+    </a>
+    <hr>
     <div class="card-actions">
         {# Formulário para voltar status #}
         {% if agendamento.status == 'E' or agendamento.status == 'F' %}
@@ -49,4 +51,4 @@
             {% include "partials/planilhas/actions/planilha-action.html" with action_url=urls_actions.next_status_url size="medium" status_update="P" button_class="voltar-pendente" fa_icon="rotate-left" button_text="Pendente" %}
         {% endif %}
     </div>
-</a>
+</div>

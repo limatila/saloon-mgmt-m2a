@@ -159,6 +159,17 @@ a.nav-link-hoje:hover{
     transition: all 200ms ease-in-out, transform 200ms ease-in-out;
 }
 
+.agendamento-card .card-content {
+    padding: 0;
+}
+
+.agendamento-card hr {
+    width: 100%;
+    border: none;
+    border-top: 2px solid #e5e7eb;
+    margin: 0.25rem 0 0;
+}
+
 .agendamento-card:last-child {
     /* Espaço vazio para scroll */
     margin-bottom: 7rem;
@@ -198,13 +209,6 @@ a.nav-link-hoje:hover{
     align-items: flex-start;
     font-size: 0.9rem;
     color: #4b5563;
-}
-
-.card-body hr {
-    width: 100%;
-    border: none;
-    border-top: 2px solid #e5e7eb;
-    margin: 0.25rem 0 0;
 }
 
 /* Ações do Cartão (Botões) */

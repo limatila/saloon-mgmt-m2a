@@ -92,6 +92,9 @@ class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView)
             "cancelado": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_CANCELADO)
         }
 
+        for key, value in contexto["agendamentos_fluxo_dict"].items():
+            contexto["agendamentos_fluxo_dict"][key] = value.filter(ativo=True).order_by("data_agendado")
+
         contexto["data_referencia_display"] = self.get_data_referencia_display(diferenca_dias)
         contexto["data_referencia"] = data_referencia.strftime("%d/%m/%Y")
         contexto["dia_anterior_diff"] = diferenca_dias - 1

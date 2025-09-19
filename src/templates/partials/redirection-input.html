@@ -5,11 +5,13 @@
 {% endcomment %}
 
 {% if next %}
-    <input type="hidden" name="next" value="{{ next }}">
+  <input type="hidden" name="next" value="{{ next }}">
 {% elif request.POST.next %}
-    <input type="hidden" name="next" value="{{ request.POST.next }}">
+  <input type="hidden" name="next" value="{{ request.POST.next }}">
 {% elif request.GET.next %}
-    <input type="hidden" name="next" value="{{ request.GET.next }}">
+  <input type="hidden" name="next" value="{{ request.GET.next }}">
+{% else %}
+  <input type="hidden" name="next" value="{{ request.path }}">
 {% endif %}
 
 {% comment %}

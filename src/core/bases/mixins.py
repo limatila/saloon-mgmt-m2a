@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from django.db.models import Q, Sum, OuterRef, Subquery
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from core.helpers import ConversionHelper
 from core.types import QuickActionItem, QuickInfoItem, TableOptionItemModal
@@ -42,6 +43,26 @@ class FormComArquivoMixin:
             "files": self.request.FILES or None
         })
         return kwargs
+
+
+class RedirecionarOrigemMixin:
+    """
+    Mixin para redirecionar para a URL de origem (next) após o sucesso do form / view.
+    """
+    redirect_field_name = "next"
+    success_url = "/" #default, sobescrevível
+
+    def get_success_url(self):
+        next_url = (
+            self.request.GET.get(self.redirect_field_name)
+            or self.request.POST.get(self.redirect_field_name)
+        )
+
+        # valida se é seguro
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
+            return next_url
+        else:
+            return str(self.success_url)
 
 
 class DateSearchMixin:
@@ -398,10 +419,10 @@ class HomeQuickActionMixin(ViewComQuickActionMixin):
     def get_item_actions(self):
         return [
             {
-                'header': 'Novo Agendamento',
-                'description': 'Adicione um registro',
-                'fa_icon': 'calendar',
-                'link_module': reverse_lazy('servicos:agendamentos:create')
+                'header': 'Planilha Diária',
+                'description': 'Verifique os agendamentos do dia',
+                'fa_icon': 'users',
+                'link_module': reverse_lazy('servicos:agendamentos:planilha_diaria', args=[0]),
             },
             {
                 'header': 'Finalizar Agendamento',

@@ -101,6 +101,14 @@
   transition: box-shadow 150ms ease-in-out;
 }
 
+.dashboard form button:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  background-color: initial;
+  color: initial;
+  opacity: 0.6;
+}
+
 .dashboard form button[type="submit"]:hover {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* shadow-outline-blue */
 }

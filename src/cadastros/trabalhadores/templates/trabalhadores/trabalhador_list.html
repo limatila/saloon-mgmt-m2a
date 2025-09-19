@@ -1,8 +1,8 @@
 {% extends "partials/components/dashboards/table-dashboard.html" %}
 
 {% block actions-modal %}
-    <form action="" method="get" style="display:inline;">
-        <button type="submit" title="ver em detalhe">
+    <form action="" method="get" style="display:inline;" title="em desevolvimento!">
+        <button type="submit" title="ver em detalhe" disabled >
             <i class="fa-solid fa-circle-info"></i> Detalhar
         </button>
     </form>
@@ -14,15 +14,15 @@
         </button>
     </form>
 
-    <form action="" method="post" style="display:inline;">
+    <form action="" method="post" style="display:inline;" title="em desevolvimento!">
         {% csrf_token %}
-        <button type="submit" title="editar">
+        <button type="submit" title="editar" disabled>
             <i class="fa-solid fa-pencil"></i> Editar
         </button>
     </form>
 
-    <form action="" method="get" style="display:inline;">
-        <button type="submit" title="histórico">
+    <form action="" method="get" style="display:inline;" title="em desevolvimento!">
+        <button type="submit" title="histórico" disabled>
             <i class="fa-solid fa-clock-rotate-left"></i> Histórico
         </button>
     </form>

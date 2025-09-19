@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from core.pessoas.views import PessoasListView, PessoasCreateView, PessoasDeleteView
-from core.bases.mixins import AtivosQuerysetMixin
+from core.bases.mixins import AtivosQuerysetMixin, RedirecionarOrigemMixin
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.clientes.models import Cliente
 from cadastros.clientes.forms import ClientesForm
@@ -18,7 +18,7 @@ class ClientesListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, AtivosQue
         return contexto
 
 
-class ClienteCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, PessoasCreateView):
+class ClienteCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, RedirecionarOrigemMixin, PessoasCreateView):
     model = Cliente
     form_class = ClientesForm
     success_url = reverse_lazy('cadastros:clientes:list')
@@ -32,6 +32,6 @@ class ClienteCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, PessoasCreat
         return super().form_invalid(form)
 
 
-class ClienteDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, PessoasDeleteView):
+class ClienteDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, RedirecionarOrigemMixin, PessoasDeleteView):
     model = Cliente
     success_url = reverse_lazy('cadastros:clientes:list')

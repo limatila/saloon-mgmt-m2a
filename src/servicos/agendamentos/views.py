@@ -119,10 +119,10 @@ class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, A
         return context
 
 
-class AgendamentoCreateView(FormFieldsComEscopoEmpresaMixin, BaseDynamicFormView, CreateView):
+class AgendamentoCreateView(FormFieldsComEscopoEmpresaMixin, BaseDynamicFormView, RedirecionarOrigemMixin, CreateView):
     model = Agendamento
     form_class = AgendamentoForm
-    success_url = reverse_lazy('servicos:agendamentos:list') #! TODO redirecionar para página de origem da navegação
+    success_url = reverse_lazy('servicos:agendamentos:list')
 
     def form_valid(self, form):
         messages.success(self.request, "✅ Agendamento registrado com sucesso!")  

@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from core.bases.views import BaseDynamicListView, BaseDynamicFormView, BaseDeleteView
-from core.bases.mixins import AtivosQuerysetMixin
+from core.bases.mixins import AtivosQuerysetMixin, RedirecionarOrigemMixin
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from servicos.tipo_servicos.models import TipoServico
 from servicos.tipo_servicos.forms import TipoServicoForm
@@ -45,7 +45,7 @@ class TipoServicoListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Ativos
         return contexto
 
 
-class TipoServicoCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDynamicFormView, CreateView):
+class TipoServicoCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDynamicFormView, RedirecionarOrigemMixin, CreateView):
     model = TipoServico
     form_class = TipoServicoForm
     success_url = reverse_lazy('servicos:tipo_servicos:list')
@@ -59,6 +59,6 @@ class TipoServicoCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, BaseDyna
         return super().form_invalid(form)
 
 
-class TipoServicoDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, BaseDeleteView):
+class TipoServicoDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, RedirecionarOrigemMixin, BaseDeleteView):
     model = TipoServico
     success_url = reverse_lazy('servicos:tipo_servicos:list')

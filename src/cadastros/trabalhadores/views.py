@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from core.pessoas.views import PessoasListView, PessoasCreateView, PessoasDeleteView
-from core.bases.mixins import AtivosQuerysetMixin
+from core.bases.mixins import AtivosQuerysetMixin, RedirecionarOrigemMixin
 from servicos.agendamentos.choices import AGENDAMENTO_STATUS_PENDENTE, AGENDAMENTO_STATUS_FINALIZADO
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, EscopoEmpresaFormMixin
 from cadastros.trabalhadores.models import Trabalhador
@@ -33,7 +33,7 @@ class TrabalhadoresListView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, Ativ
         return contexto
 
 
-class TrabalhadorCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, PessoasCreateView):
+class TrabalhadorCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, RedirecionarOrigemMixin, PessoasCreateView):
     model = Trabalhador
     form_class = TrabalhadoresForm
     success_url = reverse_lazy('cadastros:trabalhadores:list')
@@ -47,6 +47,6 @@ class TrabalhadorCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, PessoasC
         return super().form_invalid(form)
 
 
-class TrabalhadorDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, PessoasDeleteView):
+class TrabalhadorDeleteView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, RedirecionarOrigemMixin, PessoasDeleteView):
     model = Trabalhador
     success_url = reverse_lazy('cadastros:trabalhadores:list')

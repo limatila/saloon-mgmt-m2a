@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 
 from core.bases.views import BasePageView, BaseDynamicListView, BaseDynamicFormView, SelecaoDynamicListView, BaseDeleteView
-from core.bases.mixins import AtivosQuerysetMixin
+from core.bases.mixins import AtivosQuerysetMixin, RedirecionarOrigemMixin
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin, ContextoEmpresaMixin, FormFieldsComEscopoEmpresaMixin
 from servicos.agendamentos.models import Agendamento
 from servicos.agendamentos.forms import AgendamentoForm
@@ -50,7 +50,7 @@ class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView)
                 diferenca_dias = int(diferenca_dias_str)
             except ValueError:
                 messages.warning(self.request, "⚠️ Parâmetro de data inválido. Mostrando agendamentos de hoje.")
-                redirect(self.request.path)
+                diferenca_dias = 0
 
         data_referencia = date.today() + timedelta(days=diferenca_dias)
         return data_referencia, diferenca_dias
@@ -98,12 +98,17 @@ class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView)
         contexto["dia_seguinte_diff"] = diferenca_dias + 1
         contexto["dia_anterior_diff_display"] = (data_referencia - timedelta(days=1)).strftime("%d/%m")
         contexto["dia_seguinte_diff_display"] = (data_referencia + timedelta(days=1)).strftime("%d/%m")
+
+        contexto["urls_actions"] = {
+            "last_status_url": 'servicos:agendamentos:last-status',
+            "next_status_url": 'servicos:agendamentos:next-status',
+        }
         
         return contexto
 
 #* CRUD
 class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, AtivosQuerysetMixin, BaseDynamicListView):
-    model = Agendamento
+    model = Agendamento    
 
     def get_fields_display(self):
         return ['data_agendado', 'status', 'cliente', 'servico', 'trabalhador']
@@ -128,21 +133,28 @@ class AgendamentoCreateView(FormFieldsComEscopoEmpresaMixin, BaseDynamicFormView
         return super().form_invalid(form)
 
 
-class AtualizarOuAvancarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoEmpresaMixin, View):
+class BaseAgendamentoStatusUpdateView(LoginRequiredMixin, ContextoEmpresaMixin, RedirecionarOrigemMixin, View):
     model = Agendamento
     fields = ['status']
     success_url = reverse_lazy('servicos:agendamentos:list')
 
     def get_object(self):
-        obj = get_object_or_404(self.model, pk=self.kwargs["pk"])
+        obj = get_object_or_404(self.model, pk=self.kwargs.get("pk"))
         if obj.empresa != self.request.empresa:
             raise Http404("Agendamento não encontrado ou você não tem permissão para acessá-lo.")
-
-        return get_object_or_404(self.model, pk=self.kwargs["pk"])
+        return obj
     
     def adicionar_mensagem_sucesso(self, agendamento: Agendamento):
             messages.success(self.request, f"✅ Agendamento de {agendamento.cliente.nome} atualizado para {agendamento.get_status_display()}.")
 
+    def post(self, request, *args, **kwargs):
+        """
+        Método post deve ser usado para modificar status de um agendamento.
+        """
+        raise NotImplementedError(f"Subclasses de {self.__class__.__name__} devem implementar o método post().")
+
+
+class AtualizarOuAvancarStatusFluxoAgendamentoView(BaseAgendamentoStatusUpdateView):
     def post(self, request, *args, **kwargs):
         agendamento = self.get_object()
 
@@ -154,10 +166,12 @@ class AtualizarOuAvancarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoE
 
         if status_choice:
             # Only set if status_choice exists
-            agendamento.status = status_choice
-            agendamento.save()
+            agendamento.status = status_choice # type: ignore
+            agendamento.save(update_fields=self.fields)
             self.adicionar_mensagem_sucesso(agendamento)
-
+        elif status_requerido:
+            # Se um status foi requerido mas não é válido
+            messages.error(request, f"Status '{status_requerido}' é inválido.")
         else:
             # Auto-advance to the next valid status
             current_index = next(
@@ -179,10 +193,10 @@ class AtualizarOuAvancarStatusFluxoAgendamentoView(LoginRequiredMixin, ContextoE
             else:
                 messages.warning(request, "⚠️ Agendamento já chegou no fim do ciclo.")
 
-        return redirect(self.success_url)
+        return redirect(self.get_success_url())
 
 
-class VoltarStatusFluxoAgendamentoView(AtualizarOuAvancarStatusFluxoAgendamentoView):
+class VoltarStatusFluxoAgendamentoView(BaseAgendamentoStatusUpdateView):
     def post(self, request, *args, **kwargs):
         agendamento = self.get_object()
 
@@ -203,13 +217,13 @@ class VoltarStatusFluxoAgendamentoView(AtualizarOuAvancarStatusFluxoAgendamentoV
                 self.adicionar_mensagem_sucesso(agendamento)
                 break
         else:
-            messages.warning(request, "⚠️ Agendamento já está no início do ciclo.")
+            messages.warning(request, "⚠️ Agendamento já chegou no início do ciclo.")
 
-        return redirect(self.success_url)
+        return redirect(self.get_success_url())
 
 
 #* Funcionalidades
-class FinalizarAgendamentoView(LoginRequiredMixin, AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, SelecaoDynamicListView):
+class FinalizarAgendamentoView(LoginRequiredMixin, AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, RedirecionarOrigemMixin, SelecaoDynamicListView):
     model = Agendamento
     condicao_agendamento_valido = (
         Q(status=AGENDAMENTO_STATUS_PENDENTE) | Q(status=AGENDAMENTO_STATUS_EXECUTANDO)

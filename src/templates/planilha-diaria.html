@@ -4,6 +4,11 @@
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/dashboards.css' %}">
     <link rel="stylesheet" href="{% static 'css/planilhas/planilha-diaria.css' %}">
+    <style>
+        .addition-link{
+            padding: 0.2rem 0.6rem !important;
+        }
+    </style>
 {% endblock head %}
 
 {% block content %}
@@ -39,16 +44,15 @@
                     </h2>
                     <div class="cards-container">
                         {% for agendamento in agendamentos %}
-                            {% include "partials/planilhas/card.html" %}
-                        {% empty %}
-                            {% if status != "cancelado" %}
-                                <div class="cards-empty">
-                                    <p>Nenhum agendamento encontrado. Adicione mais 
-                                        <a href="{% url 'servicos:agendamentos:create' %}" class="addition-link">aqui</a>
-                                    </p>
-                                </div>
-                            {% endif %}
+                            {% include "partials/planilhas/card-agendamento.html" %}
                         {% endfor %}
+                        {% if status != "cancelado" %}
+                            <div class="cards-empty">
+                                <p>Sem mais agendamentos. <br>
+                                    <a href="{% url 'servicos:agendamentos:create' %}?status={{ status }}&next={{ request.get_full_path|urlencode }}" class="addition-link">Adicione mais</a>
+                                </p>
+                            </div>
+                        {% endif %}
                     </div>
                 </section>
             {% endfor %}

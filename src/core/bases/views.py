@@ -129,7 +129,7 @@ class BaseDynamicListView(DateSearchMixin, ListView):
 
 
 class BaseDynamicFormView(FormView):
-    template_name = "partials/components/form-dashboard.html"
+    template_name = "partials/components/dashboards/form-dashboard.html"
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
@@ -145,8 +145,10 @@ class BaseDynamicFormView(FormView):
         return contexto
 
 
+# class BaseCreateFormView
+
 class BaseDeleteView(UpdateView):
-    template_name = "partials/components/form-dashboard.html"
+    template_name = "partials/components/dashboards/form-dashboard.html"
     fields = ['ativo']
 
     def get_object(self, queryset = None):

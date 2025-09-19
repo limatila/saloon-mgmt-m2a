@@ -4,7 +4,6 @@
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/dashboards.css' %}">
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
-    {% comment %} <link rel="stylesheet" href="{% static 'auth/auth.css' %}"> {% endcomment %}
 {% endblock head %}
 
 {% block content %}
@@ -12,6 +11,8 @@
     <div class="form-dashboard dashboard">
         <form method="post" novalidate {% if form_with_file %}enctype="multipart/form-data"{% endif %} >
             {% csrf_token %}
+
+            {% include "partials/components/redirections/redirection-input.html" %}
 
             <section class="form-section">
                 <h2>Informações de {{ form_name }}</h2>

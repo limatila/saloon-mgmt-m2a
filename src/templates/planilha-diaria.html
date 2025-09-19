@@ -38,11 +38,13 @@
                         {% for agendamento in agendamentos %}
                             {% include "partials/planilhas/card.html" %}
                         {% empty %}
-                            <div class="cards-empty">
-                                <p>Nenhum agendamento encontrado. Adicione mais 
-                                    <a href="{% url 'servicos:agendamentos:create' %}" class="addition-link">aqui</a>
-                                </p>
-                            </div>
+                            {% if status != "cancelado" %}
+                                <div class="cards-empty">
+                                    <p>Nenhum agendamento encontrado. Adicione mais 
+                                        <a href="{% url 'servicos:agendamentos:create' %}" class="addition-link">aqui</a>
+                                    </p>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </section>

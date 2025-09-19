@@ -29,38 +29,24 @@
         <hr>
     </div>
     <div class="card-actions">
-        {# Formulário para voltar no status #}
+        {# Formulário para voltar status #}
         {% if agendamento.status == 'E' or agendamento.status == 'F' %}
-            <form action="{% url 'servicos:agendamentos:last-status' agendamento.pk %}"  method="post" class="small-action">
-                {% csrf_token %}
-            
-                <button type="submit" class="btn-action btn-revert"><i class="fa-solid fa-chevron-left"></i></button>
-            </form>
+            {% include "partials/planilhas/actions/form-action.html" with action=urls.last_status_url size="small" status_update="previous" button_class="revert" fa_icon="chevron-left" %}
         {% endif %}
-        {# Formulário para avançar no status #}
-        {% if agendamento.status == 'P' or agendamento.status == 'E' %}
-            <form action="{% url 'servicos:agendamentos:next-status' agendamento.pk %}" method="post">
-                {% csrf_token %}
 
-                <button type="submit" class="btn-action btn-next"><i class="fa-solid fa-chevron-right"></i> Avançar</button>
-            </form>
+        {# Formulário para avançar status #}
+        {% if agendamento.status == 'P' or agendamento.status == 'E' %}
+            {% include "partials/planilhas/actions/form-action.html" with action=urls.next_status_url button_class="next" fa_icon="chevron-right" button_text="Avançar" %}
         {% endif %}
+
         {# Formulário para cancelar #}
         {% if agendamento.status != 'F' and agendamento.status != 'C' %}
-            <form action="{% url 'servicos:agendamentos:next-status' agendamento.pk %}" method="post" class="small-action">
-                {% csrf_token %}
-
-                <input type="hidden" name="status" value="C">
-                <button type="submit" class="btn-action btn-cancel"><i class="fa-regular fa-circle-xmark"></i></button>
-            </form>
+            {% include "partials/planilhas/actions/form-action.html" with action=urls.next_status_url size="small" button_class="cancel" fa_icon="circle-xmark" %}
         {% endif %}
-        {% if agendamento.status == 'C' %}
-            <form action="{% url 'servicos:agendamentos:next-status' agendamento.pk %}" method="post" class="medium-action">
-                {% csrf_token %}
 
-                <input type="hidden" name="status" value="P">
-                <button type="submit" class="btn-action btn-voltar-pendente"><i class="fa-solid fa-chevron-left"></i> Pendente</button>
-            </form>
+        {# Formulário para voltar para Pendente #}
+        {% if agendamento.status == 'C' %}
+            {% include "partials/planilhas/actions/form-action.html" with action=urls.next_status_url size="medium" status="P" button_class="voltar-pendente" fa_icon="chevron-left" button_text="Pendente" %}
         {% endif %}
     </div>
 </a>

@@ -1,4 +1,5 @@
-<form action="{% url 'servicos:agendamentos:last-status' agendamento.pk %}"  method="post" class="{{ size|add:"-action" }}">
+
+<form action="{% url action_url agendamento.pk %}"  method="post" class="{{ size|add:"-action" }}">
     {% csrf_token %}
 
     {% include "partials/redirection-input.html" %}

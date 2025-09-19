@@ -31,22 +31,22 @@
     <div class="card-actions">
         {# Formulário para voltar status #}
         {% if agendamento.status == 'E' or agendamento.status == 'F' %}
-            {% include "partials/planilhas/actions/form-action.html" with action=urls.last_status_url size="small" status_update="previous" button_class="revert" fa_icon="chevron-left" %}
+            {% include "partials/planilhas/actions/form-action.html" with action_url=urls_actions.last_status_url size="small" status_update="previous" button_class="revert" fa_icon="chevron-left" %}
         {% endif %}
 
         {# Formulário para avançar status #}
         {% if agendamento.status == 'P' or agendamento.status == 'E' %}
-            {% include "partials/planilhas/actions/form-action.html" with action=urls.next_status_url button_class="next" fa_icon="chevron-right" button_text="Avançar" %}
+            {% include "partials/planilhas/actions/form-action.html" with action_url=urls_actions.next_status_url button_class="next" fa_icon="chevron-right" button_text="Avançar" %}
         {% endif %}
 
         {# Formulário para cancelar #}
         {% if agendamento.status != 'F' and agendamento.status != 'C' %}
-            {% include "partials/planilhas/actions/form-action.html" with action=urls.next_status_url size="small" button_class="cancel" fa_icon="circle-xmark" %}
+            {% include "partials/planilhas/actions/form-action.html" with action_url=urls_actions.next_status_url size="small" status_update="C" button_class="cancel" fa_icon="circle-xmark" %}
         {% endif %}
 
         {# Formulário para voltar para Pendente #}
         {% if agendamento.status == 'C' %}
-            {% include "partials/planilhas/actions/form-action.html" with action=urls.next_status_url size="medium" status="P" button_class="voltar-pendente" fa_icon="chevron-left" button_text="Pendente" %}
+            {% include "partials/planilhas/actions/form-action.html" with action_url=urls_actions.next_status_url size="medium" status_update="P" button_class="voltar-pendente" fa_icon="chevron-left" button_text="Pendente" %}
         {% endif %}
     </div>
 </a>

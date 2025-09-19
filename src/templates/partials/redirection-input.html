@@ -1,0 +1,17 @@
+{% comment %}
+  Snippet para preservar a URL de redirecionamento (next)
+  Funciona em GET ou POST.
+  Pode receber 'next' diretamente via include with, ou pega do request.
+{% endcomment %}
+
+{% if next %}
+    <input type="hidden" name="next" value="{{ next }}">
+{% elif request.POST.next %}
+    <input type="hidden" name="next" value="{{ request.POST.next }}">
+{% elif request.GET.next %}
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
+{% endif %}
+
+{% comment %}
+  Se nenhum 'next' for encontrado, nada é adicionado.
+{% endcomment %}

@@ -31,7 +31,7 @@
     alinhando as colunas.
   */
   display: block;
-  width: calc(100% - 17px); /* Subtrai a largura da barra de rolagem */
+  width: calc(100% - 0.5rem); /* Subtrai a largura da barra de rolagem */
 }
 
 /* Tbody (scrollable) */
@@ -78,7 +78,7 @@
   font-size: 1rem;
 }
 .table-dashboard .item-actions{
-  padding: 0.3rem;
+  padding: 0.3rem 0;
   height: 100%;
   width: 100%;
   display: grid;
@@ -409,10 +409,10 @@ a.dash-item:hover{
 
 /* specific inner grid childs colors */
 .modules-dashboard div.module div.inner-grid a:nth-child(1){background-color: var(--bg-color-mid);}
-.modules-dashboard div.module div.inner-grid a:nth-child(2){background-color: rgb(110, 199, 58);}
+.modules-dashboard div.module div.inner-grid a:nth-child(2){background-color: rgb(76, 175, 80);}
 .modules-dashboard div.module div.inner-grid a:nth-child(3){background-color: rgb(243, 183, 30);}
 .modules-dashboard div.module div.inner-grid a:nth-child(4){background-color: rgb(74, 129, 163);}
-
+ 
 /* Responsive */
 @media (min-width: 1024px) {
   div.grid-dashboard div.grid {

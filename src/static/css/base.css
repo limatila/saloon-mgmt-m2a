@@ -86,7 +86,7 @@ p, span, td {
 a {
   text-decoration: none;
   color: inherit;
-  transition: color 125ms, background-color 125ms;
+  transition: all 125ms;
   padding: 0.4rem;
 }
 a.disabled{
@@ -96,6 +96,7 @@ a.disabled{
 a.disabled:hover{
   color: initial;
   background-color: initial;
+  opacity: 60%;
 }
 
 button{

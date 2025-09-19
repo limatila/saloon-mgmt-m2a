@@ -49,7 +49,7 @@
                         {% if status != "cancelado" %}
                             <div class="cards-empty">
                                 <p>Sem mais agendamentos. <br>
-                                    <a href="{% url 'servicos:agendamentos:create' %}?status={{ status }}&next={{ request.get_full_path|urlencode }}" class="addition-link">Adicione mais</a>
+                                    {% include "partials/components/redirections/redirection-link.html" with url_resolve="servicos:agendamentos:create" query="status="|add:status classes="addition-link" link_text="Adicione mais" %}
                                 </p>
                             </div>
                         {% endif %}

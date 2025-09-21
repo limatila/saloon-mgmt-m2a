@@ -74,7 +74,9 @@ class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView)
 
         data_referencia, diferenca_dias = self.get_data_agendado_offset()
 
-        agendamentos_do_dia = self.model.objects.filter(
+        base_agendamentos_do_dia = self.model.objects.filter(
+            ativo=True,
+            cliente__ativo=True,
             empresa=self.request.empresa,
             data_agendado__date=data_referencia
         ).select_related(
@@ -86,14 +88,11 @@ class PlanilhaDiariaView(LoginRequiredMixin, ContextoEmpresaMixin, BasePageView)
 
         # dict[list]
         contexto["agendamentos_fluxo_dict"] = {
-            "pendente": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_PENDENTE),
-            "executando": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_EXECUTANDO),
-            "finalizado": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_FINALIZADO),
-            "cancelado": agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_CANCELADO)
+            "pendente": base_agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_PENDENTE),
+            "executando": base_agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_EXECUTANDO),
+            "finalizado": base_agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_FINALIZADO),
+            "cancelado": base_agendamentos_do_dia.filter(status=AGENDAMENTO_STATUS_CANCELADO)
         }
-
-        for key, value in contexto["agendamentos_fluxo_dict"].items():
-            contexto["agendamentos_fluxo_dict"][key] = value.filter(ativo=True).order_by("data_agendado")
 
         contexto["data_referencia_display"] = self.get_data_referencia_display(diferenca_dias)
         contexto["data_referencia"] = data_referencia.strftime("%d/%m/%Y")
@@ -117,9 +116,10 @@ class AgendamentoListView(AgendamentosSearchMixin, EscopoEmpresaQuerysetMixin, A
         return ['data_agendado', 'status', 'cliente', 'servico', 'trabalhador']
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Lista de Agendamentos"
-        return context
+        contexto = super().get_context_data(**kwargs)
+        contexto["title"] = "Lista de Agendamentos"
+        contexto['data_search_name'] = "Agendado"
+        return contexto
 
 
 class AgendamentoCreateView(FormFieldsComEscopoEmpresaMixin, BaseDynamicFormView, RedirecionarOrigemMixin, CreateView):

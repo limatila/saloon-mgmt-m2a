@@ -6,12 +6,12 @@
             <div class="vertical-divisor"></div>
 
             <div class="input-container">
-                <label for="data_1">Data Inicial</label>
+                <label for="data_1">Data {{ data_search_name|title }} Inicial</label>
                 <input type="datetime-local" name="data_1">
             </div>
             <p>Até</p>
             <div class="input-container">
-                <label for="data_2">Data Final</label>
+                <label for="data_2">Data {{ data_search_name|title }} Final</label>
                 <input type="datetime-local" name="data_2">
             </div>
         {% endif %}

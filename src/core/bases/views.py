@@ -123,6 +123,7 @@ class BaseDynamicListView(DateSearchMixin, ListView):
 
         contexto['description'] = f"Veja a listagem de tudo, verifique e modifique os dados que precisar."
         contexto['search'] = self.request.GET.get("search", "")
+        contexto['data_search_name'] = "de Criação"
         contexto["sidebar"] = True
 
         return contexto

@@ -15,6 +15,7 @@ from servicos.agendamentos.choices import (
     AGENDAMENTO_STATUS_FINALIZADO,
     AGENDAMENTO_STATUS_CANCELADO
 )
+from core.bases.mixins import AtivosQuerysetMixin
 
 
 class BaseRelatorio:
@@ -76,6 +77,8 @@ class BaseRelatorio:
             # Se não encontrar as fontes, usa as fontes padrão do módulo
             self.font_regular = "helv"   # Helvetica Regular
             self.font_bold = "helvB"     # Helvetica Bold
+        
+        self.ativos_filter = AtivosQuerysetMixin().ativos_filter
     
     def desenhar_cabecalho(self) -> int:
         # Passo 3: Definir um ponto de partida para inserir texto.
@@ -165,60 +168,77 @@ class RelatorioAtividadeMensal(BaseRelatorio):
 
     def coletar_dados(self):
         """Busca e calcula os dados necessários no banco de dados."""
-        #Agendamentos
-        agendamentos_finalizados = Agendamento.objects.filter(
+        #* Agendamentos
+        base_agendamentos_mes = Agendamento.objects.filter(
+            self.ativos_filter,
             empresa=self.request.empresa,
-            status=AGENDAMENTO_STATUS_FINALIZADO,
             data_agendado__date__gte=self.data_inicio,
             data_agendado__date__lte=self.data_fim
         )
-        agendamentos_cancelados = Agendamento.objects.filter(
-            empresa=self.request.empresa,
-            status=AGENDAMENTO_STATUS_CANCELADO,
-            data_agendado__date__gte=self.data_inicio,
-            data_agendado__date__lte=self.data_fim
-        )
-                
-        #Agendamentos
+
+        agendamentos_finalizados = base_agendamentos_mes.filter(status=AGENDAMENTO_STATUS_FINALIZADO)
+        agendamentos_cancelados = base_agendamentos_mes.filter(status=AGENDAMENTO_STATUS_CANCELADO)
+
         self.faturamento_total_mes = agendamentos_finalizados.aggregate(total=Sum('servico__preco'))['total'] or 0.0
         self.total_agendamentos_finalizados = agendamentos_finalizados.count()
         self.faturamento_total_cancelado = agendamentos_cancelados.aggregate(total=Sum('servico__preco'))['total'] or 0.0
         self.total_agendamentos_cancelados = agendamentos_cancelados.count()
 
 
-        #Trabalhadores
-        trabalhadores_atividade = (
+        #* Trabalhadores
+        base_trabalhadores_atividade = (
             Trabalhador.objects.filter(
+                self.ativos_filter,
                 empresa=self.request.empresa,
+                agendamentos__ativo=True,
                 agendamentos__data_agendado__date__gte=self.data_inicio,
                 agendamentos__data_agendado__date__lte=self.data_fim
-            )
-            .values("id", "nome")
-            .annotate(
+            ).annotate(
                 total_finalizados=Count(
-                    "agendamentos", filter=Q(agendamentos__status=AGENDAMENTO_STATUS_FINALIZADO)
+                    "agendamentos", 
+                    filter=(
+                        Q(
+                            agendamentos__status=AGENDAMENTO_STATUS_FINALIZADO, 
+                            agendamentos__ativo=True
+                        )
+                    )
                 ),
                 total_cancelados=Count(
-                    "agendamentos", filter=Q(agendamentos__status=AGENDAMENTO_STATUS_CANCELADO)
+                    "agendamentos", 
+                    filter=(
+                        Q(
+                            agendamentos__status=AGENDAMENTO_STATUS_CANCELADO, 
+                            agendamentos__ativo=True
+                        )
+                    )
                 ),
                 valor_arrecadado_total=Sum(
                     "agendamentos__servico__preco",
-                    filter=Q(agendamentos__status=AGENDAMENTO_STATUS_FINALIZADO)
-                ),
+                    filter=(
+                        Q(
+                            agendamentos__status=AGENDAMENTO_STATUS_FINALIZADO, 
+                            agendamentos__ativo=True
+                        )
+                    )
+                )
             )
         )
 
-        self.trabalhadores_mais_agendamentos_finalizados = sorted(
-            trabalhadores_atividade, key=lambda x: x["total_finalizados"], reverse=True
-        )[:3]
-
-        self.trabalhadores_mais_agendamentos_cancelados = sorted(
-            trabalhadores_atividade, key=lambda x: x["total_cancelados"], reverse=True
-        )[:3]
-
-        self.trabalhadores_maior_faturamento_total = sorted(
-            trabalhadores_atividade, key=lambda x: x["valor_arrecadado_total"] or 0, reverse=True
-        )[:3]
+        self.trabalhadores_mais_agendamentos_finalizados = (
+            base_trabalhadores_atividade
+            .values("id", "nome")
+            .order_by('-total_finalizados')[:3]
+        )
+        self.trabalhadores_mais_agendamentos_total = (
+            base_trabalhadores_atividade
+            .values("id", "nome")
+            .order_by('-total_cancelados')[:3]
+        )
+        self.trabalhadores_maior_faturamento_total = (
+            base_trabalhadores_atividade
+            .values("id", "nome")
+            .order_by('-valor_arrecadado_total')[:3]
+        )
 
 
     def desenhar_relatorio_agendamentos(self, y_inicial: int) -> int:
@@ -231,7 +251,7 @@ class RelatorioAtividadeMensal(BaseRelatorio):
         ponto.y += 25
         self.page.insert_text(ponto, f"Faturamento Total: {ConversionHelper.formatar_moeda(self.faturamento_total_mes)}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         ponto.y += 17
-        self.page.insert_text(ponto, f"Total de Atendimentos Realizados/Finalizados: {self.total_agendamentos_finalizados}", fontsize=self.font_sizes['small'], fontname=self.font_regular) # type: ignore
+        self.page.insert_text(ponto, f"Total de Atendimentos Realizados/Finalizados: {self.total_agendamentos_finalizados}", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 25
         self.page.insert_text(ponto, f"Faturamento Total Perdido: {ConversionHelper.formatar_moeda(self.faturamento_total_cancelado)}", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
@@ -259,7 +279,7 @@ class RelatorioAtividadeMensal(BaseRelatorio):
         ponto.y += 30
         i: int = 0
         self.page.insert_text(ponto, f"Top 3 funcionários com mais atendimentos cancelados", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
-        for item in self.trabalhadores_mais_agendamentos_cancelados:
+        for item in self.trabalhadores_mais_agendamentos_total:
             i += 1
             ponto.y += 20
             ponto_indentado = pymupdf.Point(ponto.x + 20, ponto.y)
@@ -288,18 +308,16 @@ class RelatorioClientesMensal(BaseRelatorio):
 
     def coletar_dados(self):
         #* Clientes Atuais
-        self.total_clientes_novos = (
-            Cliente.objects.filter(
-                Q(
-                    data_criado__gte=self.data_inicio,
-                    data_criado__lte=self.data_fim
-                )
-            ).count()
-        )
+        base_clientes = Cliente.objects.filter(self.ativos_filter, empresa=self.request.empresa)
 
-        clientes_atividades = (
-            Cliente.objects.filter(
-                empresa=self.request.empresa,
+        self.total_clientes_novos = base_clientes.filter(
+            data_criado__gte=self.data_inicio,
+            data_criado__lte=self.data_fim
+        ).count()
+
+        base_clientes_atividade = (
+            base_clientes.filter(
+                agendamentos__ativo=True,
                 agendamentos__data_agendado__gte=self.data_inicio,
                 agendamentos__data_agendado__lte=self.data_fim
             )
@@ -307,62 +325,75 @@ class RelatorioClientesMensal(BaseRelatorio):
             .annotate(
                 total_marcados=Count("agendamentos"),
                 total_finalizados=Count(
-                    "agendamentos", filter=Q(agendamentos__status=AGENDAMENTO_STATUS_FINALIZADO)
+                    "agendamentos", 
+                    filter=(
+                        Q(
+                            agendamentos__status=AGENDAMENTO_STATUS_FINALIZADO, 
+                            agendamentos__ativo=True
+                        )
+                    )
                 ),
                 total_cancelados=Count(
-                    "agendamentos", filter=Q(agendamentos__status=AGENDAMENTO_STATUS_CANCELADO)
+                    "agendamentos", 
+                    filter=(
+                        Q(
+                            agendamentos__status=AGENDAMENTO_STATUS_CANCELADO, 
+                            agendamentos__ativo=True
+                        )
+                    )
                 ),
             )
         )
 
         #quais clientes com mais atendimentos marcados
-        self.clientes_mais_agendamentos_marcados = sorted(
-            clientes_atividades, key=lambda x: x["total_marcados"], reverse=True
-        )[:3]
-
+        self.clientes_mais_agendamentos_marcados = (
+            base_clientes_atividade
+            .order_by('-total_marcados')[:3]
+        )
         #quais clientes com mais atendimentos finalizados
-        self.clientes_mais_agendamentos_finalizados = sorted(
-            clientes_atividades, key=lambda x: x["total_finalizados"], reverse=True
-        )[:3]
-
+        self.clientes_mais_agendamentos_finalizados = (
+            base_clientes_atividade
+            .order_by('-total_finalizados')[:3]
+        )
         #quais clientes com mais atendimentos cancelados
-        self.clientes_mais_agendamentos_cancelados = sorted(
-            clientes_atividades, key=lambda x: x["total_cancelados"], reverse=True
-        )[:3]
+        self.clientes_mais_agendamentos_cancelados = (
+            base_clientes_atividade
+            .order_by('-total_cancelados')[:3]
+        )
 
         #Cliente que gerou maior faturamento
         self.cliente_maior_faturamento_total = (
-            Cliente.objects.filter(empresa=self.request.empresa)
+            base_clientes
             .annotate(faturamento_total=Sum("agendamentos__servico__preco"))
             .order_by("-faturamento_total")
             .first()
         )
-
+        if self.cliente_maior_faturamento_total and self.cliente_maior_faturamento_total.faturamento_total <= 0:
+            self.cliente_maior_faturamento_total = None
 
         #* Clientes recorrentes
-        self.total_clientes_unicos = Cliente.objects.filter(
-            empresa=self.request.empresa,
+        base_agendamentos_clientes_mes = base_clientes.filter(
+            agendamentos__ativo=True,
             agendamentos__data_agendado__gte=self.data_inicio,
             agendamentos__data_agendado__lte=self.data_fim,
-        ).distinct().count() # type: ignore
+        )
+        self.total_clientes_unicos = base_agendamentos_clientes_mes.distinct().count()
 
         self.clientes_recorrentes = (
-            Cliente.objects.filter(
-                empresa=self.request.empresa,
-                agendamentos__data_agendado__gte=self.data_inicio,
-                agendamentos__data_agendado__lte=self.data_fim
-            )
+            base_agendamentos_clientes_mes
             .values("id", "nome", "telefone")
             .annotate(
                 total_agendamentos=Count("agendamentos", 
-                    filter=Q(agendamentos__status__in=[
-                        AGENDAMENTO_STATUS_PENDENTE,
-                        AGENDAMENTO_STATUS_EXECUTANDO, 
-                        AGENDAMENTO_STATUS_FINALIZADO
-                    ])
+                    filter=(
+                        Q(agendamentos__status__in=[
+                            AGENDAMENTO_STATUS_PENDENTE,
+                            AGENDAMENTO_STATUS_EXECUTANDO, 
+                            AGENDAMENTO_STATUS_FINALIZADO
+                        ], agendamentos__ativo=True)
+                    )
                 )
             ).filter(total_agendamentos__gt=1)
-            .order_by('-total_agendamentos') # type: ignore
+            .order_by('-total_agendamentos')
         )
 
         # nn%
@@ -372,23 +403,25 @@ class RelatorioClientesMensal(BaseRelatorio):
             calculo_recorrencia = 0
         self.porcentagem_recorrencia = f"{calculo_recorrencia:.2f}%"
 
-        self.top_clientes_recorrentes = sorted(
-            self.clientes_recorrentes, key=lambda x: x["total_agendamentos"], reverse=True
-        )[:3]
+        self.top_clientes_recorrentes = (
+            self.clientes_recorrentes.order_by('-total_agendamentos')[:3]
+        )
 
         self.top_clientes_antigos_recorrentes = (
-            Cliente.objects.filter(
-                empresa=self.request.empresa,
+            base_clientes.filter(
+                agendamentos__ativo=True,
                 data_criado__lt=self.data_inicio,
                 agendamentos__data_agendado__gte=(self.data_inicio - timedelta(days=30 * 6)), # Últimos 6 meses
                 agendamentos__data_agendado__lte=self.data_fim # Até o final do mês atual
             ).annotate(
                 total_agendamentos=Count("agendamentos", 
-                    filter=Q(agendamentos__status__in=[
-                        AGENDAMENTO_STATUS_PENDENTE,
-                        AGENDAMENTO_STATUS_EXECUTANDO, 
-                        AGENDAMENTO_STATUS_FINALIZADO
-                    ]) # Contagem de agendamentos não cancelados
+                    filter=(
+                        Q(agendamentos__status__in=[
+                            AGENDAMENTO_STATUS_PENDENTE,
+                            AGENDAMENTO_STATUS_EXECUTANDO, 
+                            AGENDAMENTO_STATUS_FINALIZADO
+                        ], agendamentos__ativo=True)
+                    )
                 )
             ).filter(total_agendamentos__gt=1) # Clientes com mais de 1 agendamento no período
             .order_by('-total_agendamentos')
@@ -398,13 +431,12 @@ class RelatorioClientesMensal(BaseRelatorio):
         #* Clientes inativos
         # Clientes que não tiveram agendamentos nos últimos 3 meses
         clientes_inativos = (
-            Cliente.objects.filter(
-                empresa=self.request.empresa
-            )
+            base_clientes
             .annotate(
                 total_agendamentos_periodo=Count(
                     "agendamentos",
                     filter=Q(
+                        agendamentos__ativo=True,
                         agendamentos__data_agendado__gte=(self.data_inicio - timedelta(days=30 * 6)), # Últimos 6 meses
                         agendamentos__data_agendado__lte=self.data_fim, # Até o final do mês atual
                     ),
@@ -420,12 +452,14 @@ class RelatorioClientesMensal(BaseRelatorio):
         self.clientes_inativos_antigos_recorrentes = (
             clientes_inativos.annotate(
                 total_agendamentos_geral=Count("agendamentos", 
-                    filter=Q(agendamentos__status__in=[
-                        AGENDAMENTO_STATUS_PENDENTE,
-                        AGENDAMENTO_STATUS_EXECUTANDO,
-                        AGENDAMENTO_STATUS_FINALIZADO
-                    ])
-                ) # Contagem de agendamentos não cancelados
+                    filter=(
+                        Q(agendamentos__status__in=[
+                            AGENDAMENTO_STATUS_PENDENTE,
+                            AGENDAMENTO_STATUS_EXECUTANDO, 
+                            AGENDAMENTO_STATUS_FINALIZADO
+                        ], agendamentos__ativo=True)
+                    )
+                )
             ).filter(
                 total_agendamentos_geral__gt=1
             ).order_by("-data_criado")
@@ -437,7 +471,7 @@ class RelatorioClientesMensal(BaseRelatorio):
         self.page.insert_text(ponto, "Resumo de Clientes Atuais", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.y += 25
-        self.page.insert_text(ponto, "Total de Clientes Novos:", fontsize=self.font_sizes['sub-title'], fontname=self.font_regular) # type: ignore
+        self.page.insert_text(ponto, "Total de Clientes Novos:", fontsize=self.font_sizes['sub-title'], fontname=self.font_regular)
         # Ajuste de posicionamento para o valor do total de clientes novos
         self.page.insert_text(pymupdf.Point(ponto.x + 136, ponto.y), str(self.total_clientes_novos), fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
 
@@ -474,8 +508,12 @@ class RelatorioClientesMensal(BaseRelatorio):
         self.page.insert_text(ponto, f"Cliente que gerou maior faturamento total no mês", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         ponto.y += 20
         ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
-        self.page.insert_text(ponto_indentado, f"{self.cliente_maior_faturamento_total.nome}: {ConversionHelper.formatar_moeda(self.cliente_maior_faturamento_total.faturamento_total)} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
-        ponto.y += 15 # type: ignore
+        if not self.cliente_maior_faturamento_total:
+            self.page.insert_text(ponto_indentado, "Nenhum cliente com faturamento encontrado.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+            return ponto.y
+        else: 
+            self.page.insert_text(ponto_indentado, f"{self.cliente_maior_faturamento_total.nome}: {ConversionHelper.formatar_moeda(self.cliente_maior_faturamento_total.faturamento_total)} agendamentos.", fontsize=self.font_sizes['small'], fontname=self.font_regular)
+        ponto.y += 15
         ponto_indentado = pymupdf.Point(ponto.x + 17, ponto.y)
         self.page.insert_text(ponto_indentado, f"(telefone: {self.cliente_maior_faturamento_total.telefone})", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
@@ -486,12 +524,12 @@ class RelatorioClientesMensal(BaseRelatorio):
         self.page.insert_text(ponto, "Resumo de Clientes Recorrentes", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.y += 25
-        self.page.insert_text(ponto, "Total de Clientes Únicos:", fontsize=self.font_sizes['small'], fontname=self.font_regular) # type: ignore
+        self.page.insert_text(ponto, "Total de Clientes Únicos:", fontsize=self.font_sizes['small'], fontname=self.font_regular)
         # Ajuste de posicionamento para o valor do total de clientes únicos
         self.page.insert_text(pymupdf.Point(ponto.x + 114, ponto.y), str(self.total_clientes_unicos), fontsize=self.font_sizes['small'], fontname=self.font_bold)
         
         ponto.y += 15
-        self.page.insert_text(ponto, "Total de Clientes Recorrentes:", fontsize=self.font_sizes['small'], fontname=self.font_regular) # type: ignore
+        self.page.insert_text(ponto, "Total de Clientes Recorrentes:", fontsize=self.font_sizes['small'], fontname=self.font_regular)
         # Ajuste de posicionamento para o valor do total de clientes recorrentes
         self.page.insert_text(pymupdf.Point(ponto.x + 139, ponto.y), str(self.clientes_recorrentes.count()), fontsize=self.font_sizes['small'], fontname=self.font_bold)
         
@@ -512,7 +550,7 @@ class RelatorioClientesMensal(BaseRelatorio):
         self.page.insert_text(ponto, f"Top 3 clientes recorrentes antigos (nos últimos 6 meses)", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
 
         if len(self.top_clientes_antigos_recorrentes) == 0:
-            ponto.y += 20 # type: ignore
+            ponto.y += 20
             self.page.insert_text(pymupdf.Point(ponto.x + 15, ponto.y), "Nenhum recorrente antigo encontrado.", fontsize=self.font_sizes['small'])
         else:
             for item in self.top_clientes_antigos_recorrentes:
@@ -528,14 +566,14 @@ class RelatorioClientesMensal(BaseRelatorio):
         self.page.insert_text(ponto, "Resumo de Clientes Inativos", fontsize=self.font_sizes['title'], fontname=self.font_bold)
 
         ponto.y += 25
-        self.page.insert_text(ponto, f"Total de Clientes Inativos (nos últimos 6 meses): {self.total_clientes_inativos}", fontsize=self.font_sizes['small'], fontname=self.font_regular) # type: ignore
+        self.page.insert_text(ponto, f"Total de Clientes Inativos (nos últimos 6 meses): {self.total_clientes_inativos}", fontsize=self.font_sizes['small'], fontname=self.font_regular)
 
         ponto.y += 20
         i: int = 0
         self.page.insert_text(ponto, f"Top 3 recorrentes atualmente inativos (nos últimos 6 meses)", fontsize=self.font_sizes['sub-title'], fontname=self.font_bold)
         
         if len(self.clientes_inativos_antigos_recorrentes) == 0: # Alterado para a lista correta de inativos recorrentes
-            ponto.y += 20 # type: ignore
+            ponto.y += 20
             self.page.insert_text(pymupdf.Point(ponto.x + 15, ponto.y), "Nenhum recorrente inativo encontrado.", fontsize=self.font_sizes['small'])
         else:
             for item in self.clientes_inativos_antigos_recorrentes: # Limitar aos top 3

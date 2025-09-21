@@ -1,14 +1,13 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import TemplateView, ListView, FormView, UpdateView #, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import NoReverseMatch, reverse, reverse_lazy
+from django.urls import NoReverseMatch, reverse
 from django.shortcuts import redirect
 from django.contrib import messages
 
 from core.bases.mixins import DateSearchMixin, HomeQuickInfoMixin, HomeQuickActionMixin, ViewComWorkerStatusMixin
 from cadastros.empresas.models import Empresa
 from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
-from core.bases.models import BaseModel
 
 
 #* Base views -- que podem devem ser herdadas por views especializadas

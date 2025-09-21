@@ -9,7 +9,9 @@ from django.urls import reverse_lazy
 
 from core.auth.forms import UserForm, LogoutForm
 
+
 GLOBAL_AUTH_TEMPLATE = "partials/components/dashboards/form-dashboard.html"
+
 
 #* Entrada
 class LoginView(FormView):

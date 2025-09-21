@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from core.bases.views import DynamicSubmodulesView
 
 

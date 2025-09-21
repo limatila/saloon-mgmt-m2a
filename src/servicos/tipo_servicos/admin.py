@@ -3,6 +3,7 @@ from django.contrib import admin
 from cadastros.empresas.admin import BaseAssociadoEmpresaAdmin
 from servicos.tipo_servicos.models import TipoServico
 
+
 @admin.register(TipoServico)
 class TipoServicoAdmin(BaseAssociadoEmpresaAdmin):
     search_fields = "nome", 

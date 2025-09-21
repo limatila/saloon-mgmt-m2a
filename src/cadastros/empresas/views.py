@@ -1,13 +1,9 @@
-from django.db.models import Q, ForeignKey, Model
-from django.db.models import ForeignKey, Model
+from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms import ModelForm
 from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponseServerError
 from django.contrib import messages
 
-from core.bases.views import SelecaoDynamicListView, BaseDynamicFormView
-from cadastros.empresas.mixins import EscopoEmpresaFormMixin
+from core.bases.views import SelecaoDynamicListView
 from cadastros.empresas.models import Empresa
 from cadastros.empresas.mixins import EmpresaDoUserQuerysetMixin
 

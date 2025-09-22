@@ -19,6 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+PROJECT_TITLE = "VittaAgenda"
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-fyqh3m%#kwk2drh614o!rgxs_g4o7vz-rgznry@w(lt8lbnusm'
 

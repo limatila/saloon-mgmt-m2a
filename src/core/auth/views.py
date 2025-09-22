@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.forms import Form, ValidationError
+from django.conf import settings
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib import messages
 
@@ -21,8 +22,8 @@ class LoginView(FormView):
     redirect_field_name = "next"
 
     def form_valid(self, form: Form):
-        usuario = form.cleaned_data['username']
-        senha = form.cleaned_data['password']
+        usuario = form.cleaned_data['usuario']
+        senha = form.cleaned_data['senha']
 
         user = authenticate(self.request, username=usuario, password=senha)
 
@@ -48,13 +49,13 @@ class LoginView(FormView):
             messages.warning(self.request, "⛔ Login falhou!")
             form.add_error(None, ValidationError("Usuário e/ou Senha são inválidos."))
             return self.form_invalid(form)
-        
+
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
+        contexto["project_title"] = settings.PROJECT_TITLE
         contexto["title"] = "Logar na Conta"
         contexto["description"] = "Entre na sua conta autorizada."
         contexto["form_name"] = "Login"
-        contexto["sidebar"] = False
         return contexto
 
 
@@ -63,8 +64,8 @@ class SignUpView(LoginView):
     success_url = reverse_lazy('home')
 
     def form_valid(self, form: Form):   #TODO não ativar, disponibilizar para a staff verificar
-        usuario: str = form.cleaned_data['username']
-        senha: str = form.cleaned_data['password']
+        usuario: str = form.cleaned_data['usuario']
+        senha: str = form.cleaned_data['senha']
 
         try:
             User = get_user_model()
@@ -101,7 +102,7 @@ class LogoutView(FormView, TemplateView):
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form: Form):
-        senha = form.cleaned_data['password']
+        senha = form.cleaned_data['senha']
         user = self.request.user
 
         if not user.check_password(senha):
@@ -122,6 +123,7 @@ class LogoutView(FormView, TemplateView):
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
+        contexto["project_title"] = settings.PROJECT_TITLE
         contexto["title"] = "Sair da conta"
         contexto["description"] = "Saia com sua senha. Depois poderá logar com outra conta."
         contexto["form_name"] = "Logout"

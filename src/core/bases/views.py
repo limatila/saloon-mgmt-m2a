@@ -2,6 +2,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import TemplateView, ListView, FormView, UpdateView #, CreateView, UpdateView #? DeleteView não recomendado, apenas inativar o registro.
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import NoReverseMatch, reverse
+from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -14,6 +15,7 @@ from cadastros.empresas.mixins import EscopoEmpresaQuerysetMixin
 class BasePageView(TemplateView):
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
+        contexto["project_title"] = settings.PROJECT_TITLE
         contexto["title"] = "Base"
         contexto["description"] = "base template"
         contexto["sidebar"] = True
@@ -120,6 +122,7 @@ class BaseDynamicListView(DateSearchMixin, ListView):
         if not self.model is Empresa:
             contexto['app_name'], contexto['url_submodule_create'] = self.get_create_form_app_name_and_url()
 
+        contexto["project_title"] = settings.PROJECT_TITLE
         contexto['description'] = f"Veja a listagem de tudo, verifique e modifique os dados que precisar."
         contexto['search'] = self.request.GET.get("search", "")
         contexto['data_search_name'] = "de Criação"
@@ -177,7 +180,7 @@ class HomePageView(LoginRequiredMixin, EscopoEmpresaQuerysetMixin, HomeQuickInfo
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
-        contexto["title"] = "Home"
+        contexto["title"] = "Ínicio"
         contexto["description"] = f"Bem vindo, {self.request.user.first_name or 'usuário'}! Aqui está o resumo de <b>{self.request.empresa.nome_fantasia}</b>."
         return contexto
 

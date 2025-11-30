@@ -39,11 +39,11 @@ class TrabalhadorCreateView(LoginRequiredMixin, EscopoEmpresaFormMixin, Redireci
     success_url = reverse_lazy('cadastros:trabalhadores:list')
 
     def form_valid(self, form):
-        messages.success(self.request, "✅ Trabalhador criado com sucesso!")  
+        messages.success(self.request, "✅ Trabalhador criado com sucesso!")
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.warning(self.request, "⚠️ Não foi possível registrar o Trabalhador!")  
+        messages.warning(self.request, "⚠️ Não foi possível registrar o Trabalhador!")
         return super().form_invalid(form)
 
 

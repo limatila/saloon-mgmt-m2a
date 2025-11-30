@@ -20,43 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 PROJECT_TITLE = "VittaAgenda"
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-fyqh3m%#kwk2drh614o!rgxs_g4o7vz-rgznry@w(lt8lbnusm'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ROOT_URLCONF = 'project.urls'
+WSGI_APPLICATION = 'project.wsgi.application'
 
+SECRET_KEY = 'abc'
 
-# Application definition
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    #modules
-    'core',
-    'cadastros',
-    'servicos',
-    'relatorios',
-
-    #submodules
-    'core.bases',
-    'core.pessoas',
-
-    'cadastros.clientes',
-    'cadastros.trabalhadores',
-    'cadastros.empresas',
-    
-    'servicos.tipo_servicos',
-    'servicos.agendamentos'
-]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0'] #! change in production
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,50 +39,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
-
-ROOT_URLCONF = 'project.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            #base
-            BASE_DIR / 'templates',
-
-            #Módulos
-            BASE_DIR / 'cadastros' / 'templates',
-            BASE_DIR / 'servicos' / 'templates',
-            BASE_DIR / 'relatorios' / 'templates',
-
-
-            #submodulos
-            BASE_DIR / 'core' / 'bases' / 'templates',
-            BASE_DIR / 'core' / 'pessoas' / 'templates',
-            BASE_DIR / 'core' / 'auth' / 'templates',
-
-            BASE_DIR / 'cadastros' / 'clientes' / 'templates',
-            BASE_DIR / 'cadastros' / 'empresas' / 'templates',
-            BASE_DIR / 'cadastros' / 'trabalhadores' / 'templates',
-
-            BASE_DIR / 'servicos' / 'agendamentos' / 'templates',
-            BASE_DIR / 'cadastros' / 'tipo_servicos' / 'templates'
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
-WSGI_APPLICATION = 'project.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -131,10 +58,8 @@ STORAGES = {
     },
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -174,6 +99,75 @@ USE_TZ = True
 
 TIME_ZONE = 'America/Sao_Paulo'
 
+
+############################## APPS REGISTRY ################################
+DJANGO_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+]
+
+CORE_APPS = [
+    'core',
+]
+
+SUB_CORE_APPS = [
+    'core.bases',
+    'core.pessoas',
+    'core.auth'
+]
+
+MODULE_APPS = [
+    'cadastros',
+    'servicos',
+    'relatorios',
+]
+
+CADASTROS_APPS = [
+    'cadastros.clientes',
+    'cadastros.empresas',
+    'cadastros.trabalhadores',
+]
+
+SERVICOS_APPS = [
+    'servicos.agendamentos',
+    'servicos.tipo_servicos',
+]
+
+INSTALLED_APPS = [
+    *DJANGO_APPS,
+    *CORE_APPS,
+    *SUB_CORE_APPS,
+    *MODULE_APPS,
+    *CADASTROS_APPS,
+    *SERVICOS_APPS,
+]
+
+PATHS_TO_APPS = [BASE_DIR / app.replace('.', '/') for app in INSTALLED_APPS]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            BASE_DIR / 'templates',
+            *[app_path / 'templates' for app_path in PATHS_TO_APPS]
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
@@ -183,22 +177,12 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 
-    #Módulos
-    BASE_DIR / 'relatorios' / 'static',
-
-
-    #submodulos
-    BASE_DIR / 'core' / 'bases' / 'static',
-    BASE_DIR / 'core' / 'pessoas' / 'static',
-    BASE_DIR / 'core' / 'auth' / 'static',
-
-    BASE_DIR / 'cadastros' / 'clientes' / 'static',
-    BASE_DIR / 'cadastros' / 'empresas' / 'static',
-    BASE_DIR / 'cadastros' / 'trabalhadores' / 'static',
-    
-    BASE_DIR / 'servicos' / 'agendamentos' / 'static',
-    BASE_DIR / 'servicos' / 'tipo_servicos' / 'static'
+    *[app_path / 'static' for app_path in PATHS_TO_APPS]
 ]
+
+#!
+if __name__ != '__main__':
+    print(f'Initialized {len(PATHS_TO_APPS)} apps.')
 
 # Path for static files to be saved when 'manage.py collectstatic' for production
 STATIC_ROOT = 'static/'
@@ -206,6 +190,6 @@ STATIC_ROOT = 'static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR.parent / 'media'
 
-
+#LoginRequiredMixin urls
 LOGIN_URL = "/core/auth/login/"
 LOGIN_REDIRECT_URL = '/home/'

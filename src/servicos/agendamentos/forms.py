@@ -31,11 +31,11 @@ class AgendamentoForm(forms.ModelForm):
 
         if empresa:
             for field in fields_models.keys():
-                    self.fields[field].queryset = (
-                        fields_models[field].objects.filter(
-                            empresa=empresa,
-                            ativo=True
-                        ).order_by("nome")
-                    )
+                self.fields[field].queryset = (
+                    fields_models[field].objects.filter(
+                        empresa=empresa,
+                        ativo=True
+                    ).order_by("nome")
+                )
         else:
             raise Exception(f"Erro no form {self.__class__.__name__}, empresa não está na sessão.")

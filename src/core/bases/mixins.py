@@ -190,22 +190,20 @@ class ViewComWorkerStatusMixin:
             .values('data_agendado')[:1]
         )
 
-        # Trabalhadores anotados com a data do último agendamento agendado na última hora
-        queryset = (
+        trabalhadores_ultimos_agendamentos = (
             Trabalhador.objects.filter(empresa=self.request.empresa)
             .annotate(ultimo_agendamento_data=ultimos_agendamentos_datas)
             .values('id', 'nome', 'telefone', 'ultimo_agendamento_data')
             .order_by('ultimo_agendamento_data')[:limit]
         )
 
-        return list(queryset)
+        return list(trabalhadores_ultimos_agendamentos)
 
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
 
         trabalhadores_status_list = self.get_trabalhadores_status()
         for trabalhador in trabalhadores_status_list:
-            # Se tiver agendamento agendado na última hora → ocupado
             trabalhador['status'] = "ocupado" if trabalhador['ultimo_agendamento_data'] else "disponível"
 
         contexto['trabalhadores_status_list'] = trabalhadores_status_list

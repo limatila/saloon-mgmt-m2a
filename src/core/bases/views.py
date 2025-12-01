@@ -140,6 +140,7 @@ class BaseDynamicFormView(FormView):
         nome_formulario_extraido = self.form_class.__name__.replace("Form", ' ').title()
         nome_formulario_extraido = "Serviços" if "tiposervico" in nome_formulario_extraido.lower() else nome_formulario_extraido
 
+        contexto["project_title"] = settings.PROJECT_TITLE
         contexto['form_name'] = nome_formulario_extraido
         contexto["project_title"] = settings.PROJECT_TITLE
         contexto['title'] = f"Formulário de {contexto['form_name']}"
@@ -154,6 +155,12 @@ class BaseDynamicFormView(FormView):
 class BaseDeleteView(UpdateView):
     template_name = "partials/components/dashboards/form-dashboard.html"
     fields = ['ativo']
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        contexto["project_title"] = settings.PROJECT_TITLE
+        return contexto
+    
 
     def get_object(self, queryset = None):
         obj = super().get_object(queryset)
